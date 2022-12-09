@@ -1,0 +1,19 @@
+{
+    "name": "NatML.VideoKit.Editor",
+    "references": [
+        "NatML.Hub",
+        "NatML.Hub.Editor",
+        "NatML.VideoKit"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
