@@ -1,0 +1,72 @@
+/* 
+*   VideoKit
+*   Copyright © 2023 NatML Inc. All Rights Reserved.
+*/
+
+namespace NatML.VideoKit.Inputs {
+
+    using System;
+    using NatML.Recorders;
+    using NatML.Recorders.Clocks;
+    using NatML.Recorders.Inputs;
+
+    /// <summary>
+    /// Recorder input for recording video frames from a camera device.
+    /// </summary>
+    public sealed class CameraDeviceInput : IDisposable { // INCOMPLETE // Scaling
+
+        #region --Client API--
+        /// <summary>
+        /// Create a camera device input.
+        /// </summary>
+        /// <param name="recorder">Media recorder to receive camera frames.</param>
+        /// <param name="clock">Clock for generating timestamps.</param>
+        /// <param name="cameraManager">Camera manager with running camera.</param>
+        public CameraDeviceInput (IMediaRecorder recorder, IClock clock, VideoKitCameraManager cameraManager) : this(TextureInput.CreateDefault(recorder), clock, cameraManager) { }
+
+        /// <summary>
+        /// Create a camera device input.
+        /// </summary>
+        /// <param name="recorder">Media recorder to receive camera frames</param>
+        /// <param name="cameraManager">Camera manager with running camera.</param>
+        public CameraDeviceInput (IMediaRecorder recorder, VideoKitCameraManager cameraManager) : this(recorder, default, cameraManager) { }
+
+        /// <summary>
+        /// Create a camera device input.
+        /// </summary>
+        /// <param name="input">Texture input to receive camera frames.</param>
+        /// <param name="clock">Clock for generating timestamps.</param>
+        /// <param name="cameraManager">Camera manager with running camera.</param>
+        public CameraDeviceInput (TextureInput input, IClock clock, VideoKitCameraManager cameraManager) {
+            this.input = input;
+            this.clock = clock;
+            this.cameraManager = cameraManager;
+            cameraManager.OnCameraFrame.AddListener(OnCameraFrame);
+        }
+
+        /// <summary>
+        /// Create a camera device input.
+        /// </summary>
+        /// <param name="input">Texture input to receive camera frames.</param>
+        /// <param name="cameraManager">Camera manager with running camera.</param>
+        public CameraDeviceInput (TextureInput input, VideoKitCameraManager cameraManager) : this(input, default, cameraManager) { }
+
+        /// <summary>
+        /// Stop the recorder input and release resources.
+        /// </summary>
+        public void Dispose () {
+            cameraManager.OnCameraFrame.RemoveListener(OnCameraFrame);
+            input.Dispose();
+        }
+        #endregion
+
+
+        #region --Operations--
+        private readonly TextureInput input;
+        private readonly IClock clock;
+        private readonly VideoKitCameraManager cameraManager;
+
+        private void OnCameraFrame (CameraFrame frame) => input.CommitFrame(frame, clock?.timestamp ?? 0L);
+        #endregion
+    }
+}

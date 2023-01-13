@@ -1,0 +1,53 @@
+## 0.0.6
++ Added `VideoKitAudioManager` component for managing streaming audio from audio devices.
++ Added `VideoKitRecorder.RecordingSession` struct for receiving richer information about a completed recording session.
++ Added `VideoKitRecorder.audioManager` property for managing recording audio from audio devices.
++ Added `VideoKitRecorder.Resolution._320x240` resolution preset.
++ Added `VideoKitRecorder.Resolution._480x320` resolution preset.
++ Fixed `VideoKitRecorder` not allowing developer to select `Destination.PromptUser` destination.
++ Fixed `VideoKitRecorder` incorrect video size orientation when using `Resolution.Screen` and `Orientation.Portrait`.
++ Refactored `VideoKitRecorder.orientation` property to `VideoKitRecorder.orientationMode`.
++ Refactored `VideoKitRecorder.aspect` property to `VideoKitRecorder.aspectMode`.
++ Refactored `VideoKitRecorder.videoKeyframeInterval` property to `VideoKitRecorder.keyframeInterval`.
++ Refactored `VideoKitCameraManager.OnFrame` event to `OnCameraFrame`.
++ Removed `VideoKitRecorder.OnRecordingFailed` event. Use `OnRecordingCompleted` event instead.
+
+## 0.0.5
++ Added `VideoKitRecorder.videoBitRate` property for specifying the video bitrate for applicable formats.
++ Added `VideoKitRecorder.videoKeyframeInterval` property for specifying the keyframe interval for applicable formats.
++ Added `VideoKitRecorder.audioBitRate` property for specifying the audio bitrate for applicable formats.
+
+## 0.0.4
++ Added `CropTextureInput` for recording a cropped area of the recording.
++ Added `WatermarkTextureInput` for adding a watermark to recorded videos.
++ Added `VideoKitRecorder.VideoMode.CameraDevice` video mode for recording videos directly from a camera device.
++ Added `VideoKitRecorder.destinationPathPrefix` property for specifying recording directory.
++ Added `VideoKitRecorder.Resolution._2K` resolution preset for recording at 2K WQHD.
++ Added `VideoKitRecorder.Resolution._4K` resolution preset for recording at 4K UHD.
++ Added `VideoKitCameraView.OnPresent` event to be notified when the view presents the camera preview to the user.
++ Added `VideoKitCameraFocus` UI component for focusing a camera device with tap gestures.
++ Fixed `CameraFrame.feature` property returnning new feature instance on every access.
++ Refactored `MicrophoneInput` class to `AudioDeviceInput`.
++ Refactored `VideoKitRecorder.AudioMode.Microphone` enumeration member to `AudioMode.AudioDevice`.
+
+## 0.0.3
++ Fixed `NullReferenceException` when running camera with `Capabilities.MachineLearning` enabled.
++ Fixed rare crash when using running camera with `Capabilities.HumanTexture` enabled.
++ Fixed recording session not being ended when `VideoKitRecorder` component is disabled or destroyed.
+
+## 0.0.2
++ Added `VideoKitCameraManager.Resolution.Default` resolution preset to leave camera resolution unchanged.
++ Added `VideoKitCameraManager.Capabilities.DepthTexture` enumeration member for streaming camera depth.
++ Added `MicrophoneInput` recorder input for recording audio frames from an `AudioDevice`.
++ Added implicit conversion from `CameraFrame` to `CameraImage`.
++ Fixed `CameraFrame.image` being uninitialized in `VideoKitCameraManager.OnFrame`.
++ Refactored `VideoKitCameraManager.Play` method to `StartRunning`.
++ Refactored `VideoKitCameraManager.Stop` method to `StopRunning`.
++ Removed `CameraFrame.width` property. Use `CameraFrame.image.width` instead.
++ Removed `CameraFrame.height` property. Use `CameraFrame.image.height` instead.
++ Removed `CameraFrame.pixelBuffer` property.
++ Removed `CameraFrame.timestamp` property.
++ Removed `VideoKitCameraManager.Capabilities.PixelData` enumeration member.
+
+## 0.0.1
++ First pre-release.
