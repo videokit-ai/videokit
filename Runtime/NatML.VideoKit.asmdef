@@ -1,0 +1,26 @@
+{
+    "name": "NatML.VideoKit",
+    "references": [
+        "NatML.Hub",
+        "NatML.ML",
+        "NatML.Devices",
+        "NatML.Recorders",
+        "NatML.Sharing"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS",
+        "macOSStandalone",
+        "WebGL",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
