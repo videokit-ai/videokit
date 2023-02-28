@@ -1,0 +1,24 @@
+{
+    "name": "ai.natml.videokit",
+    "version": "0.0.11",
+    "displayName": "VideoKit",
+    "description": "The only user-generated content solution for Unity Engine.",
+    "unity": "2021.2",
+    "dependencies": {
+        "ai.natml.hub": "1.0.20",
+        "ai.natml.natml": "1.1.3",
+        "ai.natml.natcorder": "1.9.4",
+        "ai.natml.natdevice": "1.3.3",
+        "ai.natml.natshare": "1.3.0"
+    },
+    "keywords": [
+        "natml"
+    ],
+    "author": {
+        "name": "NatML",
+        "email": "hi@natml.ai",
+        "url": "https://github.com/natmlx"
+    },
+    "license": "Apache-2.0",
+    "repository": "github:natmlx/videokit"
+}
