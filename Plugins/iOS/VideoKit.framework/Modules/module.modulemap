@@ -1,0 +1,6 @@
+framework module VideoKit {
+  umbrella header "VideoKit.h"
+  export *
+
+  module * { export * }
+}

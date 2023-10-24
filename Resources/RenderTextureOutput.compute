@@ -1,0 +1,133 @@
+/* 
+*   VideoKit
+*   Copyright (c) 2023 NatML Inc. All Rights Reserved.
+*/
+
+#pragma kernel ConvertYUV420
+#pragma kernel ConvertBGRA8888
+#pragma kernel ConvertRGBA8888
+#pragma kernel Rotate90
+#pragma kernel Rotate180
+#pragma kernel Rotate270
+
+ByteAddressBuffer Input;
+Texture2D<float4> Image;
+int4 Offset;    // [Y,Cb,Cr]
+int4 Stride;    // [Y_row, Cb_row, Y_pixel, Cb_pixel]
+bool Mirror;
+RWTexture2D<float4> Result;
+
+static const float3x3 YUV2RGB = float3x3( // https://www.mir.com/DMG/ycbcr.html
+    1., 0., 1.402,
+    1., -0.344136, -0.714136,
+    1., 1.772, 0.
+);
+
+int ReadByte (int index) {
+    int address = (index >> 2) << 2;
+    int offset = index - address;
+    int word = Input.Load(address);
+    int data = word >> (offset * 8);
+    return data & 0xFF;
+}
+
+[numthreads(16, 16, 1)]
+void ConvertYUV420 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Color
+    uint j = Mirror ? height - id.y - 1 : id.y;
+    float y = ReadByte(Offset.x + j * Stride.x + id.x * Stride.z);
+    float u = ReadByte(Offset.y + j / 2 * Stride.y + id.x / 2 * Stride.w) - 128.;
+    float v = ReadByte(Offset.z + j / 2 * Stride.y + id.x / 2 * Stride.w) - 128.;
+    float3 yuv = float3(y, u, v) / 255.;
+    float3 rgb = mul(YUV2RGB, yuv);
+    Result[id.xy] = float4(rgb, 1.0);
+}
+
+[numthreads(16, 16, 1)]
+void ConvertRGBA8888 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Color
+    uint j = Mirror ? height - id.y - 1 : id.y;
+    int pixel = Input.Load(j * Stride.x + id.x * 4);
+    float r = pixel & 0xFF;
+    float g = (pixel >> 8) & 0xFF;
+    float b = (pixel >> 16) & 0xFF;
+    float a = (pixel >> 24) & 0xFF;
+    float4 rgba = float4(r, g, b, a) / 255.;
+    Result[id.xy] = rgba;
+}
+
+[numthreads(16, 16, 1)]
+void ConvertBGRA8888 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Color
+    uint j = Mirror ? height - id.y - 1 : id.y;
+    int pixel = Input.Load(j * Stride.x + id.x * 4);
+    float b = pixel & 0xFF;
+    float g = (pixel >> 8) & 0xFF;
+    float r = (pixel >> 16) & 0xFF;
+    float a = (pixel >> 24) & 0xFF;
+    float4 rgba = float4(r, g, b, a) / 255.;
+    Result[id.xy] = rgba;
+}
+
+[numthreads(16, 16, 1)]
+void Rotate90 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Copy
+    uint2 uv = uint2(height - id.y - 1, id.x);
+    Result[id.xy] = Image[uv];
+}
+
+[numthreads(16, 16, 1)]
+void Rotate180 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Copy
+    uint2 uv = uint2(width - id.x - 1, height - id.y - 1);
+    Result[id.xy] = Image[uv];
+}
+
+[numthreads(16, 16, 1)]
+void Rotate270 (uint3 id : SV_DispatchThreadID) {
+    // Check
+    uint width, height;
+    Result.GetDimensions(width, height);
+    if (id.x >= width)
+        return;
+    if (id.y >= height)
+        return;
+    // Copy
+    uint2 uv = uint2(id.y, width - id.x - 1);
+    Result[id.xy] = Image[uv];
+}

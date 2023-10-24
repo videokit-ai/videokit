@@ -1,0 +1,30 @@
+{
+    "name": "ai.natml.videokit",
+    "version": "0.0.15",
+    "displayName": "VideoKit",
+    "description": "The only user-generated content solution for Unity Engine.",
+    "unity": "2022.3",
+    "dependencies": {
+        "ai.natml.natml": "1.1.16",
+        "ai.fxn.fxn3d": "0.0.4"
+    },
+    "keywords": [
+        "natml",
+        "function",
+        "fxn",
+        "unity3d",
+        "recording",
+        "sharing",
+        "camera",
+        "microphone",
+        "ai",
+        "natshare"
+    ],
+    "author": {
+        "name": "NatML",
+        "email": "hi@natml.ai",
+        "url": "https://github.com/natmlx"
+    },
+    "license": "Apache-2.0",
+    "repository": "github:natmlx/videokit"
+}
