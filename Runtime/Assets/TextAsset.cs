@@ -49,7 +49,7 @@ namespace VideoKit.Assets {
             var prediction = await VideoKitSettings.Instance.fxn.Predictions.Create(
                 "@videokit/un2structured-v0-1",
                 inputs: new () { [@"text"] = text, [@"schema"] = schema.ToJson() }
-            ) as CloudPrediction;
+            );
             // Check
             if (!string.IsNullOrEmpty(prediction.error))
                 throw new InvalidOperationException(prediction.error);

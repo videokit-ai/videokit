@@ -44,7 +44,7 @@ namespace VideoKit.Assets {
             var prediction = await VideoKitSettings.Instance.fxn.Predictions.Create(
                 "@videokit/caption-v0-1",
                 inputs: new () { [@"audio"] = stream }
-            ) as CloudPrediction;
+            );
             // Check
             if (!string.IsNullOrEmpty(prediction.error))
                 throw new InvalidOperationException(prediction.error);
