@@ -29,7 +29,7 @@ Add the following items to your Unity project's `Packages/manifest.json`:
     }
   ],
   "dependencies": {
-    "ai.natml.videokit": "0.0.17",
+    "ai.natml.videokit": "0.0.18",
   }
 }
 ```
