@@ -1,0 +1,25 @@
+{
+    "name": "VideoKit.Tests.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "Function.Runtime",
+        "Function.Unity",
+        "VideoKit.Runtime"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS",
+        "macOSStandalone",
+        "WebGL",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

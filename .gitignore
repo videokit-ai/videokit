@@ -1,0 +1,25 @@
+# Unity
+Library/
+Temp/
+obj/
+Logs/
+
+# IDE
+.vscode/
+.gradle/
+.vs/
+
+# Env
+.env
+
+# Function
+ProjectSettings/Function.asset
+
+# VideoKit
+ProjectSettings/VideoKit.asset
+
+# Recordings
+recordings/
+
+# Misc
+.DS_Store

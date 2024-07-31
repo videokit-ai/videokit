@@ -1,0 +1,29 @@
+{
+    "name": "ai.videokit.videokit",
+    "version": "0.0.20",
+    "displayName": "VideoKit",
+    "description": "The cross-platform media solution for Unity Engine.",
+    "unity": "2022.3",
+    "dependencies": {
+        "ai.fxn.fxn3d": "0.0.25"
+    },
+    "keywords": [
+        "unity3d",
+        "recording",
+        "sharing",
+        "camera",
+        "microphone",
+        "ai",
+        "natshare",
+        "natcorder",
+        "natdevice",
+        "video recording"
+    ],
+    "author": {
+        "name": "VideoKit",
+        "email": "hi@videokit.ai",
+        "url": "https://github.com/videokit-ai"
+    },
+    "license": "Apache-2.0",
+    "repository": "github:videokit-ai/videokit"
+}
