@@ -37,17 +37,17 @@ Add the following items to your Unity project's `Packages/manifest.json`:
 }
 ```
 
-> [!WARNING]
-> VideoKit is still in alpha. As such, behaviours are expected to change more drastically between releases.
+> [!IMPORTANT]
+> VideoKit is still in alpha. As such, the C# API is expected to change a lot between releases.
 
 ## Retrieving your Access Key
-To use VideoKit, you will need to generate an access key. First, head over to [hub.natml.ai](https://hub.natml.ai/account/developers) to create an account by logging in. Once you do, generate an access key:
+To use VideoKit, you will need to generate an access key. First, head over to [videokit.ai](https://videokit.ai) to create an account by logging in. Once you do, generate an access key:
 
-![generating an access key](https://raw.githubusercontent.com/natmlx/videokit/main/Media/create-access-key.gif)
+![generating an access key](https://www.videokit.ai/api_key.gif)
 
 Then add the key to your Unity project in `Project Settings > VideoKit`:
 
-![set the access key](https://raw.githubusercontent.com/natmlx/videokit/main/Media/set-access-key.gif)
+![set the access key](https://www.videokit.ai/key.png)
 
 > [!CAUTION]
 > If your Unity project is open-source, make sure to add `ProjectSettings/VideoKit.asset` to your `.gitignore` file to keep your VideoKit access key private.
@@ -83,21 +83,17 @@ Texture2D image = await asset.ToTexture();
 ### Camera Streaming
 Stream the camera preview with the `VideoKitCameraManager` component:
 
-![stream the camera preview](https://raw.githubusercontent.com/natmlx/videokit/main/Media/camera-streaming.gif)
+![stream the camera preview](https://www.videokit.ai/camera.gif)
 
 ### Record Videos
 Record MP4, HEVC, WEBM videos; animated GIF images; JPEG image sequences; and WAV audio files with the `VideoKitRecorder` component:
 
-![recording a video](https://raw.githubusercontent.com/natmlx/videokit/main/Media/video-recording.gif)
-
-> Video recording requires an active [VideoKit](https://hub.natml.ai/account/billing) subscription. But you can record `MP4` videos that are downsized and watermarked without a subscription.
+![recording a video](https://www.videokit.ai/video-recording.gif)
 
 ### Human Texture
 Remove the background from the camera preview with the `VideoKitCameraManager` component:
 
-![using the human texture](https://raw.githubusercontent.com/natmlx/videokit/main/Media/human-texture.gif)
-
-> Human texture requires an active [VideoKit AI](https://hub.natml.ai/account/billing) subscription.
+![using the human texture](https://www.videokit.ai/human-texture.gif)
 
 ### Speech-to-Text
 Caption audio with the `AudioAsset.Caption` method:
@@ -107,8 +103,6 @@ var asset = await MediaAsset.FromAudioClip(clip);
 var caption = await asset.Caption();
 Debug.Log(caption);
 ```
-
-> Audio captioning requires an active [VideoKit AI](https://hub.natml.ai/account/billing) subscription.
 
 ### Text Commands
 Convert a natural language prompt into a `struct` with the `TextAsset.To<T>` method. This enables features like text commands, and can be combined with audio captioning for voice control:
@@ -133,8 +127,6 @@ async void ParseCommand () {
 }
 ```
 
-> Text commands can be used without a subscription, but will require an active [VideoKit AI](https://hub.natml.ai/account/billing) subscription in a later VideoKit release.
-
 ___
 
 ## Requirements
@@ -151,9 +143,9 @@ ___
   - Safari 16.4+
 
 ## Resources
-- Join the [NatML community on Discord](https://natml.ai/community).
-- See the [VideoKit documentation](https://docs.natml.ai/videokit).
-- Check out [NatML on GitHub](https://github.com/natmlx).
-- Contact us at [hi@natml.ai](mailto:hi@natml.ai).
+- Join the [VideoKit community on Discord](https://www.videokit.ai/community).
+- See the [VideoKit documentation](https://www.videokit.ai).
+- Check out [VideoKit on GitHub](https://github.com/videokit-ai).
+- Contact us at [hi@videokit.ai](mailto:hi@videokit.ai).
 
 Thank you very much!
