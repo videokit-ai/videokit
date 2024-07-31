@@ -43,7 +43,7 @@ Add the following items to your Unity project's `Packages/manifest.json`:
 ## Retrieving your Access Key
 To use VideoKit, you will need to generate an access key. First, head over to [videokit.ai](https://videokit.ai) to create an account by logging in. Once you do, generate an access key:
 
-![generating an access key](https://www.videokit.ai/api-key-down.gif)
+![generating an access key](api-key.gif)
 
 Then add the key to your Unity project in `Project Settings > VideoKit`:
 
