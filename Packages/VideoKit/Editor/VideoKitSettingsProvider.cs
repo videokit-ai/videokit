@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 NatML Inc. All Rights Reserved.
+*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Editor {
@@ -26,7 +26,7 @@ namespace VideoKit.Editor {
                 EditorGUILayout.LabelField(@"iOS Settings", EditorStyles.boldLabel);
                 VideoKitProjectSettings.instance.PhotoLibraryUsageDescription = EditorGUILayout.TextField(@"Photo Library Usage Description", VideoKitProjectSettings.instance.PhotoLibraryUsageDescription);
             },
-            keywords = new HashSet<string>(new[] { @"VideoKit", @"NatML", @"NatCorder", @"NatDevice", @"NatShare", @"Hub" }),
+            keywords = new HashSet<string>(new[] { @"VideoKit", @"NatCorder", @"NatDevice", @"NatShare" }),
         };
     }
 }

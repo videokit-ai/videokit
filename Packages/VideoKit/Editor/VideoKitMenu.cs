@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 NatML Inc. All Rights Reserved.
+*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Editor {
@@ -26,8 +26,5 @@ namespace VideoKit.Editor {
 
         [MenuItem(@"VideoKit/Report an Issue", false, BasePriority + 3)]
         private static void OpenIssue () => Help.BrowseURL(@"https://github.com/vkt3d/videokit");
-
-        [MenuItem(@"VideoKit/Speak to Support", false, BasePriority + 4)]
-        private static void BookCall () => Help.BrowseURL(@"https://calendly.com/olokobayusuf/natml-support");
     }
 }

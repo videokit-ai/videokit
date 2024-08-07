@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2023 NatML Inc. All Rights Reserved.
+*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Tests.Behaviours {
