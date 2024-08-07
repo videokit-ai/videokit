@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/13/2024.
-//  Copyright © 2024 NatML Inc. All rights reserved.
+//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once

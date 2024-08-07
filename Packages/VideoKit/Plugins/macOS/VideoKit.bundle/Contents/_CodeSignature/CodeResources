@@ -10,112 +10,112 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Si+hbqcZb5F7/GF3OXW5VRUX2SLlqCOkSnUuzK3OdyI=
+			AkZv8ybY1zKk0iBL2banbD2ketlzhsPLxGy653dxovU=
 			</data>
 		</dict>
 		<key>Headers/VKTAudioBuffer.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Rl/4XFGg4Nyp3WWs3aCRhIxxgKs0+x8fVPIJrIruScM=
+			EM8D4k/X2hm8fbnrUq5xG80rA8UyNNvw7heLnn9mUSA=
 			</data>
 		</dict>
 		<key>Headers/VKTAudioDevice.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Y+jd7zAwS+1RNQ8Em5oHfyGZHauUQKWrxT+rQAPySOo=
+			ci4nF097rzKGgQkrswsvZo/UiMANgyG03SG3X9Q/dGM=
 			</data>
 		</dict>
 		<key>Headers/VKTCameraDevice.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2X/qLl4hrG1JKtPFTG9zHxhWqbajhb9Xu/kSnQUO4I0=
+			eh1oW64vP16Mq++BPc7ItLbgIPWYCL4yDJKuTduo0wY=
 			</data>
 		</dict>
 		<key>Headers/VKTClock.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			hUXltwzXA3+aOXWdy5ycrb9qFIVGutzqlX2cyvQP5Og=
+			9sVRq/S3c36tn1GTVD5kbqZqI9clVqFB9biblxZ32Gg=
 			</data>
 		</dict>
 		<key>Headers/VKTMediaAsset.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tdq/Gz+OJA3+fS2ct3aKDUH8nDVdIyEJZA0hQ9pUvJI=
+			EqTgiE5exUJm/HPxa9C40SGrFfoN/gKWFpZ+OsyWPPU=
 			</data>
 		</dict>
 		<key>Headers/VKTMediaDevice.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BCXuglkmwvl8LgInQBLUMmEyQNCz/T9krc7+q9cqfyc=
+			IDLBgNs5RD39QuIgyfS7SprRTnwPW6DSIXA9dtx39B4=
 			</data>
 		</dict>
 		<key>Headers/VKTMediaReader.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			C+D1jgq48DJa5Z3O5GnwnLA6ORDyijIUeWCb80/9P70=
+			ocaaOl7IIiW6XhW1taS6xIOKstI3b26mXoupPyegUeU=
 			</data>
 		</dict>
 		<key>Headers/VKTMediaRecorder.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SHVdJGFlNsKrbquLsegrSQCDleNtDQCXfdPilVXv1PQ=
+			64rJTBVs52iixRAAfJDdbmw53Qtu//scU05+wb3l+PI=
 			</data>
 		</dict>
 		<key>Headers/VKTMetadata.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tfcRxgvBx8TXUVEPKkOtOQm2gDoH0SpgsjyChaQM1to=
+			XDZ5MzSa/LnlPO3Rm3YKSPLMRQSN+Q7xGDkg1GK+Yos=
 			</data>
 		</dict>
 		<key>Headers/VKTPixelBuffer.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			1kJXeUZIU4timmTylBbbkrQD6l3P/szrgkFHcpl+7JY=
+			p/4EB3PnM6pg/UESh9eB7HY6EEauHVt48vUuAbxwxng=
 			</data>
 		</dict>
 		<key>Headers/VKTSampleBuffer.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			0E2YkksyA7g+fp/bHffRXkw4FCucGRcoNuJW2iG0M+Q=
+			rRjs1PDivMXwhB7f5lsA28ivgCtxsoJwNlVIKIPfHYk=
 			</data>
 		</dict>
 		<key>Headers/VKTSession.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			T5ARuTKoOojUA4hxMZRG8g+/M7QXbMciDfLlPZxqkIc=
+			EhhJadhbZKLkHGKqZgWrOZIhoOfKzFR7Hn0u04rJ9Fc=
 			</data>
 		</dict>
 		<key>Headers/VKTStatus.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F25SPZ3jBmzkMEX50mnTcU+59IEu3Bax89yeW+qFCj4=
+			zIClG131euSuK7K7ELgCkSqAFHjAafb0hyofqHIHZ4k=
 			</data>
 		</dict>
 		<key>Headers/VKTVersion.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3GXBhrCmg4LtWzgC4ZqCLh9YI1VrupiD8zSxszye+aw=
+			JMVhldVVPxdNeTEUgR0zXg39yvFPZdAW2pk5ndOZPw0=
 			</data>
 		</dict>
 		<key>Headers/VideoKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			pfB9DG57Fz0rIBAqWweizP/3bnHdQwrJvGFEp5sMjY4=
+			xGEfyMB+DOHk8ArsCUc9IGF2D7AhnRmSBAUyGegWcpQ=
 			</data>
 		</dict>
 	</dict>

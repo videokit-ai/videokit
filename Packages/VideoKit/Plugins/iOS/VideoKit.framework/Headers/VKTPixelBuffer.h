@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/05/2024.
-//  Copyright © 2024 NatML Inc. All rights reserved.
+//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -501,30 +501,5 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCopyTo (
     VKTPixelBuffer* source,
     VKTPixelBuffer* destination,
     VKTPixelRotation rotation
-);
-
-/*!
- @function VKTPixelBufferBlendAndCopyTo
-
- @abstract Blend an overlay pixel buffer and copy the results into a destination pixel buffer.
-
- @discussion Blend an overlay pixel buffer and copy the results into a destination pixel buffer.
- NOTE: All pixel buffers must have format `VKT_PIXEL_FORMAT_RGBA8888` or `VKT_PIXEL_FORMAT_BGRA8888`.
- NOTE: All pixel buffers must have the same pixel format.
- NOTE: All pixel buffers must have the same width and height.
-
- @param source
- Source pixel buffer.
-
- @param overlay
- Overlay pixel buffer.
- 
- @param destination
- Destination pixel buffer.
-*/
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferBlendAndCopyTo (
-    VKTPixelBuffer* source,
-    VKTPixelBuffer* overlay,
-    VKTPixelBuffer* destination
 );
 #pragma endregion
