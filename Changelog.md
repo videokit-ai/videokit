@@ -1,3 +1,6 @@
+## 0.0.21
++ Fixed `WebException: The request was aborted: The request was canceled` when building for Android.
+
 ## 0.0.20
 + Added support for streaming from USB UVC cameras on iOS and iPadOS (#135).
 + Added `VideoKitRecorder.CaptureScreenshot` method for capturing a screenshot image to a `JPEG` media asset (#132).

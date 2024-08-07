@@ -32,7 +32,7 @@ Add the following items to your Unity project's `Packages/manifest.json`:
     }
   ],
   "dependencies": {
-    "ai.videokit.videokit": "0.0.20",
+    "ai.videokit.videokit": "0.0.21",
   }
 }
 ```
