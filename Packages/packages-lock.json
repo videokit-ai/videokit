@@ -10,7 +10,7 @@
       "url": "https://registry.npmjs.com"
     },
     "ai.videokit.videokit": {
-      "version": "file:VideoKit",
+      "version": "file:ai.videokit.videokit",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
