@@ -84,6 +84,7 @@ namespace VideoKit.Internal {
         public delegate void MediaDeviceDiscoveryHandler (IntPtr context, IntPtr devices, int count);
         public delegate void MediaDeviceDisconnectHandler (IntPtr context, IntPtr device);
         public delegate void MediaDevicePermissionResultHandler (IntPtr context, MediaDevice.PermissionStatus result);
+        internal delegate void MultiCameraDeviceSystemPressureHandler (IntPtr context, MultiCameraDevice.SystemPressureLevel level);
         #endregion
 
 

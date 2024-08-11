@@ -7,12 +7,12 @@
 
 namespace VideoKit {
 
-    using AOT;
     using System;
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
     using UnityEngine;
+    using AOT;
     using Internal;
     using MediaDeviceFlags = Internal.VideoKit.MediaDeviceFlags;
     using PermissionType = Internal.VideoKit.PermissionType;
@@ -116,7 +116,7 @@ namespace VideoKit {
 
         #region --Operations--
         protected readonly IntPtr device;
-        private readonly GCHandle weakSelf;
+        protected readonly GCHandle weakSelf;
         private GCHandle streamHandle;
 
         internal MediaDevice (IntPtr device) {

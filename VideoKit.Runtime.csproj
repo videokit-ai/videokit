@@ -64,34 +64,35 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.23f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages/VideoKit/Runtime/Components/VideoKitCameraManager.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/PixelBuffer.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Clocks/RealtimeClock.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Internal/VideoKitEvents.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/MediaAsset.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Components/VideoKitAudioManager.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/AudioComponentSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/AudioManagerSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Internal/VideoKitInfo.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Components/VideoKitRecordButton.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Internal/VideoKit.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Components/VideoKitRecorder.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/MediaRecorder.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/CameraSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/TextureSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/ScreenSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/AudioBuffer.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Components/VideoKitCameraView.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/CameraDevics.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Sources/CameraManagerSource.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/MediaDevice.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Clocks/FixedClock.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/AudioDevice.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Internal/VideoKitClient.cs" />
-    <Compile Include="Packages/VideoKit/Runtime/Clocks/IClock.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitCameraManager.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/PixelBuffer.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Clocks/RealtimeClock.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKitEvents.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/MediaAsset.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitAudioManager.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/AudioComponentSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/AudioManagerSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKitInfo.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitRecordButton.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKit.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitRecorder.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/MediaRecorder.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/TextureSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/ScreenSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioBuffer.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitCameraView.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/CameraDevics.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraManagerSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/MultiCameraDevice.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/MediaDevice.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Clocks/FixedClock.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioDevice.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKitClient.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Clocks/IClock.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages/VideoKit/Runtime/VideoKit.Runtime.asmdef" />
+    <None Include="Packages/ai.videokit.videokit/Runtime/VideoKit.Runtime.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -379,7 +380,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="NJsonSchema">
-      <HintPath>Packages/VideoKit/Plugins/Managed/NJsonSchema.dll</HintPath>
+      <HintPath>Packages/ai.videokit.videokit/Plugins/Managed/NJsonSchema.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">

@@ -119,10 +119,6 @@ namespace VideoKit {
         internal AudioDevice (IntPtr device) : base(device) { }
 
         public override string ToString () => $"AudioDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
-        #endregion
-
-
-        #region --Callbacks--
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDeviceDiscoveryHandler))]
         private static unsafe void OnDiscoverDevices (IntPtr context, IntPtr devices, int count) {
