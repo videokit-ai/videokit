@@ -16,4 +16,4 @@ jobs:
       with:
         registry-url: "https://registry.npmjs.org"
     - run: npm publish --access public
-      working-directory: Packages/VideoKit
+      working-directory: Packages/ai.videokit.videokit
