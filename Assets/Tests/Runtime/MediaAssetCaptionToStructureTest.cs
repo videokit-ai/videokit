@@ -26,7 +26,7 @@ namespace VideoKit.Tests {
 
         private async void Start () {
             var asset = await MediaAsset.FromText(@"My name is Yusuf and I'm heading East");
-            var command = await asset.Caption<Command>();
+            var command = await asset.Parse<Command>();
             Debug.Log(JsonConvert.SerializeObject(command, Formatting.Indented));
         }
     }

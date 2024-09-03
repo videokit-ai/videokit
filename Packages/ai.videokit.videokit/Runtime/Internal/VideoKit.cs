@@ -851,13 +851,10 @@ namespace VideoKit.Internal {
             }
         }
 
-        public static async Task<Prediction> Throw (this Task<Prediction> task) => (await task).Throw();
-
-        public static Prediction Throw (this Prediction prediction) {
-            // Check
+        public static async Task<Prediction> Throw (this Task<Prediction> task) {
+            var prediction = await task;
             if (!string.IsNullOrEmpty(prediction.error))
                 throw new InvalidOperationException(prediction.error);
-            // Return
             return prediction;
         }
 

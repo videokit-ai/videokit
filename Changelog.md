@@ -1,5 +1,7 @@
 ## 0.0.22
-*INCOMPLETE*
++ Refactored `MediaAsset.Caption<T>` method to `MediaAsset.Parse<T>` for structured parsing.
++ Refactored `MediaAsset.Caption` method to `MediaAsset.Transcribe` for performing speech-to-text.
++ Refactored `MediaAsset.FromSpeechPrompt` method to `MediaAsset.FromGeneratedSpeech` for performing text-to-speech.
 
 ## 0.0.21
 + Fixed `WebException: The request was aborted: The request was canceled` when building for Android.

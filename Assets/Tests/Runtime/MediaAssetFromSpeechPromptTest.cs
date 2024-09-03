@@ -14,7 +14,7 @@ namespace VideoKit.Tests {
         private string prompt;
 
         private async void Start () {
-            var audioAsset = await MediaAsset.FromSpeechPrompt(prompt);
+            var audioAsset = await MediaAsset.FromGeneratedSpeech(prompt);
             var audioClip = await audioAsset.ToAudioClip();
             AudioSource.PlayClipAtPoint(audioClip, Vector3.zero);
         }

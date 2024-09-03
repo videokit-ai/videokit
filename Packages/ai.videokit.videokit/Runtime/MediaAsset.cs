@@ -261,26 +261,6 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Create a media asset from a prediction value.
-        /// </summary>
-        /// <param name="value">Prediction value.</param>
-        /// <returns>Media asset.</returns>
-        public static async Task<MediaAsset> FromValue (Value value) { // CHECK // Improve memory usage here
-            // Check
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-            // Compute path
-            var name = $"{Guid.NewGuid()}{GetValueExtension(value.type)}";
-            var path = Path.Combine(Application.temporaryCachePath, name);
-            // Download
-            var fxn = VideoKitClient.Instance!.fxn;
-            using var downloadStream = await fxn.Storage.Download(value.data!);
-            File.WriteAllBytes(path, downloadStream.ToArray());
-            // Load
-            return await FromFile(path);
-        }
-
-        /// <summary>
         /// Create a media asset by prompting the user to select an image or video from the camera roll.
         /// NOTE: This requires iOS 14+.
         /// </summary>
@@ -299,45 +279,6 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Create a media asset by performing text-to-speech on the provided text prompt.
-        /// </summary>
-        /// <param name="prompt">Text to synthesize speech from.</param>
-        /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
-        /// <returns>Generated audio asset.</returns>
-        public static async Task<MediaAsset> FromSpeechPrompt (string prompt, NarrationVoice voice = 0) { // INCOMPLETE
-            // Generate
-            var fxn = VideoKitClient.Instance!.fxn;
-            var prediction = await fxn.Predictions.Create(
-                @"@videokit/text-to-speech",
-                inputs: new () { [@"prompt"] = prompt, [@"voice"] = voice }
-            ).Throw();
-            // Create asset
-            var value = (prediction.results![0] as Value)!;
-            var asset = await FromValue(value);
-            // Return
-            return asset;
-        }
-
-        /// <summary>
-        /// Create a media asset by performing text-to-image on the provided text prompt.
-        /// </summary>
-        /// <param name="prompt">Text prompt to use to generate the image.</param>
-        /// <returns>Generated image asset.</returns>
-        internal static async Task<MediaAsset> FromImagePrompt (string prompt) { // INCOMPLETE
-            // Generate
-            var fxn = VideoKitClient.Instance!.fxn;
-            var prediction = await fxn.Predictions.Create(
-                @"@videokit/text-to-image",
-                inputs: new () { [@"prompt"] = prompt }
-            ).Throw();
-            // Create asset
-            var value = (prediction.results![0] as Value)!;
-            var asset = await FromValue(value);
-            // Return
-            return asset;
-        }
-
-        /// <summary>
         /// Create a media asset from a file in `StreamingAssets`.
         /// </summary>
         /// <param name="path">Relative file path in `StreamingAssets`.</param>
@@ -349,6 +290,34 @@ namespace VideoKit {
                 throw new InvalidOperationException($"Failed to create media asset because file '{path}' could not be found in `StreamingAssets`");
             // Create asset
             return await FromFile(absolutePath);
+        }
+
+        /// <summary>
+        /// Create a media asset by performing text-to-speech on the provided text prompt.
+        /// </summary>
+        /// <param name="prompt">Text to synthesize speech from.</param>
+        /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
+        /// <returns>Generated audio asset.</returns>
+        internal static async Task<MediaAsset> FromGeneratedSpeech ( // INCOMPLETE
+            string prompt,
+            NarrationVoice voice = 0
+        ) {
+            return default;
+        }
+
+        /// <summary>
+        /// Create a media asset by performing text-to-image on the provided text prompt.
+        /// </summary>
+        /// <param name="prompt">Text prompt to use to generate the image.</param>
+        /// <param name="desiredWidth">Desired image width. NOTE: The generated image is not guaranteed to have this width.</param>
+        /// <param name="desiredHeight">Desired image height. NOTE: The generated image is not guaranteed to have this height.</param>
+        /// <returns>Generated image asset.</returns>
+        internal static async Task<MediaAsset> FromGeneratedImage ( // INCOMPLETE
+            string prompt,
+            int desiredWidth = 1024,
+            int desiredHeight = 1024
+        ) {
+            return default;
         }
         #endregion
 
@@ -399,25 +368,6 @@ namespace VideoKit {
                 throw new InvalidOperationException($"Audio clip could not be loaded with error: {request.error}");
             // Return
             return DownloadHandlerAudioClip.GetContent(request);
-        }
-
-        /// <summary>
-        /// Convert the media asset to a Function value.
-        /// </summary>
-        /// <param name="minUploadSize">Media assets larger than this size in bytes will be uploaded.</param>
-        /// <returns>Function value for making predictions.</returns>
-        public async Task<Value> ToValue (int minUploadSize = 4096) {
-            // Check
-            if (type == MediaType.Sequence)
-                throw new InvalidOperationException(@"Sequence assets cannot be converted to Function values");
-            // Open stream
-            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            var name = Path.GetFileName(path);
-            var dtype = ToDtype(type);
-            var fxn = FunctionUnity.Create();
-            var value = await fxn.Predictions.ToValue(stream, name, dtype, minUploadSize: minUploadSize);
-            // Return
-            return value;
         }
         #endregion
 
@@ -490,37 +440,14 @@ namespace VideoKit {
 
         #region --AI--
         /// <summary>
-        /// Caption the audio asset by performing speech-to-text.
-        /// NOTE: This requires an active VideoKit AI plan.
-        /// </summary>
-        public async Task<string> Caption () {
-            // Check type
-            if (type != MediaType.Audio)
-                throw new InvalidOperationException($"Failed to caption media asset because asset has invalid type: {type}");
-            // Caption
-            var fxn = VideoKitClient.Instance!.fxn;
-            var prediction = await fxn.Predictions.Create(
-                @"@videokit/caption",
-                inputs: new () {
-                    [@"audio"] = await ToValue()
-                }
-            ).Throw();
-            // Return
-            return (prediction.results![0]! as string)!;
-        }
-
-        /// <summary>
-        /// Caption the media asset into a structure.
-        /// For text assets, this parses the plain text into a class or struct.
-        /// NOTE: This only supports text and audio assets.
-        /// NOTE: This requires an active VideoKit AI plan.
+        /// Parse the text asset into a structure.
         /// </summary>
         /// <typeparam name="T">Structure to parse into.</typeparam>
         /// <returns>Parsed structure.</returns>
-        public async Task<T> Caption<T> () {
+        public async Task<T> Parse<T> () {
             // Check
-            if (type != MediaType.Text && type != MediaType.Audio)
-                throw new ArgumentException($"Cannot perform structured caption media asset because asset has invalid type: {type}");
+            if (type != MediaType.Text)
+                throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
             // Generate schema
             var settings = new JsonSchemaGeneratorSettings {
                 GenerateAbstractSchemas = false,
@@ -530,18 +457,21 @@ namespace VideoKit {
                 FlattenInheritanceHierarchy = false,
             };
             var schema = JsonSchema.FromType<T>(settings);
-            // Caption
-            var fxn = VideoKitClient.Instance!.fxn;
-            var prediction = await fxn.Predictions.Create(
-                @"@videokit/caption-to-structure",
-                inputs: new () {
-                    [@"asset"] = await ToValue(),
-                    [@"schema"] = schema.ToJson()
-                }
-            ).Throw();
-            var result = prediction.results![0] as JObject;
-            // Return
-            return result!.ToObject<T>()!;
+            // Parse
+            
+            return default;
+        }
+
+        /// <summary>
+        /// Transcribe the audio asset by performing speech-to-text.
+        /// </summary>
+        public async Task<string> Transcribe () {
+            // Check type
+            if (type != MediaType.Audio)
+                throw new InvalidOperationException($"Cannot caption media asset because asset is not an audio asset");
+            // Transcribe
+            
+            return default;
         }
         #endregion
 
@@ -635,15 +565,6 @@ namespace VideoKit {
 
 
         #region --Utilities--
-
-        private static Dtype ToDtype (MediaType type) => type switch {
-            MediaType.Unknown   => Dtype.Null,
-            MediaType.Image     => Dtype.Image,
-            MediaType.Audio     => Dtype.Audio,
-            MediaType.Video     => Dtype.Video,
-            MediaType.Text      => Dtype.String,
-            _                   => Dtype.Null,
-        };
 
         private static string GetValueExtension (Dtype type) => type switch {
             Dtype.Image => ".png",

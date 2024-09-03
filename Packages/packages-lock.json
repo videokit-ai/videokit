@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "ai.fxn.fxn3d": {
-      "version": "0.0.26",
+      "version": "0.0.29",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -14,7 +14,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "ai.fxn.fxn3d": "0.0.26"
+        "ai.fxn.fxn3d": "0.0.29"
       }
     },
     "com.unity.editorcoroutines": {

@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
-  viewMode: 0
+  viewMode: 1
   focusMode: 0
   exposureMode: 0
   zoomMode: 0
@@ -771,7 +771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98622613d505143a9a06b4b11b0a82cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capabilities: 0
+  capabilities: 6
   playOnAwake: 1
   _facing: 0
   resolution: 3

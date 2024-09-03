@@ -19,6 +19,8 @@ namespace VideoKit {
     using Function.Types;
     using Internal;
 
+    using Function.C;
+
     /// <summary>
     /// VideoKit camera manager for streaming video from camera devices.
     /// </summary>
@@ -42,7 +44,6 @@ namespace VideoKit {
             /// <summary>
             /// Generate a human texture from the camera preview stream.
             /// This flag adds a variable performance cost, so enable it only when necessary.
-            /// NOTE: This requires an active VideoKit AI plan.
             /// </summary>
             HumanTexture    = 0b00110,
         }
@@ -295,7 +296,7 @@ namespace VideoKit {
                 _device.exposureMode = exposureMode;
             // Preload human texture predictor
             if (capabilities.HasFlag(Capabilities.HumanTexture))
-                await fxn.Predictions.Create(HumanTextureTag);
+                await fxn.Predictions.Create(HumanTextureTag, new());
             // Create preview texture
             rotation = GetPreviewRotation(Screen.orientation);
             var (cameraWidth, cameraHeight) = _device.previewResolution;
@@ -367,11 +368,11 @@ namespace VideoKit {
                 texture!.GetRawTextureData<byte>().CopyFrom(previewBuffer);
             texture.Apply();
             // Human texture
-            if (capabilities.HasFlag(Capabilities.HumanTexture)) {                
+            if (capabilities.HasFlag(Capabilities.HumanTexture)) {
                 var prediction = fxn.Predictions.Create(
                     tag: HumanTextureTag,
                     inputs: new () { ["image"] = texture.ToImage() }
-                ).Result.Throw();
+                ).Throw().Result;
                 var image = (Image)prediction.results![0]!;
                 image.ToTexture(humanTexture);
             }
