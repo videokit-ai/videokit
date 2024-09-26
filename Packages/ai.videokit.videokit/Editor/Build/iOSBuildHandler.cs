@@ -28,7 +28,7 @@ namespace VideoKit.Editor.Build {
 
         private static void AddPhotoLibraryUsageDescription (BuildReport report) {
             #if UNITY_IOS
-            var description = VideoKitProjectSettings.instance.PhotoLibraryUsageDescription;
+            var description = VideoKitProjectSettings.instance.photoLibraryUsageDescription;
             var outputPath = report.summary.outputPath;
             if (!string.IsNullOrEmpty(description)) {
                 // Read plist

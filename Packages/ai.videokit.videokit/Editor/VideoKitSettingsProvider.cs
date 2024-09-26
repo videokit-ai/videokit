@@ -14,17 +14,22 @@ namespace VideoKit.Editor {
         public static SettingsProvider CreateProvider () => new SettingsProvider(@"Project/VideoKit", SettingsScope.Project) {
             label = @"VideoKit",
             guiHandler = searchContext => {
-                // License
+                var settings = VideoKitProjectSettings.instance;
+                EditorGUI.BeginChangeCheck();
+                // Account
                 EditorGUILayout.LabelField(@"VideoKit Account", EditorStyles.boldLabel);
-                VideoKitProjectSettings.instance.AccessKey = EditorGUILayout.TextField(@"Access Key", VideoKitProjectSettings.instance.AccessKey);
+                settings.accessKey = EditorGUILayout.TextField(@"Access Key", settings.accessKey);
                 EditorGUILayout.Space(10);
                 // Android settings
                 EditorGUILayout.LabelField(@"Android Settings", EditorStyles.boldLabel);
-                VideoKitProjectSettings.instance.EmbedAndroidX = EditorGUILayout.Toggle(@"Embed AndroidX Library", VideoKitProjectSettings.instance.EmbedAndroidX);
+                settings.embedAndroidX= EditorGUILayout.Toggle(@"Embed AndroidX Library", settings.embedAndroidX);
                 EditorGUILayout.Space(10);
                 // iOS settings
                 EditorGUILayout.LabelField(@"iOS Settings", EditorStyles.boldLabel);
-                VideoKitProjectSettings.instance.PhotoLibraryUsageDescription = EditorGUILayout.TextField(@"Photo Library Usage Description", VideoKitProjectSettings.instance.PhotoLibraryUsageDescription);
+                settings.photoLibraryUsageDescription = EditorGUILayout.TextField(@"Photo Library Usage Description", settings.photoLibraryUsageDescription);
+                // Save
+                if (EditorGUI.EndChangeCheck())
+                    settings.Save();
             },
             keywords = new HashSet<string>(new[] { @"VideoKit", @"NatCorder", @"NatDevice", @"NatShare" }),
         };

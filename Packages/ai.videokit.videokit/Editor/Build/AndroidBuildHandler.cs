@@ -28,7 +28,7 @@ namespace VideoKit.Editor.Build {
             // Update importer
             var path = AssetDatabase.GUIDToAssetPath(guids[0]);
             var importer = PluginImporter.GetAtPath(path) as PluginImporter;
-            importer.SetCompatibleWithPlatform(BuildTarget.Android, VideoKitProjectSettings.instance.EmbedAndroidX);
+            importer.SetCompatibleWithPlatform(BuildTarget.Android, VideoKitProjectSettings.instance.embedAndroidX);
         }
     }
 }

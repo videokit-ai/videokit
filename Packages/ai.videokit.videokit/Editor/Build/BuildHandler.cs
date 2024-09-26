@@ -24,7 +24,9 @@ namespace VideoKit.Editor.Build {
 
         protected virtual VideoKitClient CreateClient (BuildReport report) {
             var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
-            var client = VideoKitProjectSettings.CreateClient();
+            var client = VideoKitClient.Create(
+                accessKey: VideoKitProjectSettings.instance.accessKey
+            );
             try {
                 client.buildToken = Task.Run(() => client.CreateBuildToken(platform: platform)).Result;
             } catch (Exception ex) {
@@ -41,7 +43,7 @@ namespace VideoKit.Editor.Build {
 
         [Function.Function.Embed(VideoKitCameraManager.HumanTextureTag)]
         private static Function.Function fxn => new (
-            VideoKitProjectSettings.instance.AccessKey,
+            accessKey: VideoKitProjectSettings.instance.accessKey,
             url: "https://www.videokit.ai/api"
         );
 

@@ -15,7 +15,6 @@ namespace VideoKit {
     using UnityEngine;
     using Unity.Collections;
     using Unity.Collections.LowLevel.Unsafe;
-    using Function.Types;
     using Internal;
     using Status = Internal.VideoKit.Status;
 
@@ -196,7 +195,7 @@ namespace VideoKit {
         /// Pixel buffer metadata.
         /// This is `null` if the pixel buffer has no metadata.
         /// </summary>
-        public readonly IReadOnlyDictionary<string, object>? metadata => new NativeMetadataDictionary(this);
+        public readonly IReadOnlyDictionary<string, object> metadata => new NativeMetadataDictionary(this);
         #endregion
 
 
@@ -318,32 +317,7 @@ namespace VideoKit {
 
 
         #region --Processing--
-        /// <summary>
-        /// Create a pixel buffer from a region of this pixel buffer.
-        /// NOTE: This is only supported for pixel buffers with `RGBA8888` and `BGRA8888` formats.
-        /// </summary>
-        /// <param name="x">Left coordinate.</param>
-        /// <param name="y">Bottom coordinate.</param>
-        /// <param name="width">Region width.</param>
-        /// <param name="height">Region height.</param>
-        /// <returns>Region pixel buffer.</returns>
-        public unsafe PixelBuffer Region (int x, int y, int width, int height) {
-            // Check
-            if (format != Format.RGBA8888 && format != Format.BGRA8888)
-                throw new InvalidOperationException(@"PixelBuffer.Region currently only supports pixel buffers with `RGBA8888` pixel format");
-            // Return
-            return new PixelBuffer(
-                width,
-                height,
-                format,
-                (byte*)data.GetUnsafePtr() + (y * rowStride) + (x * 4),
-                rowStride,
-                timestamp: timestamp,
-                mirrored: verticallyMirrored
-            );
-        }
-
-        /// <summary>
+         /// <summary>
         /// Copy pixel data into a destination pixel buffer.
         /// </summary>
         /// <param name="destination">Destination pixel buffer.</param>
@@ -352,18 +326,6 @@ namespace VideoKit {
             PixelBuffer destination,
             Rotation rotation = Rotation._0
         ) => pixelBuffer.CopyToPixelBuffer(destination, rotation).Throw();
-
-        /// <summary>
-        /// Create a Function image for making predictions.
-        /// NOTE: The pixel buffer format MUST be `RGBA8888`.
-        /// </summary>
-        public unsafe Image ToImage () {
-            // Check format
-            if (format != Format.RGBA8888)
-                throw new InvalidOperationException($"Cannot convert pixel buffer to image because pixel buffer format is not `RGBA8888`: {format}");
-            // Create
-            return new Image((byte*)data.GetUnsafeReadOnlyPtr(), width, height, 4);
-        }
         #endregion
 
 
