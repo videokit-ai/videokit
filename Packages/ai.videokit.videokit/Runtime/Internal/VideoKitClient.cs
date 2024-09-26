@@ -128,16 +128,19 @@ namespace VideoKit.Internal {
             var payloadStr = JsonConvert.SerializeObject(payload);
             using var content = new StringContent(payloadStr, Encoding.UTF8, @"application/json");
             using var response = await request.PostAsync($"{url}/build", content);
+            // Parse response
             var responseStr = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseStr) ??
-                throw new InvalidOperationException($"Failed to create build token with status: {response.StatusCode}");
+            Dictionary<string, string> responseBody;
+            try {
+                responseBody = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseStr)!;
+            } catch {
+                throw new InvalidOperationException($"Failed to create build token with status {response.StatusCode} and error: {responseStr}");
+            }
             // Check error
-            if (result.TryGetValue(@"error", out var error))
+            if (responseBody.TryGetValue(@"error", out var error))
                 throw new InvalidOperationException(error);
-            // Set
-            buildToken = result[@"token"];
             // Return
-            return buildToken;
+            return responseBody[@"token"];
         }
 
         private async Task<string?> CreateSessionToken () {
@@ -146,7 +149,8 @@ namespace VideoKit.Internal {
             VideoKit.GetSessionIdentifier(sessionId, sessionId.Capacity);
             // Create payload
             var payload = new Dictionary<string, object> {
-                [@"sessionId"] = sessionId.ToString()
+                [@"buildToken"] = buildToken,
+                [@"sessionId"] = sessionId.ToString(),
             };
             var payloadStr = JsonConvert.SerializeObject(payload);
             // Generate session token
@@ -158,17 +162,21 @@ namespace VideoKit.Internal {
                 timeout = 20,
             };
             request.SetRequestHeader(@"Content-Type",  @"application/json");
-            request.SetRequestHeader(@"Authorization", $"Bearer {buildToken}");
             request.SendWebRequest();
             while (!request.isDone)
                 await Task.Yield();
+            // Parse response
+            Dictionary<string, string> response;
+            try {
+                response = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text)!;
+            } catch {
+                throw new InvalidOperationException($"Failed to create session token with status {request.responseCode} and error: {request.downloadHandler.text}");
+            }
             // Check error
-            var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text) ??
-                throw new InvalidOperationException($"Failed to create session token with status {request.responseCode} and error: {request.error}");
-            if (result.TryGetValue(@"error", out var error))
+            if (response.TryGetValue(@"error", out var error))
                 throw new InvalidOperationException(error);
             // Return
-            return result["token"];
+            return response["token"];
         }
         #endregion
     }

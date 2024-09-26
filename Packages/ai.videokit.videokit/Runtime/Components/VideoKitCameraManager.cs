@@ -11,6 +11,7 @@ namespace VideoKit {
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Events;
     using Unity.Collections;
@@ -18,8 +19,6 @@ namespace VideoKit {
     using Function;
     using Function.Types;
     using Internal;
-
-    using Function.C;
 
     /// <summary>
     /// VideoKit camera manager for streaming video from camera devices.
@@ -269,7 +268,12 @@ namespace VideoKit {
         /// <summary>
         /// Start the camera preview.
         /// </summary>
-        public async void StartRunning () {
+        public async void StartRunning () => await StartRunningAsync();
+
+        /// <summary>
+        /// Start the camera preview.
+        /// </summary>
+        public async Task StartRunningAsync () {
             // Check
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKit: Camera manager failed to start running because component is disabled");
@@ -279,7 +283,7 @@ namespace VideoKit {
             // Request camera permissions
             var permissions = await CameraDevice.CheckPermissions(request: true);
             if (permissions != MediaDevice.PermissionStatus.Authorized)
-                throw new InvalidOperationException(@"VideoKit: User did not grant camera permissions");            
+                throw new InvalidOperationException(@"VideoKit: User did not grant camera permissions");
             // Check device
             devices = await CameraDevice.Discover();
             _device ??= GetDefaultCameraDevice(_facing);

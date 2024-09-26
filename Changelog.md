@@ -1,4 +1,5 @@
 ## 0.0.22
++ Added `VideoKitCameraManager.StartRunningAsync` method which returns a `Task` for async completion and error handling.
 + Refactored `MediaAsset.Caption<T>` method to `MediaAsset.Parse<T>` for structured parsing.
 + Refactored `MediaAsset.Caption` method to `MediaAsset.Transcribe` for performing speech-to-text.
 + Refactored `MediaAsset.FromSpeechPrompt` method to `MediaAsset.FromGeneratedSpeech` for performing text-to-speech.
