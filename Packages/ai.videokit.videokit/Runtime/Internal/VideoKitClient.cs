@@ -59,7 +59,7 @@ namespace VideoKit.Internal {
             var token = sessionToken ?? await CreateSessionToken();
             var result = VideoKit.SetSessionToken(token);
             // Cache
-            if (result.IsOk()) {
+            if (result == Status.Ok) {
                 PlayerPrefs.SetString(BuildTokenKey, buildToken);
                 PlayerPrefs.SetString(SessionTokenKey, token);
             }

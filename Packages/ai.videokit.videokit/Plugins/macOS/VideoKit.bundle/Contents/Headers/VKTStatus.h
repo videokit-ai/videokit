@@ -31,9 +31,6 @@
  
  @constant VKT_ERROR_INVALID_PLAN
  Current VideoKit plan does not allow the operation.
-
- @constant VKT_WARNING_LIMITED_PLAN
- Current VideoKit plan only allows for limited functionality.
  */
 enum VKTStatus {
     VKT_OK                       = 0,
@@ -42,7 +39,6 @@ enum VKTStatus {
     VKT_ERROR_NOT_IMPLEMENTED    = 3,
     VKT_ERROR_INVALID_SESSION    = 101,
     VKT_ERROR_INVALID_PLAN       = 104,
-    VKT_WARNING_LIMITED_PLAN     = 105,
 };
 typedef enum VKTStatus VKTStatus;
 #pragma endregion

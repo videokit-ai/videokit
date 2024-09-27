@@ -72,7 +72,6 @@ namespace VideoKit.Internal {
             NotImplemented      = 3,
             InvalidSession      = 101,
             InvalidPlan         = 104,
-            LimitedPlan         = 105,
         }
         #endregion
 
@@ -846,7 +845,6 @@ namespace VideoKit.Internal {
                 case Status.NotImplemented:     throw new NotImplementedException();
                 case Status.InvalidSession:     throw new InvalidOperationException(@"VideoKit session token is invalid. Get your VideoKit access key at https://videokit.ai");
                 case Status.InvalidPlan:        throw new InvalidOperationException(@"VideoKit plan does not support this operation. Check your plan and upgrade at https://videokit.ai");
-                case Status.LimitedPlan:        Debug.LogWarning(@"VideoKit plan only allows for limited functionality. Check your plan and upgrade at https://videokit.ai"); return status;
                 default:                        throw new InvalidOperationException();
             }
         }
@@ -857,8 +855,6 @@ namespace VideoKit.Internal {
                 throw new InvalidOperationException(prediction.error);
             return prediction;
         }
-
-        public static bool IsOk (this Status status) => status == Status.Ok || status == Status.LimitedPlan;
         #endregion
     }
 }

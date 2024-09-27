@@ -188,7 +188,7 @@ namespace VideoKit {
                         keyframeInterval,
                         audioBitRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.HEVC: return new MediaRecorder(VideoKit.CreateHEVCRecorder(
                         CreatePath(extension: @".mp4", prefix: prefix),
                         width,
@@ -200,20 +200,20 @@ namespace VideoKit {
                         keyframeInterval,
                         audioBitRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.GIF: return new MediaRecorder(VideoKit.CreateGIFRecorder(
                         CreatePath(extension: @".gif", prefix: prefix),
                         width,
                         height,
                         1f / frameRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.WAV: return new MediaRecorder(VideoKit.CreateWAVRecorder(
                         CreatePath(extension: @".wav", prefix: prefix),
                         sampleRate,
                         channelCount,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.WEBM: return new MediaRecorder(VideoKit.CreateWEBMRecorder(
                         CreatePath(extension: @".webm", prefix: prefix),
                         width,
@@ -225,14 +225,14 @@ namespace VideoKit {
                         keyframeInterval,
                         audioBitRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.JPEG: return new MediaRecorder(VideoKit.CreateJPEGRecorder(
                         CreatePath(prefix: prefix),
                         width,
                         height,
                         compressionQuality,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.AV1: return new MediaRecorder(VideoKit.CreateAV1Recorder(
                         CreatePath(extension: @".mp4", prefix: prefix),
                         width,
@@ -244,7 +244,7 @@ namespace VideoKit {
                         keyframeInterval,
                         audioBitRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 case Format.ProRes4444: return new MediaRecorder(VideoKit.CreateProRes4444Recorder(
                         CreatePath(extension: @".mov", prefix: prefix),
                         width,
@@ -253,7 +253,7 @@ namespace VideoKit {
                         channelCount,
                         audioBitRate,
                         out recorder
-                    ).Throw().IsOk() ? recorder : default);
+                    ).Throw() == Status.Ok ? recorder : default);
                 default: throw new InvalidOperationException($"Cannot create media recorder because format is not supported: {format}");
             }
         }
@@ -279,8 +279,15 @@ namespace VideoKit {
         private readonly IntPtr recorder;
         private static string directory = string.Empty;
         private static readonly Dictionary<Type, Format[]> FormatSampleBufferSupportMatrix = new () {
-            [typeof(PixelBuffer)] = new [] { Format.MP4, Format.HEVC, Format.WEBM, Format.GIF, Format.JPEG, Format.AV1, Format.ProRes4444 },
-            [typeof(AudioBuffer)] = new [] { Format.MP4, Format.HEVC, Format.WEBM, Format.WAV, Format.AV1, Format.ProRes4444 },
+            [typeof(PixelBuffer)] = new [] {
+                Format.MP4, Format.HEVC, Format.WEBM,
+                Format.GIF, Format.JPEG, Format.AV1,
+                Format.ProRes4444
+            },
+            [typeof(AudioBuffer)] = new [] {
+                Format.MP4, Format.HEVC, Format.WEBM,
+                Format.WAV, Format.AV1, Format.ProRes4444
+            },
         };
 
         private MediaRecorder (IntPtr recorder) => this.recorder = recorder;

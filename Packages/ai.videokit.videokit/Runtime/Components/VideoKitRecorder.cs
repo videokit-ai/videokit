@@ -739,28 +739,37 @@ namespace VideoKit {
         }
 
         private static async Task PrepareEncoder () {
-            // Check platform // CHECK // WebGL
-            if (!MediaRecorder.CanCreate(MediaFormat.MP4))
-                return;
-            // Create recorder
-            var width = 1280;
-            var height = 720;
-            var clock = new FixedClock(30);
-            var recorder = await MediaRecorder.Create(MediaFormat.MP4, width: width, height: height, frameRate: 30);
-            // Commit empty frames
-            using var pixelData = new NativeArray<byte>(
-                width * height * 4,
-                Allocator.Persistent,
-                NativeArrayOptions.ClearMemory
-            );
-            var format = PixelBuffer.Format.RGBA8888;
-            for (var i = 0; i < 3; ++i) {
-                using var pixelBuffer = new PixelBuffer(width, height, format, pixelData, timestamp: clock.timestamp);
-                recorder.Append(pixelBuffer);
-            }
-            // Finish and delete
-            var asset = await recorder.FinishWriting();
-            File.Delete(asset.path);
+            try {
+                // Create recorder
+                var clock = new FixedClock(30);
+                var recorder = await MediaRecorder.Create(
+                    MediaFormat.MP4,
+                    width: 1280,
+                    height: 720,
+                    frameRate: 30
+                );
+                // Commit empty frames
+                using var pixelData = new NativeArray<byte>(
+                    recorder.width * recorder.height * 4,
+                    Allocator.Persistent,
+                    NativeArrayOptions.ClearMemory
+                );
+                var format = PixelBuffer.Format.RGBA8888;
+                for (var i = 0; i < 3; ++i) {
+                    using var pixelBuffer = new PixelBuffer(
+                        recorder.width,
+                        recorder.height,
+                        format,
+                        pixelData,
+                        timestamp:
+                        clock.timestamp
+                    );
+                    recorder.Append(pixelBuffer);
+                }
+                // Finish and delete
+                var asset = await recorder.FinishWriting();
+                File.Delete(asset.path);
+            } catch { }
         }
         #endregion
     }

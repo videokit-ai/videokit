@@ -7,6 +7,7 @@
 + Refactored `MediaAsset.FromSpeechPrompt` method to `MediaAsset.FromGeneratedSpeech` for performing text-to-speech.
 + Removed `PixelBuffer.Region` method.
 + Removed `PixelBuffer.ToImage` method.
++ Removed video recording in the free tier. Subscribe to a VideoKit plan to use video recording.
 + VideoKit now requires iOS 14+.
 + VideoKit now requires macOS 12+.
 
