@@ -17,9 +17,10 @@ namespace VideoKit.Tests {
         [SerializeField] private RawImage rawImage;
 
         private async void Start () {
-            await Task.Delay(3_000);
+            await Task.Delay(4_000);
             var imageAsset = await recorder.CaptureScreenshot();
             rawImage.texture = await imageAsset.ToTexture();
+            await imageAsset.Share();
         }
     }
 }

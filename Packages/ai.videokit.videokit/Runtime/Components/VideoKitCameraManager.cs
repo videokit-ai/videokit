@@ -305,7 +305,7 @@ namespace VideoKit {
             rotation = GetPreviewRotation(Screen.orientation);
             var (cameraWidth, cameraHeight) = _device.previewResolution;
             var (previewWidth, previewHeight) = GetPreviewTextureSize(cameraWidth, cameraHeight, rotation);
-            previewBuffer = new NativeArray<byte>(previewWidth * previewHeight * 4, Allocator.Persistent);
+            previewData = new NativeArray<byte>(previewWidth * previewHeight * 4, Allocator.Persistent);
             texture = new Texture2D(previewWidth, previewHeight, TextureFormat.RGBA32, false);
             humanTexture = capabilities.HasFlag(Capabilities.HumanTexture) ?
                 new Texture2D(previewWidth, previewHeight, TextureFormat.RGBA32, false) :
@@ -324,9 +324,9 @@ namespace VideoKit {
             _device?.StopRunning();
             Texture2D.Destroy(texture);
             Texture2D.Destroy(humanTexture);
-            if (previewBuffer.IsCreated)
-                previewBuffer.Dispose();
-            previewBuffer = default;
+            if (previewData.IsCreated)
+                previewData.Dispose();
+            previewData = default;
             texture = null;
             humanTexture = null;
             rotation = 0;
@@ -337,7 +337,7 @@ namespace VideoKit {
         #region --Operations--
         private CameraDevice[]? devices;
         private CameraDevice? _device;
-        private NativeArray<byte> previewBuffer;
+        internal NativeArray<byte> previewData { get; private set; }
         private readonly object previewFence = new object();
         private static readonly List<RuntimePlatform> OrientationSupport = new List<RuntimePlatform> {
             RuntimePlatform.Android,
@@ -358,7 +358,7 @@ namespace VideoKit {
                     width,
                     height,
                     PixelBuffer.Format.RGBA8888,
-                    (byte*)previewBuffer.GetUnsafePtr()
+                    (byte*)previewData.GetUnsafePtr()
                 );
                 srcBuffer.CopyTo(dstBuffer, rotation: rotation);
             }
@@ -369,7 +369,7 @@ namespace VideoKit {
         private void OnFrame () {
             // Preview texture
             lock (previewFence)
-                texture!.GetRawTextureData<byte>().CopyFrom(previewBuffer);
+                texture!.GetRawTextureData<byte>().CopyFrom(previewData);
             texture.Apply();
             // Human texture
             if (capabilities.HasFlag(Capabilities.HumanTexture)) {

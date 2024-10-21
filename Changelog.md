@@ -1,6 +1,9 @@
 ## 0.0.22
 + Improved native error propagation into C# code allowing you to `try..catch` more errors.
++ Improved recording performance when using `VideoMode.CameraDevice` with the `VideoKitRecorder` component.
 + Added `VideoKitCameraManager.StartRunningAsync` method which returns a `Task` for async completion and error handling.
++ Added `VideoKitAudioManager.StartRunningAsync` method which returns a `Task` for async completion and error handling.
++ Added `VideoKitRecorder.StartRecordingAsync` method which returns a `Task` for async completion and error handling.
 + Fixed `CameraDevice.StopRunning` method causing app hanging when camera device is unsupported (#126).
 + Refactored `MediaAsset.Caption<T>` method to `MediaAsset.Parse<T>` for structured parsing.
 + Refactored `MediaAsset.Caption` method to `MediaAsset.Transcribe` for performing speech-to-text.

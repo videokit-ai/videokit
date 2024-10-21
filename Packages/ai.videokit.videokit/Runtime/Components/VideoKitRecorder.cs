@@ -427,7 +427,12 @@ namespace VideoKit {
         /// <summary>
         /// Start recording.
         /// </summary>
-        public async void StartRecording () {
+        public async void StartRecording () => await StartRecordingAsync();
+
+        /// <summary>
+        /// Start recording.
+        /// </summary>
+        public async Task StartRecordingAsync () {
             // Check active
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because component is disabled");
@@ -461,17 +466,8 @@ namespace VideoKit {
                         audioManager.channelCount = VideoKitAudioManager.ChannelCount.MatchUnity;
                     }
                     // Start running
-                    audioManager.StartRunning();
-                    // Check that we're running
-                    for (var i = 0; i < 150; ++i)
-                        if (!audioManager.running)
-                            await Task.Yield();
-                        else
-                            break;
+                    await audioManager.StartRunningAsync();
                 }
-                // Check audio stream
-                if (!audioManager.running)
-                    throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because the audio mode includes to `AudioMode.AudioDevice` but the `audioManager` is not running");
             }
             // Check format
             if (format == MediaFormat.MP4 && Application.platform == RuntimePlatform.WebGLPlayer) {
@@ -701,7 +697,7 @@ namespace VideoKit {
             VideoMode.Screen        => new ScreenSource(width, height, handler, clock) { frameSkip = frameSkip },
             VideoMode.Camera        => new CameraSource(width, height, handler, clock, cameras) { frameSkip = frameSkip },
             VideoMode.Texture       => new TextureSource(width, height, handler, clock) { texture = texture, frameSkip = frameSkip },
-            VideoMode.CameraDevice  => new CameraManagerSource(width, height, handler, clock, cameraManager!) { },
+            VideoMode.CameraDevice  => new CameraManagerSource(cameraManager!, handler, clock) { },
             _                       => null
         };
 

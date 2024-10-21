@@ -773,9 +773,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capabilities: 0
   playOnAwake: 1
-  _facing: 0
+  _facing: 1
   resolution: 3
-  frameRate: 0
+  frameRate: 240
   focusMode: 0
   exposureMode: 0
   OnCameraFrame:
@@ -795,7 +795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 1
+  videoMode: 4
   resolution: 1
   customResolution: {x: 1280, y: 720}
   cameras:
@@ -805,7 +805,7 @@ MonoBehaviour:
   _frameRate: 10
   frameSkip: 0
   watermarkMode: 0
-  _watermark: {fileID: 0}
+  _watermark: {fileID: 2800000, guid: 530e9c7c48e0d43e284701c2fae3de8c, type: 3}
   _watermarkRect:
     x: 0
     y: 0

@@ -8,9 +8,7 @@
 namespace VideoKit.Sources {
 
     using System;
-    using System.Runtime.CompilerServices;
     using Clocks;
-    using Unity.Collections;
 
     /// <summary>
     /// Media source for generating pixel buffers from a camera device.
@@ -19,80 +17,50 @@ namespace VideoKit.Sources {
 
         #region --Client API--
         public CameraManagerSource (
+            VideoKitCameraManager cameraManager,
             MediaRecorder recorder,
-            IClock? clock,
-            VideoKitCameraManager cameraManager
-        ) : this(recorder.width, recorder.height, recorder.Append, clock, cameraManager) { }
+            IClock? clock = null
+        ) : this(cameraManager, recorder.Append, clock) {
+            if (recorder.width != width || recorder.height != height)
+                throw new ArgumentException("Cannot create camera manager source because camera preview resolution does not match recorder resolution");
+        }
 
         public CameraManagerSource (
-            int width,
-            int height,
+            VideoKitCameraManager cameraManager,
             Action<PixelBuffer> handler,
-            IClock? clock,
-            VideoKitCameraManager cameraManager
+            IClock? clock = null
         ) {
-            this.width = width;
-            this.height = height;
+            if (cameraManager.texture == null)
+                throw new ArgumentException("Cannot create camera manager source because camera manager is not running");
             this.handler = handler;
             this.clock = clock;
             this.cameraManager = cameraManager;
+            this.width = cameraManager.texture!.width;
+            this.height = cameraManager.texture!.height;
             cameraManager.OnPixelBuffer += OnPixelBuffer;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void Dispose () {
-            cameraManager.OnPixelBuffer -= OnPixelBuffer;
-            pixelData.Dispose();
-            pixelData = default;
-            disposed = true;
-        }
+        public void Dispose () => cameraManager.OnPixelBuffer -= OnPixelBuffer;
         #endregion
 
 
         #region --Operations--
-        private readonly int width;
-        private readonly int height;
         private readonly Action<PixelBuffer> handler;
         private readonly IClock? clock;
         private readonly VideoKitCameraManager cameraManager;
-        private NativeArray<byte> pixelData;
-        private bool disposed;
+        private readonly int width;
+        private readonly int height;
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        private void OnPixelBuffer (PixelBuffer srcBuffer) { // INCOMPLETE // Check width and height
-            // Check
-            if (disposed)
-                return;
-            // Check data
-            var dataSize = srcBuffer.width * srcBuffer.height * 4;
-            if (pixelData.IsCreated && pixelData.Length != dataSize) {
-                pixelData.Dispose();
-                pixelData = default;
-            }
-            // Create data
-            if (!pixelData.IsCreated)
-                pixelData = new NativeArray<byte>(dataSize, Allocator.Persistent);
-            // Copy
-            var rotation = cameraManager.rotation;
-            var (dstWidth, dstHeight) = IsTransposed(rotation) ?
-                (srcBuffer.height, srcBuffer.width) :
-                (srcBuffer.width, srcBuffer.height);
-            using var dstBuffer = new PixelBuffer(
-                dstWidth,
-                dstHeight,
+        private void OnPixelBuffer (PixelBuffer srcBuffer) {
+            using var pixelBuffer = new PixelBuffer(
+                width,
+                height,
                 PixelBuffer.Format.RGBA8888,
-                pixelData,
+                cameraManager.previewData,
                 timestamp: clock?.timestamp ?? 0L
             );
-            srcBuffer.CopyTo(dstBuffer, rotation: rotation);
-            // Append
-            handler?.Invoke(dstBuffer);
+            handler?.Invoke(pixelBuffer);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsTransposed (PixelBuffer.Rotation rotation) =>
-            rotation == PixelBuffer.Rotation._90 ||
-            rotation == PixelBuffer.Rotation._270;
         #endregion
     }
 }

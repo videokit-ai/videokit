@@ -7,6 +7,7 @@ namespace VideoKit {
 
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using UnityEngine;
     using Internal;
 
@@ -138,7 +139,12 @@ namespace VideoKit {
         /// <summary>
         /// Start streaming audio.
         /// </summary>
-        public async void StartRunning () {
+        public async void StartRunning () => await StartRunningAsync();
+
+        /// <summary>
+        /// Start streaming audio.
+        /// </summary>
+        public async Task StartRunningAsync () {
             // Check
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKit: Audio manager failed to start running because component is disabled");
