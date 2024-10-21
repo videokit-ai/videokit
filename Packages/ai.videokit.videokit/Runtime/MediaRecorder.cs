@@ -22,7 +22,7 @@ namespace VideoKit {
     /// Media recorder capable of recording video and/or audio frames to a media file.
     /// All recorder methods are thread safe, and as such can be called from any thread.
     /// </summary>
-    public sealed class MediaRecorder {
+    public class MediaRecorder {
 
         #region --Enumerations--
         /// <summary>
@@ -86,52 +86,52 @@ namespace VideoKit {
         /// <summary>
         /// Recorder format.
         /// </summary>
-        public Format format => recorder.GetMediaRecorderFormat(out var format).Throw() == Status.Ok ? format : default;
+        public virtual Format format => recorder.GetMediaRecorderFormat(out var format).Throw() == Status.Ok ? format : default;
 
         /// <summary>
         /// Recorder video width.
         /// </summary>
-        public int width => recorder.GetMediaRecorderWidth(out var width).Throw() == Status.Ok ? width : default;
+        public virtual int width => recorder.GetMediaRecorderWidth(out var width).Throw() == Status.Ok ? width : default;
 
         /// <summary>
         /// Recorder video height.
         /// </summary>
-        public int height => recorder.GetMediaRecorderHeight(out var height).Throw() == Status.Ok ? height : default;
+        public virtual int height => recorder.GetMediaRecorderHeight(out var height).Throw() == Status.Ok ? height : default;
 
         /// <summary>
         /// Recorder audio sample rate.
         /// </summary>
-        public int sampleRate => recorder.GetMediaRecorderSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
+        public virtual int sampleRate => recorder.GetMediaRecorderSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
 
         /// <summary>
         /// Recorder audio channel count.
         /// </summary>
-        public int channelCount => recorder.GetMediaRecorderChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
+        public virtual int channelCount => recorder.GetMediaRecorderChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
 
         /// <summary>
         /// Check whether the media recorder supports appending sample buffers of the given type.
         /// </summary>
         /// <typeparam name="T">Sample buffer type.</typeparam>
         /// <returns>Whether the media recorder supports appending sample buffers of the given type.</returns>
-        public bool CanAppend<T> () where T : struct => CanAppend<T>(format);
+        public virtual bool CanAppend<T> () where T : struct => CanAppend<T>(format);
 
         /// <summary>
         /// Append a video frame to the recorder.
         /// </summary>
         /// <param name="image">Input image to append. The image MUST have a valid timestamp for formats that require one.</param>
-        public unsafe void Append (PixelBuffer pixelBuffer) => recorder.AppendPixelBuffer(pixelBuffer).Throw();
+        public virtual void Append (PixelBuffer pixelBuffer) => recorder.AppendPixelBuffer(pixelBuffer).Throw();
 
         /// <summary>
         /// Append an audio frame to the recorder.
         /// </summary>
         /// <param name="audioBuffer">Input audio buffer to append. This audio buffer MUST have a valid timestamp for formats that require one.</param>
-        public unsafe void Append (AudioBuffer audioBuffer) => recorder.AppendSampleBuffer(audioBuffer).Throw();
+        public virtual void Append (AudioBuffer audioBuffer) => recorder.AppendSampleBuffer(audioBuffer).Throw();
 
         /// <summary>
         /// Finish writing.
         /// </summary>
         /// <returns>Recorded media asset.</returns>
-        public Task<MediaAsset> FinishWriting () {
+        public virtual Task<MediaAsset> FinishWriting () {
             var tcs = new TaskCompletionSource<MediaAsset>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
@@ -290,7 +290,7 @@ namespace VideoKit {
             },
         };
 
-        private MediaRecorder (IntPtr recorder) => this.recorder = recorder;
+        protected MediaRecorder (IntPtr recorder = default) => this.recorder = recorder;
 
         public static implicit operator IntPtr (MediaRecorder recorder) => recorder.recorder;
 

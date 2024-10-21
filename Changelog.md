@@ -1,6 +1,7 @@
 ## 0.0.22
 + Improved native error propagation into C# code allowing you to `try..catch` more errors.
 + Improved recording performance when using `VideoMode.CameraDevice` with the `VideoKitRecorder` component.
++ Unsealed the `MediaRecorder` class, allowing for custom derived classes to override recording behaviour.
 + Added `VideoKitCameraManager.StartRunningAsync` method which returns a `Task` for async completion and error handling.
 + Added `VideoKitAudioManager.StartRunningAsync` method which returns a `Task` for async completion and error handling.
 + Added `VideoKitRecorder.StartRecordingAsync` method which returns a `Task` for async completion and error handling.
