@@ -544,7 +544,12 @@ namespace VideoKit {
         /// <summary>
         /// Stop recording.
         /// </summary>
-        public async void StopRecording () {
+        public async void StopRecording () => await StopRecordingAsync();
+
+        /// <summary>
+        /// Stop recording.
+        /// </summary>
+        public async Task StopRecordingAsync () {
             // Check
             if (status == Status.Idle) {
                 Debug.LogWarning(@"Cannot stop recording because no recording session is in progress");
