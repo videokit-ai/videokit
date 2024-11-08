@@ -484,7 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
-  viewMode: 1
+  viewMode: 0
   focusMode: 0
   exposureMode: 0
   zoomMode: 0
@@ -715,8 +715,10 @@ GameObject:
   - component: {fileID: 1493259193}
   - component: {fileID: 1493259199}
   - component: {fileID: 1493259192}
+  - component: {fileID: 1493259205}
   - component: {fileID: 1493259197}
   - component: {fileID: 1493259200}
+  - component: {fileID: 1493259204}
   - component: {fileID: 1493259201}
   - component: {fileID: 1493259203}
   - component: {fileID: 1493259196}
@@ -770,7 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98622613d505143a9a06b4b11b0a82cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capabilities: 6
+  capabilities: 0
   playOnAwake: 1
   _facing: 1
   resolution: 3
@@ -787,14 +789,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0fffa95ffc0b4c7a87ce2d4c7fd1873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 0
+  videoMode: 1
   resolution: 1
   customResolution: {x: 1280, y: 720}
   cameras:
@@ -815,7 +817,7 @@ MonoBehaviour:
   configureAudioManager: 1
   audioListener: {fileID: 963194226}
   audioSource: {fileID: 0}
-  recordingAction: 0
+  recordingAction: 2
   OnRecordingCompleted:
     m_PersistentCalls:
       m_Calls: []
@@ -1022,6 +1024,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recorder: {fileID: 1493259191}
+  rawImage: {fileID: 840997204}
+--- !u!114 &1493259204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e06a6413b46e4cc28d6f8cbe5413567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 2800000, guid: 9720ae62abb8a4085baab643c5e4c591, type: 3}
+--- !u!114 &1493259205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e34e9851b6eb2408180670a9d82c9e7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   rawImage: {fileID: 840997204}
 --- !u!1 &1553569355
 GameObject:

@@ -11,8 +11,6 @@
 #include <VideoKit/VKTAPI.h>
 #include <VideoKit/VKTStatus.h>
 #include <VideoKit/VKTSession.h>
-#include <VideoKit/VKTClock.h>
-#include <VideoKit/VKTMetadata.h>
 #include <VideoKit/VKTSampleBuffer.h>
 #include <VideoKit/VKTAudioBuffer.h>
 #include <VideoKit/VKTPixelBuffer.h>

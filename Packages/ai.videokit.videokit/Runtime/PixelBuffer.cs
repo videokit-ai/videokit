@@ -10,11 +10,11 @@ namespace VideoKit {
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.InteropServices;
+    using System.Text;
     using UnityEngine;
     using Unity.Collections;
     using Unity.Collections.LowLevel.Unsafe;
+    using Newtonsoft.Json;
     using Internal;
     using Status = Internal.VideoKit.Status;
 
@@ -189,13 +189,27 @@ namespace VideoKit {
         /// Pixel buffer planes for planar formats.
         /// This is `null` for interleaved formats.
         /// </summary>
-        public readonly IReadOnlyList<Plane> planes => new NativePlanes(this);
+        public readonly IReadOnlyList<Plane>? planes {
+            get {
+                var planes = new NativePlanes(this) as IReadOnlyList<Plane>;
+                return planes.Count > 0 ? planes : null;
+            }
+        }
 
         /// <summary>
         /// Pixel buffer metadata.
+        /// A new dictionary is returned every time this property is accessed.
         /// This is `null` if the pixel buffer has no metadata.
         /// </summary>
-        public readonly IReadOnlyDictionary<string, object> metadata => new NativeMetadataDictionary(this);
+        public readonly Dictionary<string, object>? metadata {
+            get {
+                var sb = new StringBuilder(8192);
+                if (pixelBuffer.CopyPixelBufferMetadata(sb, sb.Capacity) != Status.Ok)
+                    return null;
+                var metadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(sb.ToString());
+                return metadata;
+            }
+        }
         #endregion
 
 
@@ -373,65 +387,6 @@ namespace VideoKit {
             }
 
             IEnumerator IEnumerable.GetEnumerator () => (this as IEnumerable<Plane>).GetEnumerator();
-        }
-
-        private readonly struct NativeMetadataDictionary : IReadOnlyDictionary<string, object> {
-
-            private readonly IntPtr metadata;
-
-            public NativeMetadataDictionary (IntPtr pixelBuffer) => pixelBuffer.GetPixelBufferMetadata(out metadata);
-
-            object IReadOnlyDictionary<string, object>.this[string key] {
-                get {
-                    if ((this as IReadOnlyDictionary<string, object>).TryGetValue(key, out var value))
-                        return value;
-                    else
-                        throw new KeyNotFoundException();
-                }
-            }
-
-            int IReadOnlyCollection<KeyValuePair<string, object>>.Count => metadata.GetMetadataCount(out var count) ==  Status.Ok ? count : default;
-
-            bool IReadOnlyDictionary<string, object>.ContainsKey (string key) => metadata.MetadataContainsKey(key) == Status.Ok;
-
-            unsafe IEnumerable<string> IReadOnlyDictionary<string, object>.Keys {
-                get {
-                    if (metadata.GetMetadataCount(out var count) != Status.Ok)
-                        return Enumerable.Empty<string>();
-                    var keyPtrs = new IntPtr[count];
-                    metadata.GetMetadataKeys(keyPtrs);
-                    return keyPtrs.Select(ptr => Marshal.PtrToStringUTF8(ptr));
-                }
-            }
-
-            IEnumerable<object> IReadOnlyDictionary<string, object>.Values {
-                get {
-                    var dict = this as IReadOnlyDictionary<string, object>;
-                    foreach (var key in dict.Keys)
-                        if (dict.TryGetValue(key, out var value))
-                            yield return value;
-                }
-            }
-
-            bool IReadOnlyDictionary<string, object>.TryGetValue(string key, out object value) {
-                value = null!;
-                var count = 0;
-                var status = metadata.GetMetadataFloatValue(key, null, ref count);
-                if (status == Status.Ok) {
-                    var result = new float[count];
-                    metadata.GetMetadataFloatValue(key, result, ref count).Throw();
-                    value = result;
-                    return true;
-                }
-                return false;
-            }
-
-            IEnumerator<KeyValuePair<string, object>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator () {
-                var dict = this as IReadOnlyDictionary<string, object>;
-                return dict.Keys.Zip(dict.Values, KeyValuePair.Create).GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator () => (this as IEnumerable<KeyValuePair<string, object>>).GetEnumerator();
         }
         #endregion
     }

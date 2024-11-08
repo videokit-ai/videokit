@@ -34,13 +34,6 @@
 			eh1oW64vP16Mq++BPc7ItLbgIPWYCL4yDJKuTduo0wY=
 			</data>
 		</dict>
-		<key>Headers/VKTClock.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			9sVRq/S3c36tn1GTVD5kbqZqI9clVqFB9biblxZ32Gg=
-			</data>
-		</dict>
 		<key>Headers/VKTMediaAsset.h</key>
 		<dict>
 			<key>hash2</key>
@@ -69,25 +62,18 @@
 			64rJTBVs52iixRAAfJDdbmw53Qtu//scU05+wb3l+PI=
 			</data>
 		</dict>
-		<key>Headers/VKTMetadata.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			XDZ5MzSa/LnlPO3Rm3YKSPLMRQSN+Q7xGDkg1GK+Yos=
-			</data>
-		</dict>
 		<key>Headers/VKTPixelBuffer.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			p/4EB3PnM6pg/UESh9eB7HY6EEauHVt48vUuAbxwxng=
+			E4jpVdAs15P4qn6kYY0Ls/uMfllm6b9+R6mw3x02fnQ=
 			</data>
 		</dict>
 		<key>Headers/VKTSampleBuffer.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			rRjs1PDivMXwhB7f5lsA28ivgCtxsoJwNlVIKIPfHYk=
+			u/Olilag5938xGQYoAFwJEfvaDCkooR8QAe8uFSCQxA=
 			</data>
 		</dict>
 		<key>Headers/VKTSession.h</key>
@@ -108,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JMVhldVVPxdNeTEUgR0zXg39yvFPZdAW2pk5ndOZPw0=
+			F9Ap4G3LagXqVqn7+lnQzG3pUaQzqgYfw3F33kDh0r8=
 			</data>
 		</dict>
 		<key>Headers/VideoKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xGEfyMB+DOHk8ArsCUc9IGF2D7AhnRmSBAUyGegWcpQ=
+			xe7gR+Hr93TSYEx9miK/be77ZyY4jxFs2rriEJC2sis=
 			</data>
 		</dict>
 	</dict>

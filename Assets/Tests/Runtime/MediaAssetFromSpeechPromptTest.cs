@@ -6,11 +6,10 @@
 namespace VideoKit.Tests {
 
     using UnityEngine;
-    using UnityEngine.Serialization;
 
     internal sealed class MediaAssetFromSpeechPromptTest : MonoBehaviour {
 
-        [SerializeField, TextArea, FormerlySerializedAs(@"text")]
+        [SerializeField, TextArea]
         private string prompt;
 
         private async void Start () {

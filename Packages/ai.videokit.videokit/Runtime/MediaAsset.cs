@@ -509,18 +509,12 @@ namespace VideoKit {
         [MonoPInvokeCallback(typeof(VideoKit.MediaAssetHandler))]
         private static void OnCreateAsset (IntPtr context, IntPtr asset) {
             try {
-                // Check
                 if (!VideoKit.IsAppDomainLoaded)
                     return;
-                // Get tcs
                 var handle = (GCHandle)context;
                 var tcs = handle.Target as TaskCompletionSource<MediaAsset?>;
                 handle.Free();
-                // Complete task
-                if (asset != IntPtr.Zero)
-                    tcs?.SetResult(new MediaAsset(asset));
-                else
-                    tcs?.SetException(new InvalidOperationException(@"Failed to create media asset"));
+                tcs?.SetResult(asset != IntPtr.Zero ? new MediaAsset(asset) : null);
             } catch (Exception ex) {
                 Debug.LogException(ex);
             }

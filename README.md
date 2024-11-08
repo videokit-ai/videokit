@@ -137,7 +137,7 @@ ___
 - iOS 14+
 - macOS 12+ (Apple Silicon and Intel)
 - Windows 10+ (64-bit only)
-- WebGL:
+- WebGL (requires Unity 6):
   - Chrome 91+
   - Firefox 90+
   - Safari 16.4+

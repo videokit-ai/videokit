@@ -34,6 +34,16 @@ namespace VideoKit.Internal {
         public event Action? onLateUpdate;
 
         /// <summary>
+        /// Event invoked when the application is paused.
+        /// </summary>
+        public event Action? onPause;
+
+        /// <summary>
+        /// Event invoked when the application is resumed.
+        /// </summary>
+        public event Action? onResume;
+
+        /// <summary>
         /// Event invoked when application is quit.
         /// </summary>
         public event Action? onQuit;
@@ -67,6 +77,8 @@ namespace VideoKit.Internal {
         private void Update () => onUpdate?.Invoke();
 
         private void LateUpdate () => onLateUpdate?.Invoke();
+
+        private void OnApplicationPause (bool paused) => (paused ? onPause : onResume)?.Invoke();
 
         private void OnApplicationQuit () {
             onQuit?.Invoke();

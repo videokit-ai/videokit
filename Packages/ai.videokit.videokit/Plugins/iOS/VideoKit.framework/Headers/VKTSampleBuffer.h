@@ -69,4 +69,18 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferGetTimestamp (
     VKTSampleBuffer* sampleBuffer,
     int64_t* timestamp
 );
+
+/*!
+ @function VKTSampleBufferGetCurrentTimestamp
+
+ @abstract Get the high resolution timestamp.
+
+ @discussion Get the high resolution timestamp.
+
+ @param timestamp
+ High resolution timestamp in nanoseconds.
+
+ @returns Status.
+*/
+VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferGetCurrentTimestamp (int64_t* timestamp);
 #pragma endregion

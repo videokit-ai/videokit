@@ -11,7 +11,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <VideoKit/VKTSampleBuffer.h>
-#include <VideoKit/VKTMetadata.h>
 
 #pragma region --Enumerations--
 /*!
@@ -460,21 +459,26 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneRowStride (
 );
 
 /*!
- @function VKTPixelBufferGetMetadata
+ @function VKTPixelBufferCopyMetadata
 
- @abstract Get the pixel buffer metadata.
+ @abstract Copy the pixel buffer metadata.
 
- @discussion Get the pixel buffer metadata.
+ @discussion Copy the pixel buffer metadata.
+ The metadata dictionary is specified as a JSON-encoded dictionary.
 
  @param pixelBuffer
  Pixel buffer.
  
  @param metadata
- Pixel buffer metadata.
+ Pixel buffer metadata as a JSON-encoded UTF-8 string.
+
+ @param size
+ Size of metadata buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetMetadata (
+VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCopyMetadata (
     VKTPixelBuffer* pixelBuffer,
-    VKTMetadata** metadata
+    char* metadata,
+    int32_t size
 );
 #pragma endregion
 

@@ -7,12 +7,16 @@
 + Added `VideoKitRecorder.StartRecordingAsync` method which returns a `Task` for async completion and error handling.
 + Added `VideoKitRecorder.StopRecordingAsync` method which returns a `Task` for async completion and error handling.
 + Fixed `CameraDevice.StopRunning` method causing app hanging when camera device is unsupported (#126).
++ Fixed `MediaAsset.FromCameraRoll` method causing app crash when the user does not pick an asset on Android (#146).
++ Fixed `MediaAsset.FromCameraRoll` task never completing when user does not pick an asset on iOS (#146).
++ Fixed camera preview not resuming after app is suspended for more than a few seconds on Android (#56).
 + Refactored `MediaAsset.Caption<T>` method to `MediaAsset.Parse<T>` for structured parsing.
 + Refactored `MediaAsset.Caption` method to `MediaAsset.Transcribe` for performing speech-to-text.
 + Refactored `MediaAsset.FromSpeechPrompt` method to `MediaAsset.FromGeneratedSpeech` for performing text-to-speech.
 + Removed `PixelBuffer.Region` method.
 + Removed `PixelBuffer.ToImage` method.
 + Removed video recording in the free tier. Subscribe to a VideoKit plan to use video recording.
++ VideoKit now requires Unity 6 when building for WebGL (#150).
 + VideoKit now requires iOS 14+.
 + VideoKit now requires macOS 12+.
 

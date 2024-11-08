@@ -7,10 +7,9 @@
 
 namespace VideoKit.Clocks {
 
-    using System;
     using System.Runtime.CompilerServices;
     using Internal;
-    using Status = VideoKit.Internal.VideoKit.Status;
+    using Status = Internal.VideoKit.Status;
 
     /// <summary>
     /// Realtime clock for generating timestamps.
@@ -59,8 +58,7 @@ namespace VideoKit.Clocks {
         private long startTime;
         private bool isPaused;
         private long pauseTime;
-        private static long CurrentTimestamp => VideoKit
-            .GetHighResolutionTimestamp(out var timestamp)
+        private static long CurrentTimestamp => VideoKit.GetCurrentTimestamp(out var timestamp)
             .Throw() == Status.Ok ? timestamp : 0L;
         #endregion
     }

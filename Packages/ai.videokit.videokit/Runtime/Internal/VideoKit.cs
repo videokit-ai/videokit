@@ -11,7 +11,6 @@ namespace VideoKit.Internal {
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
-    using UnityEngine;
     using Function.Types;
 
     public static class VideoKit {
@@ -59,12 +58,6 @@ namespace VideoKit.Internal {
             Camera      = 2
         }
 
-        public enum MetadataType : int {
-            Unknown   = 0,
-            Float     = 1,
-            Int       = 2,
-        }
-    
         public enum Status : int {
             Ok                  = 0,
             InvalidArgument     = 1,
@@ -100,38 +93,6 @@ namespace VideoKit.Internal {
         #endregion
 
 
-        #region --VKTClock--
-        [DllImport(Assembly, EntryPoint = @"VKTClockGetHighResolutionTimestamp")]
-        public static extern Status GetHighResolutionTimestamp (out long timestamp);
-        #endregion
-
-
-        #region --VKTMetadata--
-        [DllImport(Assembly, EntryPoint = @"VKTMetadataGetCount")]
-        public static extern Status GetMetadataCount (
-            this IntPtr metadata,
-            out int count
-        );
-        [DllImport(Assembly, EntryPoint = @"VKTMetadataContainsKey")]
-        public static extern Status MetadataContainsKey (
-            this IntPtr metadata,
-            [MarshalAs(UnmanagedType.LPUTF8Str)] string key
-        );
-        [DllImport(Assembly, EntryPoint = @"VKTMetadataGetKeys")]
-        public static extern Status GetMetadataKeys (
-            this IntPtr metadata,
-            [Out] IntPtr[] keys
-        );
-        [DllImport(Assembly, EntryPoint = @"VKTMetadataGetFloatValue")]
-        public static extern Status GetMetadataFloatValue (
-            this IntPtr metadata,
-            [MarshalAs(UnmanagedType.LPUTF8Str)] string key,
-            [Out] float[]? value,
-            ref int count
-        );
-        #endregion
-
-
         #region --VKTSampleBuffer--
         [DllImport(Assembly, EntryPoint = @"VKTSampleBufferRelease")]
         public static extern Status ReleaseSampleBuffer (this IntPtr sampleBuffer);
@@ -140,6 +101,8 @@ namespace VideoKit.Internal {
             this IntPtr audioBuffer,
             out long timestamp
         );
+        [DllImport(Assembly, EntryPoint = @"VKTSampleBufferGetCurrentTimestamp")]
+        public static extern Status GetCurrentTimestamp (out long timestamp);
         #endregion
 
 
@@ -280,10 +243,11 @@ namespace VideoKit.Internal {
             int planeIdx,
             out int rowStride
         );
-        [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetMetadata")]
-        public static extern Status GetPixelBufferMetadata (
+        [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCopyMetadata")]
+        public static extern Status CopyPixelBufferMetadata (
             this IntPtr pixelBuffer,
-            out IntPtr metadata
+            [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder dest,
+            int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCopyTo")]
         public static extern Status CopyToPixelBuffer (
