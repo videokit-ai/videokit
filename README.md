@@ -1,4 +1,7 @@
 # VideoKit
+
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/1o2on.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
+
 VideoKit is the only full feature user-generated content solution for Unity Engine. VideoKit allows:
 
 - **Video recording**. Record MP4 videos, animated GIF images, WEBM videos, ProRes videos, waveform audio, JPEG image sequences, and more to come!
