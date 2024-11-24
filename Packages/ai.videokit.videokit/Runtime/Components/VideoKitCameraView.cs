@@ -8,6 +8,7 @@ namespace VideoKit.UI {
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
+    using UnityEngine.Serialization;
     using UnityEngine.UI;
 
     /// <summary>
@@ -75,22 +76,22 @@ namespace VideoKit.UI {
 
         [Header(@"Gestures")]
         /// <summary>
-        /// Focus gesture mode.
+        /// Focus gesture.
         /// </summary>
-        [Tooltip(@"Focus gesture mode.")]
-        public GestureMode focusMode = GestureMode.None;
+        [Tooltip(@"Focus gesture."), FormerlySerializedAs(@"focusMode")]
+        public GestureMode focusGesture = GestureMode.None;
 
         /// <summary>
-        /// Exposure gesture mode.
+        /// Exposure gesture.
         /// </summary>
-        [Tooltip(@"Exposure gesture mode.")]
-        public GestureMode exposureMode = GestureMode.None;
+        [Tooltip(@"Exposure gesture."), FormerlySerializedAs(@"exposureMode")]
+        public GestureMode exposureGesture = GestureMode.None;
 
         /// <summary>
-        /// Zoom gesture mode.
+        /// Zoom gesture.
         /// </summary>
-        [Tooltip(@"Zoom gesture mode.")]
-        public GestureMode zoomMode = GestureMode.None;
+        [Tooltip(@"Zoom gesture."), FormerlySerializedAs(@"zoomMode")]
+        public GestureMode zoomGesture = GestureMode.None;
 
         [Header(@"Events")]
         /// <summary>
@@ -144,7 +145,7 @@ namespace VideoKit.UI {
             if (!cameraManager)
                 return;
             // Check focus mode
-            if (focusMode != GestureMode.Tap && exposureMode != GestureMode.Tap)
+            if (focusGesture != GestureMode.Tap && exposureGesture != GestureMode.Tap)
                 return;
             // Get press position
             var rectTransform = transform as RectTransform;
@@ -158,9 +159,9 @@ namespace VideoKit.UI {
             // Focus
             var cameraDevice = cameraManager.device;
             var point = Rect.PointToNormalized(rectTransform.rect, localPoint);
-            if (cameraDevice.focusPointSupported && focusMode == GestureMode.Tap)
+            if (cameraDevice.focusPointSupported && focusGesture == GestureMode.Tap)
                 cameraDevice.SetFocusPoint(point.x, point.y);
-            if (cameraDevice.exposurePointSupported && exposureMode == GestureMode.Tap)
+            if (cameraDevice.exposurePointSupported && exposureGesture == GestureMode.Tap)
                 cameraDevice.SetExposurePoint(point.x, point.y);
         }
 

@@ -121,32 +121,44 @@ namespace VideoKit {
         /// <summary>
         /// Is this camera front facing?
         /// </summary>
-        public bool frontFacing => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FrontFacing);
+        public bool frontFacing => 
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.FrontFacing);
 
         /// <summary>
         /// Is flash supported for photo capture?
         /// </summary>
-        public bool flashSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.Flash);
+        public bool flashSupported =>
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.Flash);
 
         /// <summary>
         /// Is torch supported?
         /// </summary>
-        public bool torchSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.Torch);
+        public bool torchSupported =>
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.Torch);
         
         /// <summary>
         /// Is setting the exposure point supported?
         /// </summary>
-        public bool exposurePointSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposurePoint);
+        public bool exposurePointSupported =>
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.ExposurePoint);
 
         /// <summary>
         /// Is setting the focus point supported?
         /// </summary>
-        public bool focusPointSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusPoint);
+        public bool focusPointSupported =>
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.FocusPoint);
 
         /// <summary>
         /// Is depth streaming supported?
         /// </summary>
-        public bool depthStreamingSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.Depth);
+        public bool depthStreamingSupported =>
+            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            flags.HasFlag(MediaDeviceFlags.Depth);
 
         /// <summary>
         /// Field of view in degrees.
@@ -406,7 +418,7 @@ namespace VideoKit {
             }
         }
 
-        internal CameraDevice (IntPtr device) : base(device) { }
+        internal CameraDevice (IntPtr device, bool weak = false) : base(device, weak: weak) { }
 
         public override string ToString () => $"CameraDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 

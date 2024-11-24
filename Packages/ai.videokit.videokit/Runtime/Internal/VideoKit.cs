@@ -76,7 +76,7 @@ namespace VideoKit.Internal {
         public delegate void MediaDeviceDiscoveryHandler (IntPtr context, IntPtr devices, int count);
         public delegate void MediaDeviceDisconnectHandler (IntPtr context, IntPtr device);
         public delegate void MediaDevicePermissionResultHandler (IntPtr context, MediaDevice.PermissionStatus result);
-        internal delegate void MultiCameraDeviceSystemPressureHandler (IntPtr context, MultiCameraDevice.SystemPressureLevel level);
+        public delegate void MultiCameraDeviceSystemPressureHandler (IntPtr context);
         #endregion
 
 
@@ -767,7 +767,59 @@ namespace VideoKit.Internal {
         #endregion
 
 
-        #region --VKTStatus--
+        #region --VKTMultiCameraDevice--
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceDiscoverDevices")]
+        public static extern Status DiscoverMultiCameraDevices (
+            MediaDeviceDiscoveryHandler handler,
+            IntPtr context
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraCount")]
+        public static extern Status GetMultiCameraDeviceCameraCount (
+            this IntPtr device,
+            out int count
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCamera")]
+        public static extern Status GetMultiCameraDeviceCamera (
+            this IntPtr device,
+            int index,
+            out IntPtr camera
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceIsRunning")]
+        public static extern Status GetMultiCameraDeviceIsRunning (
+            this IntPtr device,
+            IntPtr camera,
+            out bool running
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStartRunning")]
+        public static extern Status StartRunning (
+            this IntPtr device,
+            IntPtr camera
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStopRunning")]
+        public static extern Status StopRunning (
+            this IntPtr device,
+            IntPtr camera
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetHardwareCost")]
+        public static extern Status GetMultiCameraDeviceHardwareCost (
+            this IntPtr device,
+            out float cost
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetSystemPressureCost")]
+        public static extern Status GetMultiCameraDeviceSystemPressureCost (
+            this IntPtr device,
+            out float cost
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceSetSystemPressureChangeHandler")]
+        public static extern Status SetMultiCameraDeviceSystemPressureChangeHandler (
+            this IntPtr device,
+            MultiCameraDeviceSystemPressureHandler handler,
+            IntPtr context
+        );
+        #endregion
+
+
+        #region --VKTVersion--
         [DllImport(Assembly, EntryPoint = @"VKTGetVersion")]
         public static extern IntPtr GetVersion ();
         #endregion

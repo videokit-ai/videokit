@@ -1,3 +1,9 @@
+## 0.0.23
++ Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously.
++ Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.
++ Refactored `VideoKitViewManager.focusMode` field to `focusGesture`.
++ Refactored `VideoKitViewManager.zoomMode` field to `zoomGesture`.
+
 ## 0.0.22
 + Improved native error propagation into C# code allowing you to `try..catch` more errors.
 + Improved recording performance when using `VideoMode.CameraDevice` with the `VideoKitRecorder` component.

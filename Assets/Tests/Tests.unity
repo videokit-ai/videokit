@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44407493, g: 0.49331808, b: 0.5724013, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
-  viewMode: 0
+  viewMode: 1
   focusMode: 0
   exposureMode: 0
   zoomMode: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98622613d505143a9a06b4b11b0a82cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capabilities: 0
+  capabilities: 6
   playOnAwake: 1
   _facing: 1
   resolution: 3
@@ -806,7 +806,7 @@ MonoBehaviour:
   cameraManager: {fileID: 1493259190}
   _frameRate: 10
   frameSkip: 0
-  watermarkMode: 0
+  watermarkMode: 2
   _watermark: {fileID: 2800000, guid: 530e9c7c48e0d43e284701c2fae3de8c, type: 3}
   _watermarkRect:
     x: 0
@@ -1018,7 +1018,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2849fbf2b11584d8fb7c24044e7a9d84, type: 3}
   m_Name: 
