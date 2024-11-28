@@ -23,17 +23,15 @@ namespace VideoKit.Editor.Build {
         public virtual int callbackOrder => -1;
 
         protected virtual VideoKitClient CreateClient (BuildReport report) {
-            var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
-            var client = VideoKitClient.Create(
-                accessKey: VideoKitProjectSettings.instance.accessKey
-            );
             try {
-                client.buildToken = Task.Run(() => client.CreateBuildToken(platform: platform)).Result;
+                var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
+                var accessKey = VideoKitProjectSettings.instance.accessKey;
+                var token = Task.Run(() => VideoKitClient.CreateToken(platform, accessKey)).Result;
+                return VideoKitClient.Create(token: token);
             } catch (Exception ex) {
                 Debug.LogWarning($"VideoKit: {ex.Message}");
-                Debug.LogException(ex);
+                return VideoKitClient.Create(token: null); // unauthed
             }
-            return client;
         }
         #endregion
 
@@ -44,7 +42,7 @@ namespace VideoKit.Editor.Build {
         [Function.Function.Embed(VideoKitCameraManager.HumanTextureTag)]
         private static Function.Function fxn => new (
             accessKey: VideoKitProjectSettings.instance.accessKey,
-            url: "https://www.videokit.ai/api"
+            url: VideoKitClient.URL
         );
 
         void IPreprocessBuildWithReport.OnPreprocessBuild (BuildReport report) {

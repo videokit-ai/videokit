@@ -8,6 +8,7 @@
 namespace VideoKit.Editor {
 
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEditor;
@@ -30,16 +31,22 @@ namespace VideoKit.Editor {
 
         #region --Operations--
 
+        private static readonly Dictionary<RuntimePlatform, string> PlatformToName = new() {
+            [RuntimePlatform.LinuxEditor]   = @"linux",
+            [RuntimePlatform.OSXEditor]     = @"macos",
+            [RuntimePlatform.WindowsEditor] = @"windows",
+        };
+
         [InitializeOnEnterPlayMode]
-        private static void OnEnterPlaymodeInEditor (EnterPlayModeOptions options) {
-            var client = VideoKitClient.Create(instance.accessKey);
+        private static void OnEnterPlaymodeInEditor (EnterPlayModeOptions options) {            
             try {
-                client.buildToken = Task.Run(() => client.CreateBuildToken()).Result;
+                var platform = PlatformToName.GetValueOrDefault(Application.platform);
+                var token = Task.Run(() => VideoKitClient.CreateToken(platform, instance.accessKey)).Result;
+                VideoKitClient.Instance = VideoKitClient.Create(token);
             } catch (Exception ex) {
+                VideoKitClient.Instance = VideoKitClient.Create(null);
                 Debug.LogWarning($"VideoKit: {ex.Message}");
-                Debug.LogException(ex);
             }
-            VideoKitClient.Instance = client;
         }
         #endregion
     }

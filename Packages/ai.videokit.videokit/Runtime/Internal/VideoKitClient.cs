@@ -30,12 +30,12 @@ namespace VideoKit.Internal {
         /// VideoKit API URL.
         /// </summary>
         [SerializeField, HideInInspector]
-        public string url = @"https://www.videokit.ai/api";
+        public string url = URL;
 
         /// <summary>
         /// VideoKit Function client.
         /// </summary>
-        public Function fxn => _fxn ??= FunctionUnity.Create(buildToken, url: url);
+        public Function fxn => _fxn ??= FunctionUnity.Create(token, url: url);
 
         /// <summary>
         /// VideoKit client for this project.
@@ -51,30 +51,31 @@ namespace VideoKit.Internal {
         /// Check the application VideoKit session status.
         /// </summary>
         public async Task<Status> CheckSession () {
-            // Linux editor
-            if (Application.platform == RuntimePlatform.LinuxEditor)
-                return Status.NotImplemented;
-            // Set
-            buildToken ??= await CreateBuildToken(); // can only run if client is not serialized
-            var token = sessionToken ?? await CreateSessionToken();
-            var result = VideoKit.SetSessionToken(token);
-            // Cache
-            if (result == Status.Ok) {
-                PlayerPrefs.SetString(BuildTokenKey, buildToken);
-                PlayerPrefs.SetString(SessionTokenKey, token);
+            try {
+                // Set
+                var session = sessionToken ?? await CreateSessionToken();
+                var result = VideoKit.SetSessionToken(session);
+                // Cache
+                if (result == Status.Ok) {
+                    PlayerPrefs.SetString(BuildTokenKey, token);
+                    PlayerPrefs.SetString(SessionTokenKey, session);
+                }
+                // Return
+                return result;
+            } catch (Exception ex) {
+                Debug.LogWarning($"VideoKit: Failed to check session with error: {ex.Message}");
+                return Status.InvalidOperation;
             }
-            // Return
-            return result;
         }
 
         /// <summary>
         /// Create a VideoKit client.
         /// </summary>
-        /// <param name="accessKey">VideoKit access key.</param>
+        /// <param name="buildToken">VideoKit auth token.</param>
         /// <param name="url">VideoKit API URL.</param>
-        public static VideoKitClient Create (string accessKey, string? url = null) {
+        public static VideoKitClient Create (string? token, string? url = null) {
             var client = CreateInstance<VideoKitClient>();
-            client.accessKey = accessKey;
+            client.token = token;
             client.url = !string.IsNullOrEmpty(url) ? url : client.url;
             return client;
         }
@@ -83,28 +84,16 @@ namespace VideoKit.Internal {
 
         #region --Operations--
         [SerializeField, HideInInspector]
-        internal string accessKey = string.Empty;
-        [SerializeField, HideInInspector]
-        internal string buildToken = string.Empty;
+        private string? token = string.Empty;
         private Function? _fxn;
-        private static readonly Dictionary<RuntimePlatform, string> PlatformToName = new () {
-            [RuntimePlatform.Android]       = @"android",
-            [RuntimePlatform.IPhonePlayer]  = @"ios",
-            [RuntimePlatform.LinuxEditor]   = @"linux",
-            [RuntimePlatform.LinuxPlayer]   = @"linux",
-            [RuntimePlatform.OSXEditor]     = @"macos",
-            [RuntimePlatform.OSXPlayer]     = @"macos",
-            [RuntimePlatform.WebGLPlayer]   = @"web",
-            [RuntimePlatform.WindowsEditor] = @"windows",
-            [RuntimePlatform.WindowsPlayer] = @"windows",
-        };
+        public const string URL = @"https://www.videokit.ai/api";
         private const string BuildTokenKey = @"ai.videokit.build";
         private const string SessionTokenKey = @"ai.videokit.session";
 
         private string? sessionToken => (
             !Application.isEditor &&
             PlayerPrefs.HasKey(BuildTokenKey) &&
-            PlayerPrefs.GetString(BuildTokenKey) == buildToken &&
+            PlayerPrefs.GetString(BuildTokenKey) == token &&
             !string.IsNullOrEmpty(PlayerPrefs.GetString(SessionTokenKey))
         ) ? PlayerPrefs.GetString(SessionTokenKey) : null;
 
@@ -114,15 +103,19 @@ namespace VideoKit.Internal {
                 Instance = this;
         }
 
-        internal async Task<string> CreateBuildToken (string? platform = null) {
+        internal async static Task<string> CreateToken (
+            string platform,
+            string apiKey,
+            string? url = URL
+        ) {
             // Create client
             using var request = new HttpClient();
-            request.DefaultRequestHeaders.Authorization = !string.IsNullOrEmpty(accessKey) ?
-                new AuthenticationHeaderValue(@"Bearer", accessKey) :
+            request.DefaultRequestHeaders.Authorization = !string.IsNullOrEmpty(apiKey) ?
+                new AuthenticationHeaderValue(@"Bearer", apiKey) :
                 null;
             // Request
             var payload = new Dictionary<string, object> {
-                [@"platform"] = platform ?? PlatformToName.GetValueOrDefault(Application.platform),
+                [@"platform"] = platform,
                 [@"version"] = Version
             };
             var payloadStr = JsonConvert.SerializeObject(payload);
@@ -148,8 +141,8 @@ namespace VideoKit.Internal {
             var sessionId = new StringBuilder(2048);
             VideoKit.GetSessionIdentifier(sessionId, sessionId.Capacity);
             // Create payload
-            var payload = new Dictionary<string, object> {
-                [@"buildToken"] = buildToken,
+            var payload = new Dictionary<string, object?> {
+                [@"buildToken"] = token,
                 [@"sessionId"] = sessionId.ToString(),
             };
             var payloadStr = JsonConvert.SerializeObject(payload);

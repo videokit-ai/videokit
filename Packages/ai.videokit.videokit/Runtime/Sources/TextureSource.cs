@@ -34,14 +34,14 @@ namespace VideoKit.Sources {
         public Texture? watermark;
 
         /// <summary>
-        /// Watermark display rect in pixel coordinates of the recorder.
+        /// Watermark display rect in pixel coordinates.
         /// </summary>
         public RectInt watermarkRect;
 
         /// <summary>
-        /// Crop rect in pixel coordinates of the recorder.
+        /// Region of interest to capture in pixel coordinates.
         /// </summary>
-        public RectInt cropRect;
+        public RectInt regionOfInterest;
 
         /// <summary>
         /// Control number of successive frames to skip while generating images.
@@ -74,7 +74,7 @@ namespace VideoKit.Sources {
             this.descriptor = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGB32, 0) {
                 sRGB = true
             };
-            this.cropRect = new RectInt(0, 0, width, height);
+            this.regionOfInterest = new RectInt(0, 0, width, height);
             VideoKitEvents.Instance.onFrame += OnFrame;
         }
 
@@ -160,9 +160,9 @@ namespace VideoKit.Sources {
             // Check frame index
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
-            // Crop
+            // Extract RoI
             var cropDest = RenderTexture.GetTemporary(descriptor);
-            ApplyCrop(texture, cropRect, cropDest);
+            ExtractRoI(texture, regionOfInterest, cropDest);
             // Watermark
             var watermarkDest = RenderTexture.GetTemporary(descriptor);
             ApplyWatermark(cropDest, watermark, watermarkRect, watermarkDest);
@@ -173,7 +173,7 @@ namespace VideoKit.Sources {
             RenderTexture.ReleaseTemporary(watermarkDest);
         }
 
-        private static void ApplyCrop (Texture source, RectInt rect, RenderTexture destination) {
+        private static void ExtractRoI (Texture source, RectInt rect, RenderTexture destination) {
             // Compute crop scale
             var frameSize = new Vector2(destination.width, destination.height);
             var ratio = new Vector2(frameSize.x / rect.width, frameSize.y / rect.height);

@@ -9,6 +9,8 @@
         "Android",
         "Editor",
         "iOS",
+        "LinuxStandalone64",
+        "CloudRendering",
         "macOSStandalone",
         "WebGL",
         "WindowsStandalone64"

@@ -11,10 +11,10 @@
   "dependencies": {
     "com.unity.feature.development": "1.0.2",
     "com.unity.ugui": "2.0.0",
+    "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.imgui": "1.0.0",
-    "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.screencapture": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.uielements": "1.0.0",
@@ -22,7 +22,6 @@
     "com.unity.modules.unitywebrequestaudio": "1.0.0",
     "com.unity.modules.unitywebrequesttexture": "1.0.0",
     "com.unity.modules.unitywebrequestwww": "1.0.0",
-    "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.video": "1.0.0"
   }
 }

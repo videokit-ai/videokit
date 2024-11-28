@@ -381,7 +381,10 @@ namespace VideoKit {
         /// </summary>
         /// <param name="request">Request permissions if the user has not yet been asked.</param>
         /// <returns>Camera permission status.</returns>
-        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CheckPermissions(VideoKit.PermissionType.Camera, request);
+        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CheckPermissions(
+            VideoKit.PermissionType.Camera,
+            request
+        );
 
         /// <summary>
         /// Discover available camera devices.

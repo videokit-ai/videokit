@@ -1,5 +1,6 @@
 ## 0.0.23
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously.
++ Refactored `TextureSource.cropRect` field to `regionOfInterest`.
 + Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.
 + Refactored `VideoKitViewManager.focusMode` field to `focusGesture`.
 + Refactored `VideoKitViewManager.zoomMode` field to `zoomGesture`.

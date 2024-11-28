@@ -768,6 +768,11 @@ namespace VideoKit.Internal {
 
 
         #region --VKTMultiCameraDevice--
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraPixelBufferGetCamera")]
+        public static extern Status GetMultiCameraPixelBufferCamera (
+            this IntPtr pixelBuffer,
+            out IntPtr camera
+        );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceDiscoverDevices")]
         public static extern Status DiscoverMultiCameraDevices (
             MediaDeviceDiscoveryHandler handler,
@@ -853,17 +858,15 @@ namespace VideoKit.Internal {
             }
         }
 
-        public static Status Throw (this Status status) {
-            switch (status) {
-                case Status.Ok:                 return status;
-                case Status.InvalidArgument:    throw new ArgumentException();
-                case Status.InvalidOperation:   throw new InvalidOperationException();
-                case Status.NotImplemented:     throw new NotImplementedException();
-                case Status.InvalidSession:     throw new InvalidOperationException(@"VideoKit session token is invalid. Get your VideoKit access key at https://videokit.ai");
-                case Status.InvalidPlan:        throw new InvalidOperationException(@"VideoKit plan does not support this operation. Check your plan and upgrade at https://videokit.ai");
-                default:                        throw new InvalidOperationException();
-            }
-        }
+        public static Status Throw (this Status status) => status switch {
+            Status.Ok               => status,
+            Status.InvalidArgument  => throw new ArgumentException(),
+            Status.InvalidOperation => throw new InvalidOperationException(),
+            Status.NotImplemented   => throw new NotImplementedException(),
+            Status.InvalidSession   => throw new InvalidOperationException(@"VideoKit session token is invalid. Get your VideoKit access key at https://videokit.ai"),
+            Status.InvalidPlan      => throw new InvalidOperationException(@"VideoKit plan does not support this operation. Check your plan and upgrade at https://videokit.ai"),
+            _                       => throw new InvalidOperationException(),
+        };
 
         public static async Task<Prediction> Throw (this Task<Prediction> task) {
             var prediction = await task;

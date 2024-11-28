@@ -56,10 +56,13 @@ namespace VideoKit {
         /// Start running.
         /// </summary>
         /// <param name="handler">Delegate to receive preview frames.</param>
-        public void StartRunning (Action<PixelBuffer, CameraDevice> handler) => StartRunning((IntPtr sampleBuffer) => { // INCOMPLETE
-            //handler(new PixelBuffer(sampleBuffer));
+        public void StartRunning (Action<CameraDevice, PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
+            sampleBuffer.GetMultiCameraPixelBufferCamera(out var rawCamera).Throw();
+            var camera = new CameraDevice(rawCamera, weak: true);
+            var pixelBuffer = new PixelBuffer(sampleBuffer);
+            handler(camera, pixelBuffer);
         });
-    
+
         /// <summary>
         /// Start the camera preview from a given camera in the multi-camera device.
         /// </summary>
@@ -75,6 +78,14 @@ namespace VideoKit {
 
 
         #region --Discovery--
+        /// <summary>
+        /// Check the current camera permission status.
+        /// This is an alias for `CameraDevice.CheckPermissions`.
+        /// </summary>
+        /// <param name="request">Request permissions if the user has not yet been asked.</param>
+        /// <returns>Camera permission status.</returns>
+        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CameraDevice.CheckPermissions(request);
+
         /// <summary>
         /// Discover available multi-camera devices.
         /// </summary>
