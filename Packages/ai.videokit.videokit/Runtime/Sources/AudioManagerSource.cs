@@ -36,7 +36,7 @@ namespace VideoKit.Sources {
             using var audioBuffer = new AudioBuffer(
                 srcBuffer.sampleRate,
                 srcBuffer.channelCount,
-                srcBuffer.sampleBuffer,
+                srcBuffer.data,
                 clock?.timestamp ?? 0L
             );
             recorder.Append(audioBuffer);

@@ -21,9 +21,10 @@ namespace VideoKit {
 
         #region --Client API--
         /// <summary>
-        /// Sample buffer.
+        /// Audio data.
+        /// This is always linear PCM audio interleaved by channel.
         /// </summary>
-        public unsafe readonly NativeArray<float> sampleBuffer {
+        public unsafe readonly NativeArray<float> data {
             get {
                 audioBuffer.GetAudioBufferData(out var data).Throw();
                 audioBuffer.GetAudioBufferSampleCount(out var sampleCount).Throw();
@@ -60,25 +61,25 @@ namespace VideoKit {
         /// </summary>
         /// <param name="sampleRate">Sample rate.</param>
         /// <param name="channelCount">Channel count.</param>
-        /// <param name="sampleBuffer">Sample buffer.</param>
+        /// <param name="data">Audio data.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
         public AudioBuffer (
             int sampleRate,
             int channelCount,
-            float[] sampleBuffer,
+            float[] data,
             long timestamp = 0L
         ) {
             // Copy
-            var byteSize = sampleBuffer.Length * sizeof(float);
+            var byteSize = data.Length * sizeof(float);
             audioData = (float*)UnsafeUtility.Malloc(byteSize, 16, Allocator.Persistent);
-            fixed (float* data = sampleBuffer)
-                UnsafeUtility.MemCpy(audioData, data, byteSize);
+            fixed (float* src = data)
+                UnsafeUtility.MemCpy(audioData, src, byteSize);
             // Create
             VideoKit.CreateAudioBuffer(
                 sampleRate,
                 channelCount,
                 audioData,
-                sampleBuffer.Length,
+                data.Length,
                 timestamp,
                 out audioBuffer
             ).Throw();
@@ -89,33 +90,33 @@ namespace VideoKit {
         /// </summary>
         /// <param name="sampleRate">Sample rate.</param>
         /// <param name="channelCount">Channel count.</param>
-        /// <param name="sampleBuffer">Sample buffer.</param>
+        /// <param name="data">Audio data.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
         public unsafe AudioBuffer (
             int sampleRate,
             int channelCount,
-            NativeArray<float> sampleBuffer,
+            NativeArray<float> data,
             long timestamp = 0L
-        ) : this(sampleRate, channelCount, (float*)sampleBuffer.GetUnsafePtr(), sampleBuffer.Length, timestamp) { }
+        ) : this(sampleRate, channelCount, (float*)data.GetUnsafePtr(), data.Length, timestamp) { }
 
         /// <summary>
         /// Create an audio buffer from a linear PCM sample buffer.
         /// </summary>
         /// <param name="sampleRate">Sample rate.</param>
         /// <param name="channelCount">Channel count.</param>
-        /// <param name="sampleBuffer">Sample buffer.</param>
+        /// <param name="data">Audio data.</param>
         /// <param name="sampleCount">Total number of samples in sample buffer.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
         public unsafe AudioBuffer (
             int sampleRate,
             int channelCount,
-            float* sampleBuffer,
+            float* data,
             int sampleCount,
             long timestamp = 0L
         ) : this(VideoKit.CreateAudioBuffer(
             sampleRate,
             channelCount,
-            sampleBuffer,
+            data,
             sampleCount,
             timestamp,
             out var buffer
