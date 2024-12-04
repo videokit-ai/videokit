@@ -1,5 +1,7 @@
 ## 0.0.23
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously.
++ Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
++ Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
 + Refactored `TextureSource.cropRect` field to `regionOfInterest`.
 + Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.

@@ -405,7 +405,14 @@ namespace VideoKit {
             var tcs = new TaskCompletionSource<string?>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
-                asset.ShareMediaAsset(message, OnShare, (IntPtr)handle).Throw();
+                asset.ShareMediaAsset(
+                    message,
+                    OnShare,
+                    (IntPtr)handle
+                ).Throw();
+            } catch (NotImplementedException) {
+                handle.Free();
+                tcs.SetResult(null);
             } catch (Exception ex) {
                 handle.Free();
                 tcs.SetException(ex);
@@ -427,7 +434,14 @@ namespace VideoKit {
             var tcs = new TaskCompletionSource<bool>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
-                asset.SaveMediaAssetToCameraRoll(album, OnSaveToCameraRoll, (IntPtr)handle).Throw();
+                asset.SaveMediaAssetToCameraRoll(
+                    album,
+                    OnSaveToCameraRoll,
+                    (IntPtr)handle
+                ).Throw();
+            } catch (NotImplementedException) {
+                handle.Free();
+                tcs.SetResult(false);
             } catch (Exception ex) {
                 handle.Free();
                 tcs.SetException(ex);
