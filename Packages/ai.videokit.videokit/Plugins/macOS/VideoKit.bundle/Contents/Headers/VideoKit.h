@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <VideoKit/VKTAPI.h>
 #include <VideoKit/VKTStatus.h>
 #include <VideoKit/VKTSession.h>
 #include <VideoKit/VKTSampleBuffer.h>
@@ -20,4 +19,5 @@
 #include <VideoKit/VKTMediaDevice.h>
 #include <VideoKit/VKTAudioDevice.h>
 #include <VideoKit/VKTCameraDevice.h>
+#include <VideoKit/VKTMultiCameraDevice.h>
 #include <VideoKit/VKTVersion.h>

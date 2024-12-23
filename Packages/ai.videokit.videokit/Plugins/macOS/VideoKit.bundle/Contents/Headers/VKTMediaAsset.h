@@ -106,7 +106,7 @@ typedef void (*VKTMediaAssetShareHandler) (void* context, const char* receiver);
 
  @returns Load status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetCreate (
+VKT_API VKTStatus VKTMediaAssetCreate (
     const char* path,
     VKTMediaAssetHandler handler,
     void* context
@@ -130,7 +130,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetCreate (
 
  @returns Load status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetCreateFromCameraRoll (
+VKT_API VKTStatus VKTMediaAssetCreateFromCameraRoll (
     VKTMediaType type,
     VKTMediaAssetHandler handler,
     void* context
@@ -146,7 +146,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetCreateFromCameraRoll (
  @param asset
  Media asset.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetRelease (VKTMediaAsset* asset);
+VKT_API VKTStatus VKTMediaAssetRelease (VKTMediaAsset* asset);
 #pragma endregion
 
 
@@ -167,7 +167,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetRelease (VKTMediaAsset* ass
  @param size
  Path buffer size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetPath (
+VKT_API VKTStatus VKTMediaAssetGetPath (
     VKTMediaAsset* asset,
     char* path,
     int32_t size
@@ -186,7 +186,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetPath (
  @param type
  Media type.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetMediaType (
+VKT_API VKTStatus VKTMediaAssetGetMediaType (
     VKTMediaAsset* asset,
     VKTMediaType* type
 );
@@ -205,7 +205,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetMediaType (
  @param width
  Media width.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetWidth (
+VKT_API VKTStatus VKTMediaAssetGetWidth (
     VKTMediaAsset* asset,
     int32_t* width
 );
@@ -224,7 +224,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetWidth (
  @param height
  Media height.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetHeight (
+VKT_API VKTStatus VKTMediaAssetGetHeight (
     VKTMediaAsset* asset,
     int32_t* height
 );
@@ -243,7 +243,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetHeight (
  @param frameRate
  Video frame rate.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetFrameRate (
+VKT_API VKTStatus VKTMediaAssetGetFrameRate (
     VKTMediaAsset* asset,
     float* frameRate
 );
@@ -262,7 +262,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetFrameRate (
  @param sampleRate
  Audio sample rate.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSampleRate (
+VKT_API VKTStatus VKTMediaAssetGetSampleRate (
     VKTMediaAsset* asset,
     int32_t* sampleRate
 );
@@ -281,7 +281,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSampleRate (
  @param channelCount
  Audio channel count.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetChannelCount (
+VKT_API VKTStatus VKTMediaAssetGetChannelCount (
     VKTMediaAsset* asset,
     int32_t* channelCount
 );
@@ -300,7 +300,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetChannelCount (
  @param duration
  Asset duration in seconds.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetDuration (
+VKT_API VKTStatus VKTMediaAssetGetDuration (
     VKTMediaAsset* asset,
     float* duration
 );
@@ -319,7 +319,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetDuration (
  @param count
  Sub-asset count.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSubAssetCount (
+VKT_API VKTStatus VKTMediaAssetGetSubAssetCount (
     VKTMediaAsset* asset,
     int32_t* count
 );
@@ -341,7 +341,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSubAssetCount (
  @param subAsset
  Sub-asset.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSubAsset (
+VKT_API VKTStatus VKTMediaAssetGetSubAsset (
     VKTMediaAsset* asset,
     int32_t index,
     VKTMediaAsset** subAsset
@@ -371,7 +371,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetGetSubAsset (
 
  @returns Share status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetShare (
+VKT_API VKTStatus VKTMediaAssetShare (
     VKTMediaAsset* asset,
     const char* message,
     VKTMediaAssetShareHandler handler,
@@ -400,7 +400,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetShare (
 
  @returns Save status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaAssetSaveToCameraRoll (
+VKT_API VKTStatus VKTMediaAssetSaveToCameraRoll (
     VKTMediaAsset* asset,
     const char* album,
     VKTMediaAssetShareHandler handler,

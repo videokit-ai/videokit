@@ -3,6 +3,7 @@ Library/
 Temp/
 obj/
 Logs/
+.utmp/
 
 # IDE
 .vscode/

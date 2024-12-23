@@ -9,7 +9,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <VideoKit/VKTAPI.h>
 #include <VideoKit/VKTStatus.h>
 
 #pragma region --Client API--
@@ -26,7 +25,7 @@
  @param size
  Destination buffer size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSessionGetIdentifier (
+VKT_API VKTStatus VKTSessionGetIdentifier (
     char * identifier,
     int32_t size
 );
@@ -40,7 +39,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSessionGetIdentifier (
 
  @returns Session status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSessionGetStatus (void);
+VKT_API VKTStatus VKTSessionGetStatus (void);
 
 /*!
  @function VKTSessionSetToken
@@ -54,5 +53,5 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSessionGetStatus (void);
 
  @returns Session status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSessionSetToken (const char* token);
+VKT_API VKTStatus VKTSessionSetToken (const char* token);
 #pragma endregion

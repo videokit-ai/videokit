@@ -8,6 +8,16 @@
 
 #pragma once
 
+#ifdef __cplusplus
+    #ifdef _WIN64
+        #define VKT_API extern "C" __declspec(dllexport)
+    #else
+        #define VKT_API extern "C"
+    #endif
+#else
+    #define VKT_API extern
+#endif
+
 #pragma region --Enumerations--
 /*!
  @enum VKTStatus

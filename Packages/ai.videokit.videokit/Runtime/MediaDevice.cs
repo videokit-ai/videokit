@@ -103,12 +103,6 @@ namespace VideoKit {
         /// Stop running.
         /// </summary>
         public virtual void StopRunning () {
-            var events = VideoKitEvents.OptionalInstance;
-            if (events != null) {
-                events.onPause -= PauseRunning;
-                events.onResume -= ResumeRunning;
-                events.onQuit -= StopRunning;
-            }
             if (running)
                 device.StopRunning().Throw();
             if (streamHandle != default)
@@ -146,23 +140,15 @@ namespace VideoKit {
         }
 
         protected virtual void StartRunning (Action<IntPtr> handler) {
-            var events = VideoKitEvents.Instance;
             streamHandle = GCHandle.Alloc(handler, GCHandleType.Normal);
             try {
                 device.StartRunning(OnSampleBuffer, (IntPtr)streamHandle).Throw();
-                events.onPause += PauseRunning;
-                events.onResume += ResumeRunning;
-                events.onQuit += StopRunning;
             } catch {
                 streamHandle.Free();
                 streamHandle = default;
                 throw;
             }
         }
-
-        protected virtual void PauseRunning () => device.StopRunning().Throw();
-
-        protected virtual void ResumeRunning () => device.StartRunning(OnSampleBuffer, (IntPtr)streamHandle).Throw();
 
         protected static Task<PermissionStatus> CheckPermissions (PermissionType type, bool request) {
             var tcs = new TaskCompletionSource<PermissionStatus>();

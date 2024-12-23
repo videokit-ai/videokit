@@ -49,7 +49,7 @@ typedef VKTSampleBuffer VKTAudioBuffer;
  @param audioBuffer
  Audio buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferCreate (
+VKT_API VKTStatus VKTAudioBufferCreate (
     int32_t sampleRate,
     int32_t channelCount,
     const float* data,
@@ -71,7 +71,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferCreate (
  @param data
  Audio data
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetData (
+VKT_API VKTStatus VKTAudioBufferGetData (
     VKTAudioBuffer* audioBuffer,
     float** data
 );
@@ -89,7 +89,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetData (
  @param sampleCount
  Total sample count.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetSampleCount (
+VKT_API VKTStatus VKTAudioBufferGetSampleCount (
     VKTAudioBuffer* audioBuffer,
     int32_t* sampleCount
 );
@@ -107,7 +107,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetSampleCount (
  @param sampleRate
  Sample rate.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetSampleRate (
+VKT_API VKTStatus VKTAudioBufferGetSampleRate (
     VKTAudioBuffer* audioBuffer,
     int32_t* sampleRate
 );
@@ -125,7 +125,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetSampleRate (
  @param channelCount
  Channel count.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioBufferGetChannelCount (
+VKT_API VKTStatus VKTAudioBufferGetChannelCount (
     VKTAudioBuffer* audioBuffer,
     int32_t* channelCount
 );

@@ -5,22 +5,16 @@
 
 namespace VideoKit.Tests {
 
-    using System.Threading.Tasks;
     using UnityEngine;
-    using UnityEngine.UI;
 
     internal sealed class VideoKitRecorderCaptureScreenshotTest : MonoBehaviour {
 
         [SerializeField] private VideoKitRecorder recorder;
 
-        [Header(@"UI")]
-        [SerializeField] private RawImage rawImage;
-
         private async void Start () {
-            await Task.Delay(4_000);
-            var imageAsset = await recorder.CaptureScreenshot();
-            rawImage.texture = await imageAsset.ToTexture();
-            await imageAsset.Share();
+            await Awaitable.WaitForSecondsAsync(2f);
+            var asset = await recorder.CaptureScreenshot();
+            Debug.Log($"Captured screenshot to path: {asset.path}");
         }
     }
 }

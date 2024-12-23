@@ -402,7 +402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &840997203
 RectTransform:
   m_ObjectHideFlags: 0
@@ -418,9 +418,9 @@ RectTransform:
   m_Father: {fileID: 1313544785}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 109.625244, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &840997204
 MonoBehaviour:
@@ -484,7 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
-  viewMode: 1
+  viewMode: 0
   focusGesture: 0
   exposureGesture: 0
   zoomGesture: 0
@@ -772,9 +772,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98622613d505143a9a06b4b11b0a82cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capabilities: 6
-  playOnAwake: 1
-  _facing: 1
+  capabilities: 0
+  playOnAwake: 0
+  _facing: 0
   resolution: 3
   frameRate: 0
   focusMode: 0
@@ -805,13 +805,14 @@ MonoBehaviour:
   cameraManager: {fileID: 1493259190}
   _frameRate: 10
   frameSkip: 0
-  watermarkMode: 2
+  watermarkMode: 0
   _watermark: {fileID: 2800000, guid: 530e9c7c48e0d43e284701c2fae3de8c, type: 3}
   _watermarkRect:
-    x: 0
+    serializedVersion: 2
+    x: 0.7
     y: 0
-    width: 0
-    height: 0
+    width: 0.3
+    height: 0.3
   audioMode: 0
   audioManager: {fileID: 1493259188}
   configureAudioManager: 1
@@ -1018,13 +1019,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2849fbf2b11584d8fb7c24044e7a9d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   recorder: {fileID: 1493259191}
-  rawImage: {fileID: 840997204}
 --- !u!114 &1493259204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1138,7 +1138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2062267032
 MonoBehaviour:
   m_ObjectHideFlags: 0

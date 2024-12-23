@@ -317,7 +317,7 @@ namespace VideoKit {
         /// Watermark display rect when `watermarkMode` is set to `WatermarkMode.Custom`.
         /// </summary>
         [SerializeField, FormerlySerializedAs(@"watermarkRect"), Tooltip(@"Watermark display rect when `watermarkMode` is set to `WatermarkMode.Custom`")]
-        private RectInt _watermarkRect;
+        private Rect _watermarkRect;
 
         [Header(@"Audio")]
         /// <summary>
@@ -404,14 +404,29 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Watermark display rect when `watermarkMode` is set to `WatermarkMode.Custom`.
+        /// Watermark normalized display rect when `watermarkMode` is set to `WatermarkMode.Custom`.
         /// </summary>
-        public RectInt watermarkRect {
-            get => textureSource?.watermarkRect ?? _watermarkRect;
+        public Rect watermarkRect {
+            get {
+                if (textureSource == null)
+                    return _watermarkRect;
+                var rect = textureSource!.watermarkRect;
+                return new(
+                    rect.x / width,
+                    rect.y / height,
+                    rect.width / width,
+                    rect.height / height
+                );
+            }
             set {
                 _watermarkRect = value;
                 if (textureSource != null)
-                    textureSource.watermarkRect = value;
+                    textureSource.watermarkRect = new(
+                        Mathf.RoundToInt(value.x * width),
+                        Mathf.RoundToInt(value.y * height),
+                        Mathf.RoundToInt(value.width * width),
+                        Mathf.RoundToInt(value.height * height)
+                    );
             }
         }
 
@@ -697,14 +712,36 @@ namespace VideoKit {
             int width,
             int height,
             Action<PixelBuffer> handler
-        ) => videoMode switch {
-            var _ when !MediaRecorder.CanAppend<PixelBuffer>(format) => null,
-            VideoMode.Screen        => new ScreenSource(width, height, handler, clock) { frameSkip = frameSkip },
-            VideoMode.Camera        => new CameraSource(width, height, handler, clock, cameras) { frameSkip = frameSkip },
-            VideoMode.Texture       => new TextureSource(width, height, handler, clock) { texture = texture, frameSkip = frameSkip },
-            VideoMode.CameraDevice  => new CameraManagerSource(cameraManager!, handler, clock) { },
-            _                       => null
-        };
+        ) {
+            if (!MediaRecorder.CanAppend<PixelBuffer>(format))
+                return null;
+            if (videoMode == VideoMode.Screen) {
+                var source = new ScreenSource(width, height, handler, clock) {
+                    frameSkip = frameSkip
+                };
+                source.textureSource.watermark = watermark;
+                source.textureSource.watermarkRect = CreateWatermarkRect(width, height);
+                return source;
+            } else if (videoMode == VideoMode.Camera) {
+                var source = new CameraSource(width, height, handler, clock, cameras) {
+                    frameSkip = frameSkip
+                };
+                source.textureSource.watermark = watermark;
+                source.textureSource.watermarkRect = CreateWatermarkRect(width, height);
+                return source;
+            } else if (videoMode == VideoMode.Texture) {
+                var source = new TextureSource(width, height, handler, clock) {
+                    texture = texture,
+                    frameSkip = frameSkip
+                };
+                source.watermark = watermark;
+                source.watermarkRect = CreateWatermarkRect(width, height);
+                return source;
+            } else if (videoMode == VideoMode.CameraDevice) // No support for watermarking yet
+                return new CameraManagerSource(cameraManager!, handler, clock);
+            else
+                return null;
+        }
 
         private IDisposable? CreateAudioInput () => audioMode switch {
             var _ when !MediaRecorder.CanAppend<AudioBuffer>(format) => null,
@@ -718,25 +755,34 @@ namespace VideoKit {
 
         #region --Utility--
 
-        private static RectInt CreateWatermarkRect (MediaRecorder recorder, WatermarkMode mode, RectInt customRect) {
+        private RectInt CreateWatermarkRect (int width, int height) {
             // Check none
-            if (mode == WatermarkMode.None)
+            if (watermarkMode == WatermarkMode.None)
                 return default;
             // Check custom
-            if (mode == WatermarkMode.Custom)
-                return customRect;
+            if (watermarkMode == WatermarkMode.Custom)
+                return new(
+                    Mathf.RoundToInt(watermarkRect.x * width),
+                    Mathf.RoundToInt(watermarkRect.y * height),
+                    Mathf.RoundToInt(watermarkRect.width * width),
+                    Mathf.RoundToInt(watermarkRect.height * height)
+                );
             // Construct rect
-            var NormalizedPositions = new Dictionary<WatermarkMode, Vector2> {
-                [WatermarkMode.BottomLeft]  = new Vector2(0.2f, 0.15f),
-                [WatermarkMode.BottomRight] = new Vector2(0.8f, 0.15f),
-                [WatermarkMode.UpperLeft]   = new Vector2(0.2f, 0.85f),
-                [WatermarkMode.UpperRight]  = new Vector2(0.8f, 0.85f),
-            };
-            var normalizedPosition = NormalizedPositions[mode];
-            var position = Vector2Int.RoundToInt(Vector2.Scale(normalizedPosition, new Vector2(recorder.width, recorder.height)));
-            var size = Mathf.RoundToInt(0.15f * Mathf.Max(recorder.width, recorder.height));
-            var rect = new RectInt(position.x - size / 1, position.y - size / 1, size, size);
-            return rect;
+            var imageSize = new Vector2(width, height);
+            var offset = 0.1f;
+            var size = 0.3f;
+            var normalizedRect = new Dictionary<WatermarkMode, Rect> {
+                [WatermarkMode.BottomLeft]  = new(offset, offset, size, size),
+                [WatermarkMode.BottomRight] = new(1f - size - offset, offset, size, size),
+                [WatermarkMode.UpperLeft]   = new(offset, 1f - size - offset, size, size),
+                [WatermarkMode.UpperRight]  = new(1f - size - offset, 1f - size - offset, size, size),
+            }[watermarkMode];
+            var frameRect = new RectInt(
+                Vector2Int.RoundToInt(Vector2.Scale(normalizedRect.position, imageSize)),
+                Vector2Int.RoundToInt(Vector2.Scale(normalizedRect.size, imageSize))
+            );
+            // Return
+            return frameRect;
         }
 
         private static async Task PrepareEncoder () {

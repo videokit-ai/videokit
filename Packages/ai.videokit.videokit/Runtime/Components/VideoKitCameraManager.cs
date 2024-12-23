@@ -26,7 +26,7 @@ namespace VideoKit {
     [Tooltip(@"VideoKit camera manager for streaming video from camera devices.")]
     [HelpURL(@"https://videokit.ai/reference/videokitcameramanager")]
     [DisallowMultipleComponent]
-    public sealed class VideoKitCameraManager : MonoBehaviour {
+    public sealed class VideoKitCameraManager : MonoBehaviour { // INCOMPLETE // Test pause handling
 
         #region --Enumerations--
         /// <summary>
@@ -312,18 +312,26 @@ namespace VideoKit {
                 null;
             // Start running
             _device.StartRunning(OnCameraPixelBuffer);
-            VideoKitEvents.Instance.onFrame += OnFrame;
+            // Listen for events
+            var events = VideoKitEvents.Instance;
+            events.onFrame += OnFrame;
+            events.onPause += OnPause;
+            events.onResume += OnResume;
         }
 
         /// <summary>
         /// Stop the camera preview.
         /// </summary>
         public void StopRunning () {
-            if (VideoKitEvents.OptionalInstance != null)
-                VideoKitEvents.OptionalInstance.onFrame -= OnFrame;
+            var events = VideoKitEvents.OptionalInstance;
+            if (events != null) {
+                events.onFrame -= OnFrame;
+                events.onPause -= OnPause;
+                events.onResume -= OnResume;
+            }
             _device?.StopRunning();
-            Texture2D.Destroy(texture);
-            Texture2D.Destroy(humanTexture);
+            Destroy(texture);
+            Destroy(humanTexture);
             if (previewData.IsCreated)
                 previewData.Dispose();
             previewData = default;
@@ -383,6 +391,10 @@ namespace VideoKit {
             // Invoke event
             OnCameraFrame?.Invoke();
         }
+
+        private void OnPause () => _device?.StopRunning();
+
+        private void OnResume () => _device?.StartRunning(OnCameraPixelBuffer);
 
         private void OnDestroy () => StopRunning();
 

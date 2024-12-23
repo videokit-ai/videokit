@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "ai.fxn.fxn3d": {
-      "version": "0.0.30",
+      "version": "0.0.32",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -14,7 +14,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "ai.fxn.fxn3d": "0.0.30"
+        "ai.fxn.fxn3d": "0.0.32"
       }
     },
     "com.unity.editorcoroutines": {
@@ -83,6 +83,22 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.sysroot": {
+      "version": "2.0.10",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot.linux-x86_64": {
+      "version": "2.0.9",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.10"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.test-framework": {
       "version": "1.4.5",
       "depth": 1,
@@ -101,6 +117,16 @@
       "dependencies": {
         "com.unity.test-framework": "1.0.16",
         "com.unity.settings-manager": "1.0.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.macos-x86_64-linux-x86_64": {
+      "version": "2.0.10",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.10",
+        "com.unity.sysroot.linux-x86_64": "2.0.9"
       },
       "url": "https://packages.unity.com"
     },

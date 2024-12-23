@@ -9,7 +9,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <VideoKit/VKTAPI.h>
 #include <VideoKit/VKTStatus.h>
 
 #pragma region --Types--
@@ -47,7 +46,7 @@ typedef void (*VKTSampleBufferHandler) (void* context, VKTSampleBuffer* sampleBu
  @param sampleBuffer
  Sample buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferRelease (VKTSampleBuffer* sampleBuffer);
+VKT_API VKTStatus VKTSampleBufferRelease (VKTSampleBuffer* sampleBuffer);
 #pragma endregion
 
 
@@ -65,7 +64,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferRelease (VKTSampleBuffer*
  @param timestamp
  Sample buffer timestamp in nanoseconds.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferGetTimestamp (
+VKT_API VKTStatus VKTSampleBufferGetTimestamp (
     VKTSampleBuffer* sampleBuffer,
     int64_t* timestamp
 );
@@ -82,5 +81,5 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferGetTimestamp (
 
  @returns Status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTSampleBufferGetCurrentTimestamp (int64_t* timestamp);
+VKT_API VKTStatus VKTSampleBufferGetCurrentTimestamp (int64_t* timestamp);
 #pragma endregion

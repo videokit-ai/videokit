@@ -39,6 +39,12 @@ namespace VideoKit.Sources {
         public RectInt watermarkRect;
 
         /// <summary>
+        /// Whether to aspect fit the watermark into the watermark display rect.
+        /// Defaults to `true`.
+        /// </summary>
+        public bool watermarkAspectFit = true;
+
+        /// <summary>
         /// Region of interest to capture in pixel coordinates.
         /// </summary>
         public RectInt regionOfInterest;
@@ -54,7 +60,10 @@ namespace VideoKit.Sources {
         /// </summary>
         /// <param name="recorder">Media recorder to receive images.</param>
         /// <param name="clock">Clock for generating image timestamps.</param>
-        public TextureSource (MediaRecorder recorder, IClock? clock = null) : this(
+        public TextureSource (
+            MediaRecorder recorder,
+            IClock? clock = null
+        ) : this(
             recorder.width,
             recorder.height,
             recorder.Append,
@@ -68,13 +77,18 @@ namespace VideoKit.Sources {
         /// <param name="height">Image height.</param>
         /// <param name="handler">Handler to receive images.</param>
         /// <param name="clock">Clock for generating image timestamps.</param>
-        public TextureSource (int width, int height, Action<PixelBuffer> handler, IClock? clock = null) {
+        public TextureSource (
+            int width,
+            int height,
+            Action<PixelBuffer> handler,
+            IClock? clock = null
+        ) {
             this.handler = handler;
             this.clock = clock;
-            this.descriptor = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGB32, 0) {
+            this.descriptor = new(width, height, RenderTextureFormat.ARGB32, 0) {
                 sRGB = true
             };
-            this.regionOfInterest = new RectInt(0, 0, width, height);
+            this.regionOfInterest = new(0, 0, width, height);
             VideoKitEvents.Instance.onFrame += OnFrame;
         }
 
@@ -89,7 +103,7 @@ namespace VideoKit.Sources {
                 return;
             // Blit
             var renderTexture = RenderTexture.GetTemporary(descriptor);
-            Graphics.Blit(texture, renderTexture);
+            Preprocess(texture, renderTexture);
             // Readback
             if (SystemInfo.supportsAsyncGPUReadback)
                 AsyncGPUReadback.Request(renderTexture, 0, TextureFormat.RGBA32, request => {
@@ -132,7 +146,7 @@ namespace VideoKit.Sources {
                 RenderTexture.active = prevActive;
             }
             // Release
-            RenderTexture.ReleaseTemporary(renderTexture);
+            RenderTexture.ReleaseTemporary(renderTexture);            
         }
 
         /// <summary>
@@ -154,33 +168,37 @@ namespace VideoKit.Sources {
         private Texture2D? readbackBuffer;
 
         private void OnFrame () {
-            // Check texture
-            if (texture == null)
-                return;
-            // Check frame index
-            if (frameIdx++ % (frameSkip + 1) != 0)
-                return;
-            // Extract RoI
+            if (texture != null && frameIdx++ % (frameSkip + 1) == 0)
+                Append(texture, clock?.timestamp ?? 0L);
+        }
+
+        private void Preprocess (Texture source, RenderTexture destination) {
+            // Crop
             var cropDest = RenderTexture.GetTemporary(descriptor);
-            ExtractRoI(texture, regionOfInterest, cropDest);
+            ExtractRoI(source, cropDest);          
             // Watermark
             var watermarkDest = RenderTexture.GetTemporary(descriptor);
-            ApplyWatermark(cropDest, watermark, watermarkRect, watermarkDest);
-            // Append
-            Append(watermarkDest, clock?.timestamp ?? 0L);
-            // Release
+            ApplyWatermark(cropDest, watermarkDest);
+            // Blit
+            Graphics.Blit(watermarkDest, destination);
             RenderTexture.ReleaseTemporary(cropDest);
             RenderTexture.ReleaseTemporary(watermarkDest);
         }
 
-        private static void ExtractRoI (Texture source, RectInt rect, RenderTexture destination) {
+        private void ExtractRoI (
+            Texture source,
+            RenderTexture destination
+        ) {
             // Compute crop scale
             var frameSize = new Vector2(destination.width, destination.height);
-            var ratio = new Vector2(frameSize.x / rect.width, frameSize.y / rect.height);
+            var ratio = new Vector2(
+                frameSize.x / regionOfInterest.width,
+                frameSize.y / regionOfInterest.height
+            );
             var scale = Mathf.Max(ratio.x, ratio.y);
             // Compute draw rect
             var pixelSize = scale * frameSize;
-            var minPoint = 0.5f * frameSize - scale * rect.center;
+            var minPoint = 0.5f * frameSize - scale * regionOfInterest.center;
             var maxPoint = minPoint + pixelSize;
             var drawRect = new Rect(minPoint.x, destination.height - maxPoint.y, pixelSize.x, pixelSize.y);
             // Render
@@ -194,9 +212,11 @@ namespace VideoKit.Sources {
             RenderTexture.active = prevActive;
         }
 
-        private static void ApplyWatermark (Texture source, Texture? watermark, RectInt rect, RenderTexture destination) {   
-            // Render source         
-            var drawRect = new Rect(rect.x, destination.height - rect.max.y, rect.width, rect.height);
+        private void ApplyWatermark (
+            Texture source,
+            RenderTexture destination
+        ) {
+            // Render source
             var prevActive = RenderTexture.active;
             RenderTexture.active = destination;
             GL.Clear(true, true, Color.black);
@@ -204,12 +224,34 @@ namespace VideoKit.Sources {
             GL.LoadPixelMatrix(0, destination.width, destination.height, 0);
             Graphics.Blit(source, destination);
             // Render watermark
-            if (watermark)
-                Graphics.DrawTexture(drawRect, watermark);
+            if (watermark != null) {
+                var rect = watermarkAspectFit ?
+                    AspectFitRect(watermark, watermarkRect) :
+                    ToRect(watermarkRect);
+                rect.y = destination.height - rect.max.y; // required by `Graphics::DrawTexture`
+                Graphics.DrawTexture(rect, watermark);
+            }
             // Restore
             GL.PopMatrix();
             RenderTexture.active = prevActive;
         }
+        #endregion
+
+
+        #region --Utility--
+
+        private static Rect AspectFitRect (Texture watermark, RectInt frame) {
+            var frameAspect = (float)frame.width / frame.height;
+            var textureAspect = (float)watermark.width / watermark.height;
+            var fitToWidth = textureAspect > frameAspect;
+            var width = fitToWidth ? frame.width : frame.height * textureAspect;
+            var height = fitToWidth ? frame.width / textureAspect : frame.height;
+            var x = 0.5f * (frame.width - width);
+            var y = 0.5f * (frame.height - height);
+            return new(frame.x + x, frame.y + y, width, height);
+        }
+
+        private static Rect ToRect (RectInt rect) => new(rect.x, rect.y, rect.width, rect.height);
         #endregion
     }
 }
