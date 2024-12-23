@@ -10,11 +10,12 @@ namespace VideoKit.Tests {
     using Function;
     using Function.Types;
     using Newtonsoft.Json;
+    using UI;
     using Stopwatch = System.Diagnostics.Stopwatch;
 
     internal sealed class HumanTextureTest : MonoBehaviour {
 
-        [SerializeField] private VideoKitCameraManager cameraManager;
+        [SerializeField] private VideoKitCameraView cameraView;
         [SerializeField] UnityEngine.UI.RawImage rawImage;
         private Texture2D humanTexture;
         private Function fxn;
@@ -27,7 +28,7 @@ namespace VideoKit.Tests {
 
         private void Update () {
             // Check
-            var previewTexture = cameraManager.texture;
+            var previewTexture = cameraView.texture;
             if (previewTexture == null)
                 return;
             // Check

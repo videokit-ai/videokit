@@ -73,7 +73,6 @@
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKit.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/MediaRecorder.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitCameraView.cs" />
-    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraManagerSource.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/MultiCameraDevice.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/MediaDevice.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKitClient.cs" />
@@ -86,11 +85,12 @@
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitRecorder.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraSource.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/TextureSource.cs" />
-    <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioBuffer.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/ScreenSource.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioBuffer.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/CameraDevics.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Clocks/FixedClock.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioDevice.cs" />
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraViewSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages/ai.videokit.videokit/Runtime/VideoKit.Runtime.asmdef" />

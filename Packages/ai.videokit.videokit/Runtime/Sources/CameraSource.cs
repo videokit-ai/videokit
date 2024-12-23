@@ -42,7 +42,7 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Create a pixel buffer source from one or more game cameras.
         /// </summary>
-        /// <param name="recorder">Media recorder to receive images.</param>
+        /// <param name="recorder">Media recorder to receive pixel buffers.</param>
         /// <param name="cameras">Game cameras to capture images from.</param>
         public CameraSource (MediaRecorder recorder, params Camera[] cameras) : this(
             recorder,
@@ -53,9 +53,9 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Create a pixel buffer source from one or more game cameras.
         /// </summary>
-        /// <param name="recorder">Media recorder to receive images.</param>
-        /// <param name="clock">Clock for generating image timestamps.</param>
-        /// <param name="cameras">Game cameras to capture images from.</param>
+        /// <param name="recorder">Media recorder to receive pixel buffers.</param>
+        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
+        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
         public CameraSource (MediaRecorder recorder, IClock? clock, params Camera[] cameras) : this(
             recorder.width,
             recorder.height,
@@ -67,10 +67,10 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Create a pixel buffer source from one or more game cameras.
         /// </summary>
-        /// <param name="width">Image width.</param>
-        /// <param name="height">Image height.</param>
-        /// <param name="handler">Handler to receive images.</param>
-        /// <param name="cameras">Game cameras to capture images from.</param>
+        /// <param name="width">Pixel buffer width.</param>
+        /// <param name="height">Pixel buffer height.</param>
+        /// <param name="handler">Handler to receive pixel buffers.</param>
+        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
         public CameraSource (int width, int height, Action<PixelBuffer> handler, params Camera[] cameras) : this(
             width,
             height,
@@ -82,11 +82,11 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Create a pixel buffer source from one or more game cameras.
         /// </summary>
-        /// <param name="width">Image width.</param>
-        /// <param name="height">Image height.</param>
-        /// <param name="handler">Handler to receive images.</param>
-        /// <param name="clock">Clock for generating image timestamps.</param>
-        /// <param name="cameras">Game cameras to capture images from.</param>
+        /// <param name="width">Pixel buffer width.</param>
+        /// <param name="height">Pixel buffer height.</param>
+        /// <param name="handler">Handler to receive pixel buffers.</param>
+        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
+        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
         public CameraSource (
             int width,
             int height,

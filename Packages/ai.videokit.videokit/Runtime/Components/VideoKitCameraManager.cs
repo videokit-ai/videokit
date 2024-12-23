@@ -8,16 +8,9 @@
 namespace VideoKit {
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using UnityEngine;
-    using UnityEngine.Events;
-    using Unity.Collections;
-    using Unity.Collections.LowLevel.Unsafe;
-    using Function;
-    using Function.Types;
     using Internal;
 
     /// <summary>
@@ -67,6 +60,10 @@ namespace VideoKit {
             /// Require a world-facing camera.
             /// </summary>
             RequireWorld = 0b11,
+            /// <summary>
+            /// Require multi-camera streaming from a user-facing and world-facing camera.
+            /// </summary>
+            RequireUserAndWorld = 0b111, // INCOMPLETE
         }
 
         /// <summary>
@@ -193,14 +190,6 @@ namespace VideoKit {
         /// </summary>
         [Tooltip(@"Desired camera exposure mode.")]
         public CameraDevice.ExposureMode exposureMode = CameraDevice.ExposureMode.Continuous;
-
-        [Header(@"Events")]
-        /// <summary>
-        /// Event raised when a new camera frame is available in the camera manager.
-        /// The preview texture, human texture, and image feature will contain the latest camera image.
-        /// </summary>
-        [Tooltip(@"Event raised when a new camera frame is available.")]
-        public UnityEvent? OnCameraFrame;
         #endregion
 
 
@@ -238,30 +227,13 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Get the camera preview texture.
-        /// </summary>
-        public Texture2D? texture { get; private set; }
-
-        /// <summary>
-        /// Get the camera human texture.
-        /// This texture has the same size as the preview texture.
-        /// NOTE: This requires the `HumanTexture` capability to be enabled.
-        /// </summary>
-        public Texture2D? humanTexture { get; private set; }
-
-        /// <summary>
-        /// Get the camera preview rotation to become upright.
-        /// </summary>
-        public PixelBuffer.Rotation rotation { get; private set; }
-
-        /// <summary>
         /// Whether the camera is running.
         /// </summary>
         public bool running => _device?.running ?? false;
 
         /// <summary>
         /// Event raised when a new camera image is provided by the camera device.
-        /// NOTE: This event is usually raised on the camera thread, not the Unity main thread.
+        /// NOTE: This event is usually raised on a dedicated camera thread, not the Unity main thread.
         /// </summary>
         public event Action<PixelBuffer>? OnPixelBuffer;
 
@@ -299,22 +271,13 @@ namespace VideoKit {
             if (_device.IsExposureModeSupported(exposureMode))
                 _device.exposureMode = exposureMode;
             // Preload human texture predictor
+            var fxn = VideoKitClient.Instance!.fxn;
             if (capabilities.HasFlag(Capabilities.HumanTexture))
                 await fxn.Predictions.Create(HumanTextureTag, new());
-            // Create preview texture
-            rotation = GetPreviewRotation(Screen.orientation);
-            var (cameraWidth, cameraHeight) = _device.previewResolution;
-            var (previewWidth, previewHeight) = GetPreviewTextureSize(cameraWidth, cameraHeight, rotation);
-            previewData = new NativeArray<byte>(previewWidth * previewHeight * 4, Allocator.Persistent);
-            texture = new Texture2D(previewWidth, previewHeight, TextureFormat.RGBA32, false);
-            humanTexture = capabilities.HasFlag(Capabilities.HumanTexture) ?
-                new Texture2D(previewWidth, previewHeight, TextureFormat.RGBA32, false) :
-                null;
             // Start running
             _device.StartRunning(OnCameraPixelBuffer);
             // Listen for events
             var events = VideoKitEvents.Instance;
-            events.onFrame += OnFrame;
             events.onPause += OnPause;
             events.onResume += OnResume;
         }
@@ -325,19 +288,10 @@ namespace VideoKit {
         public void StopRunning () {
             var events = VideoKitEvents.OptionalInstance;
             if (events != null) {
-                events.onFrame -= OnFrame;
                 events.onPause -= OnPause;
                 events.onResume -= OnResume;
             }
             _device?.StopRunning();
-            Destroy(texture);
-            Destroy(humanTexture);
-            if (previewData.IsCreated)
-                previewData.Dispose();
-            previewData = default;
-            texture = null;
-            humanTexture = null;
-            rotation = 0;
         }
         #endregion
 
@@ -345,12 +299,6 @@ namespace VideoKit {
         #region --Operations--
         private CameraDevice[]? devices;
         private CameraDevice? _device;
-        internal NativeArray<byte> previewData { get; private set; }
-        private readonly object previewFence = new object();
-        private static readonly List<RuntimePlatform> OrientationSupport = new List<RuntimePlatform> {
-            RuntimePlatform.Android,
-            RuntimePlatform.IPhonePlayer
-        };
         public const string HumanTextureTag = @"@videokit/human-texture";
 
         private void Awake () {
@@ -358,39 +306,7 @@ namespace VideoKit {
                 StartRunning();
         }
 
-        private unsafe void OnCameraPixelBuffer (PixelBuffer srcBuffer) {
-            // Copy
-            var (width, height) = GetPreviewTextureSize(srcBuffer.width, srcBuffer.height, rotation);
-            lock (previewFence) {
-                using var dstBuffer = new PixelBuffer(
-                    width,
-                    height,
-                    PixelBuffer.Format.RGBA8888,
-                    (byte*)previewData.GetUnsafePtr()
-                );
-                srcBuffer.CopyTo(dstBuffer, rotation: rotation);
-            }
-            // Invoke event
-            OnPixelBuffer?.Invoke(srcBuffer);
-        }
-
-        private void OnFrame () {
-            // Preview texture
-            lock (previewFence)
-                texture!.GetRawTextureData<byte>().CopyFrom(previewData);
-            texture.Apply();
-            // Human texture
-            if (capabilities.HasFlag(Capabilities.HumanTexture)) {
-                var prediction = fxn.Predictions.Create(
-                    tag: HumanTextureTag,
-                    inputs: new () { ["image"] = texture.ToImage() }
-                ).Throw().Result;
-                var image = (Image)prediction.results![0]!;
-                image.ToTexture(humanTexture);
-            }
-            // Invoke event
-            OnCameraFrame?.Invoke();
-        }
+        private unsafe void OnCameraPixelBuffer (PixelBuffer pixelBuffer) => OnPixelBuffer?.Invoke(pixelBuffer);
 
         private void OnPause () => _device?.StopRunning();
 
@@ -415,16 +331,6 @@ namespace VideoKit {
 
 
         #region --Utilties--
-        private static Function fxn => VideoKitClient.Instance!.fxn;
-
-        private static PixelBuffer.Rotation GetPreviewRotation (ScreenOrientation orientation) => orientation switch {
-            var _ when !OrientationSupport.Contains(Application.platform)   => PixelBuffer.Rotation._0,
-            ScreenOrientation.LandscapeLeft                                 => PixelBuffer.Rotation._0,
-            ScreenOrientation.Portrait                                      => PixelBuffer.Rotation._90,
-            ScreenOrientation.LandscapeRight                                => PixelBuffer.Rotation._180,
-            ScreenOrientation.PortraitUpsideDown                            => PixelBuffer.Rotation._270,
-            _                                                               => PixelBuffer.Rotation._0
-        };
 
         private static (int width, int height) GetResolutionFrameSize (Resolution resolution) => resolution switch {
             Resolution.Lowest       => (176, 144),
@@ -436,15 +342,6 @@ namespace VideoKit {
             Resolution.Highest      => (5120, 2880),
             _                       => (1280, 720),
         };
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static (int width, int height) GetPreviewTextureSize (
-            int width,
-            int height,
-            PixelBuffer.Rotation rotation
-        ) => rotation == PixelBuffer.Rotation._90 || rotation == PixelBuffer.Rotation._270 ?
-            (height, width) :
-            (width, height);
         #endregion
     }
 }

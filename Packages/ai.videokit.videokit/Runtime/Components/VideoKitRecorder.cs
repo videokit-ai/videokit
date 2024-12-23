@@ -17,6 +17,7 @@ namespace VideoKit {
     using Unity.Collections;
     using Clocks;
     using Sources;
+    using UI;
     using MediaFormat = MediaRecorder.Format;
     using MediaType = MediaAsset.MediaType;
 
@@ -281,10 +282,10 @@ namespace VideoKit {
         public Texture? texture;
 
         /// <summary>
-        /// Camera manager for recording video frames from a camera device.
+        /// Camera view for recording video frames from a camera device.
         /// </summary>
-        [Tooltip(@"Camera manager for recording video frames from a camera device.")]
-        public VideoKitCameraManager? cameraManager;
+        [Tooltip(@"Camera view for recording video frames from a camera device.")]
+        public VideoKitCameraView? cameraView;
 
         /// <summary>
         /// Frame rate for animated GIF images.
@@ -295,7 +296,6 @@ namespace VideoKit {
 
         /// <summary>
         /// Number of successive camera frames to skip while recording.
-        /// NOTE: This is not supported with `VideoMode.CameraDevice`.
         /// </summary>
         [Tooltip(@"Number of successive camera frames to skip while recording."), Range(0, 5)]
         public int frameSkip = 0;
@@ -303,6 +303,7 @@ namespace VideoKit {
         [Header(@"Watermark")]
         /// <summary>
         /// Recording watermark mode for adding a watermark to videos.
+        /// NOTE: Watermarking is not supported with the `VideoMode.CameraDevice` video mode.
         /// </summary>
         [Tooltip(@"Recording watermark mode for adding a watermark to videos.")]
         public WatermarkMode watermarkMode = WatermarkMode.None;
@@ -456,12 +457,12 @@ namespace VideoKit {
                 throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because a recording session is already in progress");
             // Check camera device mode
             if (videoMode == VideoMode.CameraDevice) {
-                // Check camera manager
-                if (cameraManager == null)
-                    throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because the video mode is set to `VideoMode.CameraDevice` but `cameraManager` is null");
-                // Check camera preview
-                if (!cameraManager.running)
-                    throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because the video mode is set to `VideoMode.CameraDevice` but the `cameraManager` is not running");
+                // Check camera view
+                if (cameraView == null)
+                    throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because the video mode is set to `VideoMode.CameraDevice` but `cameraView` is null");
+                // Check camera preview is running
+                if (cameraView.texture == null)
+                    throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because the video mode is set to `VideoMode.CameraDevice` but the camera preview is not running");
             }
             // Check audio mode
             if (audioMode.HasFlag(AudioMode.AudioListener) && Application.platform == RuntimePlatform.WebGLPlayer) {
@@ -634,9 +635,10 @@ namespace VideoKit {
         private RealtimeClock? clock;
         private IDisposable? videoInput;
         private IDisposable? audioInput;
+
         private int width               => resolution switch {
             var _ when videoMode == 0   => 0,
-            var _ when videoMode == VideoMode.CameraDevice => cameraManager!.texture!.width,
+            var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.width,
             Resolution._240xAuto        => 240,
             Resolution._320xAuto        => 320,
             Resolution._480xAuto        => 480,
@@ -653,37 +655,43 @@ namespace VideoKit {
             Resolution.Custom           => customResolution.x,
             _                           => 1280,
         };
+
         private float aspect            => videoMode switch {
             VideoMode.Camera            => (float)Screen.width / Screen.height,
             VideoMode.Screen            => (float)Screen.width / Screen.height,
             VideoMode.Texture           => (float)texture!.width / texture!.height,
             _                           => 0f,
         };
+
         private int height              => resolution switch {
             var _ when videoMode == 0   => 0,
-            var _ when videoMode == VideoMode.CameraDevice => cameraManager!.texture!.height,
+            var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.height,
             Resolution.Custom           => customResolution.y,
             Resolution.Screen           => Screen.height >> 1 << 1,
             Resolution.HalfScreen       => Screen.height >> 2 << 1,
             _                           => Mathf.RoundToInt(width / aspect) >> 1 << 1,
         };
+
         private float frameRate => videoMode switch {
             var _ when format == MediaFormat.GIF    => _frameRate,
-            VideoMode.CameraDevice                  => cameraManager!.device!.frameRate,
+            //VideoMode.CameraDevice                  => cameraManager!.device!.frameRate,
             _                                       => 30,
         };
+
         private int sampleRate          => audioMode switch {
             AudioMode.AudioDevice       => audioManager?.device?.sampleRate ?? 0,
             AudioMode.AudioListener     => AudioSettings.outputSampleRate,
             AudioMode.AudioSource       => AudioSettings.outputSampleRate,
             _                           => 0,
         };
+
         private int channelCount        => audioMode switch {
             AudioMode.AudioDevice       => audioManager?.device?.channelCount ?? 0,
             AudioMode.AudioListener     => (int)AudioSettings.speakerMode,
             AudioMode.AudioSource       => (int)AudioSettings.speakerMode,
             _                           => 0,
         };
+
         private TextureSource? textureSource => videoInput switch {
             CameraSource cameraSource   => cameraSource.textureSource,
             ScreenSource screenSource   => screenSource.textureSource,
@@ -693,9 +701,9 @@ namespace VideoKit {
 
         private void Reset () {
             cameras = Camera.allCameras;
-            cameraManager = FindObjectOfType<VideoKitCameraManager>();
-            audioManager = FindObjectOfType<VideoKitAudioManager>();
-            audioListener = FindObjectOfType<AudioListener>();
+            cameraView = FindFirstObjectByType<VideoKitCameraView>();
+            audioManager = FindFirstObjectByType<VideoKitAudioManager>();
+            audioListener = FindFirstObjectByType<AudioListener>();
         }
 
         private async void Awake () {
@@ -738,7 +746,9 @@ namespace VideoKit {
                 source.watermarkRect = CreateWatermarkRect(width, height);
                 return source;
             } else if (videoMode == VideoMode.CameraDevice) // No support for watermarking yet
-                return new CameraManagerSource(cameraManager!, handler, clock);
+                return new CameraViewSource(cameraView!, handler, clock) {
+                    frameSkip = frameSkip
+                };
             else
                 return null;
         }

@@ -141,6 +141,8 @@ namespace VideoKit {
             get {
                 pixelBuffer.GetPixelBufferData(out var data);
                 pixelBuffer.GetPixelBufferDataSize(out var size);
+                if (data == default)
+                    return default;
                 var nativeArray = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<byte>(
                     data,
                     size,
@@ -156,34 +158,34 @@ namespace VideoKit {
         /// <summary>
         /// Pixel buffer format.
         /// </summary>
-        public readonly Format format => pixelBuffer.GetPixelBufferFormat(out var format).Throw() == Status.Ok ? format : default;
+        public readonly Format format => pixelBuffer.GetPixelBufferFormat(out var format) == Status.Ok ? format : default;
 
         /// <summary>
         /// Pixel buffer width.
         /// </summary>
-        public readonly int width => pixelBuffer.GetPixelBufferWidth(out var width).Throw() == Status.Ok ? width : default;
+        public readonly int width => pixelBuffer.GetPixelBufferWidth(out var width) == Status.Ok ? width : default;
 
         /// <summary>
         /// Pixel buffer height.
         /// </summary>
-        public readonly int height => pixelBuffer.GetPixelBufferHeight(out var height).Throw() == Status.Ok ? height : default;
+        public readonly int height => pixelBuffer.GetPixelBufferHeight(out var height) == Status.Ok ? height : default;
 
         /// <summary>
         /// Pixel buffer row stride in bytes.
         /// This is zero if the pixel data is planar.
         /// </summary>
-        public readonly int rowStride => pixelBuffer.GetPixelBufferRowStride(out var stride).Throw() == Status.Ok ? stride : default;
+        public readonly int rowStride => pixelBuffer.GetPixelBufferRowStride(out var stride) == Status.Ok ? stride : default;
 
         /// <summary>
         /// Pixel buffer timestamp in nanoseconds.
         /// The timestamp is based on the system media clock.
         /// </summary>
-        public readonly long timestamp => pixelBuffer.GetSampleBufferTimestamp(out var timestamp).Throw() == Status.Ok ? timestamp : default;
+        public readonly long timestamp => pixelBuffer.GetSampleBufferTimestamp(out var timestamp) == Status.Ok ? timestamp : default;
 
         /// <summary>
         /// Whether the pixel buffer is vertically mirrored.
         /// </summary>
-        public readonly bool verticallyMirrored => pixelBuffer.GetPixelBufferIsVerticallyMirrored(out var mirrored).Throw() == Status.Ok ? mirrored : default;
+        public readonly bool verticallyMirrored => pixelBuffer.GetPixelBufferIsVerticallyMirrored(out var mirrored) == Status.Ok ? mirrored : default;
 
         /// <summary>
         /// Pixel buffer planes for planar formats.

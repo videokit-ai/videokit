@@ -1,5 +1,11 @@
 ## 0.0.23
-+ Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously.
++ Improved camera streaming performance especially when streaming with high frame rate or with human texture.
++ Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
++ Added `VideoKitCameraManager.Facing.RequireUserAndWorld` enumeration member to stream from user- and world-facing cameras simultaneously.
++ Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
++ Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
++ Fixed `VideoKitCameraManager.StartRunning` method crashing on some Android devices when `Capabilities.HumanTexture` capability is enabled (#157).
++ Fixed missing native library errors in Xcode when building universal macOS binary (#154).
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
@@ -7,6 +13,11 @@
 + Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.
 + Refactored `VideoKitViewManager.focusMode` field to `focusGesture`.
 + Refactored `VideoKitViewManager.zoomMode` field to `zoomGesture`.
++ Removed `VideoKitCameraManager.OnCameraFrame` event. Use `VideoKitCameraView.OnCameraFrame` event instead.
++ Removed `VideoKitCameraManager.texture` field. Use `VideoKitCameraView.texture` field instead.
++ Removed `VideoKitCameraManager.humanTexture` field. Use `VideoKitCameraView.texture` field with `VideoKitCameraView.ViewMode.HumanTexture` view mode instead.
++ Removed `VideoKitCameraManager.rotation` field. Use `VideoKitCameraView.rotation` field instead.
++ Removed `VideoKitRecorder.cameraManager` field. Use `VideoKitRecorder.cameraView` field instead.
 
 ## 0.0.22
 + Improved native error propagation into C# code allowing you to `try..catch` more errors.

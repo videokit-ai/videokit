@@ -20,7 +20,7 @@ namespace VideoKit.Editor {
         private void OnEnable () {
             var propertyNames = new [] {
                 @"format", @"recordingAction", @"prepareOnAwake", @"videoMode", @"audioMode", @"resolution", @"customResolution",
-                @"cameras", @"texture", @"cameraManager", @"_frameRate", @"frameSkip", @"watermarkMode", @"_watermark",
+                @"cameras", @"texture", @"cameraView", @"_frameRate", @"frameSkip", @"watermarkMode", @"_watermark",
                 @"_watermarkRect", @"audioManager", @"configureAudioManager", @"audioListener", @"audioSource",
                 @"OnRecordingCompleted",
             };
@@ -61,7 +61,7 @@ namespace VideoKit.Editor {
                             EditorGUILayout.PropertyField(properties[@"texture"]);
                             break;
                         case VideoMode.CameraDevice:
-                            EditorGUILayout.PropertyField(properties[@"cameraManager"]);
+                            EditorGUILayout.PropertyField(properties[@"cameraView"]);
                             break;
                     }
                     // Frame duration

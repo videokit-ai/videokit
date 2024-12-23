@@ -26,7 +26,7 @@ namespace VideoKit.Editor.Build {
         private const string CachePath = @"Assets/__VIDEOKIT_DELETE_THIS__";
 
         [Function.Function.Embed(VideoKitCameraManager.HumanTextureTag)]
-        private static Function.Function fxn => new (
+        private static Function.Function fxn => new(
             accessKey: VideoKitProjectSettings.instance.accessKey,
             url: VideoKitClient.URL
         );

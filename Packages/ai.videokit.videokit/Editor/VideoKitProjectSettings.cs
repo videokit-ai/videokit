@@ -41,7 +41,8 @@ namespace VideoKit.Editor {
         private static void OnEnterPlaymodeInEditor (EnterPlayModeOptions options) {            
             try {
                 var platform = PlatformToName.GetValueOrDefault(Application.platform);
-                var token = Task.Run(() => VideoKitClient.CreateToken(platform, instance.accessKey)).Result;
+                var accessKey = instance.accessKey;
+                var token = Task.Run(() => VideoKitClient.CreateToken(platform, accessKey)).Result;
                 VideoKitClient.Instance = VideoKitClient.Create(token);
             } catch (Exception ex) {
                 VideoKitClient.Instance = VideoKitClient.Create(null);
