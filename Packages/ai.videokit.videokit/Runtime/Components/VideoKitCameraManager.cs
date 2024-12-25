@@ -8,6 +8,7 @@
 namespace VideoKit {
 
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -43,27 +44,16 @@ namespace VideoKit {
         /// <summary>
         /// Camera facing.
         /// </summary>
-        public enum Facing : int { // bit flags: [prefer/require user/world]
+        [Flags]
+        public enum Facing : int {
             /// <summary>
-            /// Prefer a user-facing camera but enable fallback to any available camera.
+            /// User-facing camera.
             /// </summary>
-            PreferUser = 0b00,
+            User = 0b10,
             /// <summary>
-            /// Prefer a world-facing camera but enable fallback to any available camera.
+            /// World-facing camera.
             /// </summary>
-            PreferWorld = 0b01,
-            /// <summary>
-            /// Require a user-facing camera.
-            /// </summary>
-            RequireUser = 0b10,
-            /// <summary>
-            /// Require a world-facing camera.
-            /// </summary>
-            RequireWorld = 0b11,
-            /// <summary>
-            /// Require multi-camera streaming from a user-facing and world-facing camera.
-            /// </summary>
-            RequireUserAndWorld = 0b111, // INCOMPLETE
+            World = 0b01,
         }
 
         /// <summary>
@@ -160,13 +150,21 @@ namespace VideoKit {
         [Tooltip(@"Whether to start the camera preview as soon as the component awakes.")]
         public bool playOnAwake = true;
 
-        [Header(@"Camera Settings")]
+        [Header(@"Camera Selection")]
         /// <summary>
         /// Desired camera facing.
         /// </summary>
         [SerializeField, Tooltip(@"Desired camera facing.")]
-        private Facing _facing = Facing.PreferUser;
+        private Facing _facing = Facing.User;
 
+        /// <summary>
+        /// Whether the specified facing is required.
+        /// When false, the camera manager will fallback to a default camera when a camera with the requested facing is not available.
+        /// </summary>
+        [Tooltip(@"Whether the specified facing is required. When false, the camera manager will fallback to a default camera when a camera with the requested facing is not available.")]
+        public bool facingRequired = false;
+
+        [Header(@"Camera Settings")]
         /// <summary>
         /// Desired camera resolution.
         /// </summary>
@@ -197,7 +195,7 @@ namespace VideoKit {
         /// <summary>
         /// Get or set the camera device used for streaming.
         /// </summary>
-        public CameraDevice? device {
+        public MediaDevice? device {
             get => _device;
             set {
                 // Switch cameras without disposing output
@@ -205,7 +203,8 @@ namespace VideoKit {
                 if (running) {
                     _device!.StopRunning();
                     _device = value;
-                    _device?.StartRunning(OnCameraPixelBuffer);
+                    if (_device != null)
+                        StartRunning(_device, OnCameraBuffer);
                 }
                 // Handle trivial case
                 else
@@ -221,8 +220,7 @@ namespace VideoKit {
             set {
                 if (_facing == value)
                     return;
-                _facing = value;
-                device = GetDefaultCameraDevice(_facing);
+                device = GetDefaultDevice(devices, _facing = value, facingRequired);
             }
         }
 
@@ -232,10 +230,10 @@ namespace VideoKit {
         public bool running => _device?.running ?? false;
 
         /// <summary>
-        /// Event raised when a new camera image is provided by the camera device.
-        /// NOTE: This event is usually raised on a dedicated camera thread, not the Unity main thread.
+        /// Event raised when a new pixel buffer is provided by the camera device.
+        /// NOTE: This event is invoked on a dedicated camera thread, not the Unity main thread.
         /// </summary>
-        public event Action<PixelBuffer>? OnPixelBuffer;
+        public event Action<CameraDevice, PixelBuffer>? OnPixelBuffer;
 
         /// <summary>
         /// Start the camera preview.
@@ -257,25 +255,27 @@ namespace VideoKit {
             if (permissions != MediaDevice.PermissionStatus.Authorized)
                 throw new InvalidOperationException(@"VideoKit: User did not grant camera permissions");
             // Check device
-            devices = await CameraDevice.Discover();
-            _device ??= GetDefaultCameraDevice(_facing);
+            devices = await GetAllDevices();
+            _device ??= GetDefaultDevice(devices, _facing, facingRequired);
             if (_device == null)
                 throw new InvalidOperationException(@"VideoKit: Camera manager failed to start running because no camera device is available");
-            // Configure camera
-            if (resolution != Resolution.Default)
-                _device.previewResolution = GetResolutionFrameSize(resolution);
-            if (frameRate != FrameRate.Default)
-                _device.frameRate = (int)frameRate;
-            if (_device.IsFocusModeSupported(focusMode))
-                _device.focusMode = focusMode;
-            if (_device.IsExposureModeSupported(exposureMode))
-                _device.exposureMode = exposureMode;
+            // Configure camera(s)
+            foreach (var cameraDevice in EnumerateCameraDevices(_device)) {
+                if (resolution != Resolution.Default)
+                    cameraDevice.previewResolution = GetResolutionFrameSize(resolution);
+                if (frameRate != FrameRate.Default)
+                    cameraDevice.frameRate = (int)frameRate;
+                if (cameraDevice.IsFocusModeSupported(focusMode))
+                    cameraDevice.focusMode = focusMode;
+                if (cameraDevice.IsExposureModeSupported(exposureMode))
+                    cameraDevice.exposureMode = exposureMode;
+            }
             // Preload human texture predictor
             var fxn = VideoKitClient.Instance!.fxn;
             if (capabilities.HasFlag(Capabilities.HumanTexture))
                 await fxn.Predictions.Create(HumanTextureTag, new());
             // Start running
-            _device.StartRunning(OnCameraPixelBuffer);
+            StartRunning(_device, OnCameraBuffer);
             // Listen for events
             var events = VideoKitEvents.Instance;
             events.onPause += OnPause;
@@ -297,8 +297,8 @@ namespace VideoKit {
 
 
         #region --Operations--
-        private CameraDevice[]? devices;
-        private CameraDevice? _device;
+        private MediaDevice[]? devices;
+        private MediaDevice? _device;
         public const string HumanTextureTag = @"@videokit/human-texture";
 
         private void Awake () {
@@ -306,31 +306,72 @@ namespace VideoKit {
                 StartRunning();
         }
 
-        private unsafe void OnCameraPixelBuffer (PixelBuffer pixelBuffer) => OnPixelBuffer?.Invoke(pixelBuffer);
+        private static void StartRunning (
+            MediaDevice device,
+            Action<CameraDevice, PixelBuffer> handler
+        ) {
+            if (device is CameraDevice cameraDevice)
+                cameraDevice.StartRunning(pixelBuffer => handler(cameraDevice, pixelBuffer));
+            else if (device is MultiCameraDevice multiCameraDevice)
+                multiCameraDevice.StartRunning(handler);
+            else
+                throw new InvalidOperationException($"Cannot start running because media device has unsupported type: {device.GetType()}");
+        }
+
+        private unsafe void OnCameraBuffer (
+            CameraDevice cameraDevice,
+            PixelBuffer pixelBuffer
+        ) => OnPixelBuffer?.Invoke(cameraDevice, pixelBuffer);
 
         private void OnPause () => _device?.StopRunning();
 
-        private void OnResume () => _device?.StartRunning(OnCameraPixelBuffer);
+        private void OnResume () {
+            if (_device != null)
+                StartRunning(_device, OnCameraBuffer);
+        }
 
         private void OnDestroy () => StopRunning();
-
-        private CameraDevice? GetDefaultCameraDevice (Facing facing) {
-            // Check that devices have been discovered
-            if (devices == null)
-                return null;
-            // Get fallback device
-            var fallback = !facing.HasFlag(Facing.RequireUser);
-            var fallbackDevice = fallback ? devices.FirstOrDefault() : null;
-            // Find device
-            var frontFacing = !facing.HasFlag(Facing.PreferWorld);
-            var device = devices.FirstOrDefault(d => frontFacing && d.frontFacing) ?? fallbackDevice;
-            // Return
-            return device;
-        }
         #endregion
 
 
         #region --Utilties--
+
+        private static async Task<MediaDevice[]> GetAllDevices () {
+            var cameraDevices = await CameraDevice.Discover();
+            var multiCameraDevices = await MultiCameraDevice.Discover();
+            var result = cameraDevices.Cast<MediaDevice>().Concat(multiCameraDevices).ToArray();
+            return result;
+        }
+
+        private static MediaDevice? GetDefaultDevice (
+            MediaDevice[]? devices,
+            Facing facing,
+            bool facingRequired
+        ) {
+            if (devices == null)
+                return null;
+            if (facing == (Facing)(Facing.User | Facing.World))
+                return devices.FirstOrDefault(device =>
+                    device is MultiCameraDevice multiCameraDevice &&
+                    multiCameraDevice.cameras.Any(camera => camera.frontFacing) &&
+                    multiCameraDevice.cameras.Any(camera => !camera.frontFacing)
+                );
+            var fallbackDevice = facingRequired ? null : devices.FirstOrDefault();
+            return devices.FirstOrDefault(device =>
+                device is CameraDevice cameraDevice &&
+                (GetCameraFacing(cameraDevice) & facing) != 0
+            ) ?? fallbackDevice;
+        }
+
+        private static IEnumerable<CameraDevice> EnumerateCameraDevices (MediaDevice device) {
+            if (device is CameraDevice cameraDevice)
+                yield return cameraDevice;
+            else if (device is MultiCameraDevice multiCameraDevice)
+                foreach (var camera in multiCameraDevice.cameras)
+                    yield return camera;
+            else
+                yield break;
+        }
 
         private static (int width, int height) GetResolutionFrameSize (Resolution resolution) => resolution switch {
             Resolution.Lowest       => (176, 144),
@@ -342,6 +383,10 @@ namespace VideoKit {
             Resolution.Highest      => (5120, 2880),
             _                       => (1280, 720),
         };
+
+        internal static Facing GetCameraFacing (CameraDevice cameraDevice) => cameraDevice.frontFacing ?
+            Facing.User :
+            Facing.World;
         #endregion
     }
 }

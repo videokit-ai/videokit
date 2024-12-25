@@ -484,6 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
+  facing: -1
   viewMode: 0
   focusGesture: 0
   exposureGesture: 0
@@ -775,6 +776,7 @@ MonoBehaviour:
   capabilities: 6
   playOnAwake: 1
   _facing: 1
+  allowFacingFallback: 1
   resolution: 3
   frameRate: 0
   focusMode: 0

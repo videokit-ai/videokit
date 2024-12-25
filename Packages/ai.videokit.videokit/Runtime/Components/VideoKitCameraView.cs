@@ -8,6 +8,7 @@
 namespace VideoKit.UI {
 
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using UnityEngine;
     using UnityEngine.Events;
@@ -207,7 +208,12 @@ namespace VideoKit.UI {
             OnCameraFrame?.Invoke();
         }
 
-        private unsafe void OnPixelBuffer (PixelBuffer cameraBuffer) {
+        private unsafe void OnPixelBuffer (
+            CameraDevice cameraDevice,
+            PixelBuffer cameraBuffer
+        ) {
+            if ((VideoKitCameraManager.GetCameraFacing(cameraDevice) & facing) == 0)
+                return;
             var (width, height) = GetPreviewTextureSize(
                 cameraBuffer.width,
                 cameraBuffer.height,
@@ -251,7 +257,7 @@ namespace VideoKit.UI {
 
         void IPointerUpHandler.OnPointerUp (PointerEventData data) {
             // Check device
-            var cameraDevice = cameraManager?.device;
+            var cameraDevice = GetCameraDevice(cameraManager?.device, facing);
             if (cameraDevice == null)
                 return;
             // Check focus mode
@@ -304,6 +310,17 @@ namespace VideoKit.UI {
         ) => rotation == PixelBuffer.Rotation._90 || rotation == PixelBuffer.Rotation._270 ?
             (height, width) :
             (width, height);
+
+        private static CameraDevice? GetCameraDevice (MediaDevice? device, Facing facing) {
+            if (device is CameraDevice cameraDevice)
+                return cameraDevice;
+            else if (device is MultiCameraDevice multiCameraDevice)
+                return multiCameraDevice
+                    .cameras
+                    .FirstOrDefault(camera => (VideoKitCameraManager.GetCameraFacing(camera) & facing) != 0);
+            else
+                return null;
+        }
         #endregion
     }
 }
