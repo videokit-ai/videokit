@@ -421,7 +421,7 @@ namespace VideoKit {
             }
         }
 
-        internal CameraDevice (IntPtr device, bool weak = false) : base(device, weak: weak) { }
+        internal CameraDevice (IntPtr device, bool strong = true) : base(device, strong: strong) { }
 
         public override string ToString () => $"CameraDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 
@@ -438,8 +438,9 @@ namespace VideoKit {
                 // Complete
                 var cameras = Enumerable
                     .Range(0, count)
-                    .Select(idx => new CameraDevice(((IntPtr*)devices)[idx]))
-                    .OrderBy(camera => camera.priority)
+                    .Select(idx => ((IntPtr*)devices)[idx])
+                    .Select(device => new CameraDevice(device, strong: true))
+                    .OrderBy(device => device.priority)
                     .ToArray();
                 tcs?.SetResult(cameras);
             } catch (Exception ex) {

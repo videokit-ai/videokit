@@ -159,7 +159,7 @@ namespace VideoKit.UI {
                 cameraManager.OnPixelBuffer += OnPixelBuffer;
         }
 
-        private unsafe void Update () { // INCOMPLETE // Human texture upside down
+        private unsafe void Update () {
             bool upload = false;
             lock (fence) {
                 if (pixelBuffer.width == 0 || pixelBuffer.height == 0)

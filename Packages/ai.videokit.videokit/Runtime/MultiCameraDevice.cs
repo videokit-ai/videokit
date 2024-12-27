@@ -58,7 +58,7 @@ namespace VideoKit {
         /// <param name="handler">Delegate to receive preview frames.</param>
         public void StartRunning (Action<CameraDevice, PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
             sampleBuffer.GetMultiCameraPixelBufferCamera(out var rawCamera).Throw();
-            var camera = new CameraDevice(rawCamera, weak: true);
+            var camera = cameras.First(cam => cam == rawCamera);
             var pixelBuffer = new PixelBuffer(sampleBuffer);
             handler(camera, pixelBuffer);
         });
@@ -111,10 +111,8 @@ namespace VideoKit {
         internal MultiCameraDevice (IntPtr device) : base(device) {
             device.GetMultiCameraDeviceCameraCount(out var count).Throw();
             this.cameras = Enumerable.Range(0, count)
-                .Select(idx => new CameraDevice(
-                    device.GetMultiCameraDeviceCamera(idx, out var camera).Throw() == Status.Ok ? camera : default,
-                    weak: true
-                ))
+                .Select(idx => device.GetMultiCameraDeviceCamera(idx, out var camera).Throw() == Status.Ok ? camera : default)
+                .Select(camera => new CameraDevice(camera, strong: false))
                 .ToArray();
             device.SetMultiCameraDeviceSystemPressureChangeHandler(OnSystemPressureChange, (IntPtr)weakSelf);
         }
@@ -134,7 +132,8 @@ namespace VideoKit {
                 // Complete task
                 var cameras = Enumerable
                     .Range(0, count)
-                    .Select(idx => new MultiCameraDevice(((IntPtr*)devices)[idx]))
+                    .Select(idx => ((IntPtr*)devices)[idx])
+                    .Select(device => new MultiCameraDevice(device))
                     .ToArray();
                 tcs?.SetResult(cameras);
             } catch (Exception ex) {

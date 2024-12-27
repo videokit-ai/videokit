@@ -115,11 +115,12 @@ namespace VideoKit {
         #region --Operations--
         protected readonly IntPtr device;
         protected readonly GCHandle weakSelf;
-        private readonly bool weak;
+        private readonly bool strong;
         private GCHandle streamHandle;
 
-        internal MediaDevice (IntPtr device, bool weak = false) {
+        internal MediaDevice (IntPtr device, bool strong = true) {
             this.device = device;
+            this.strong = strong;
             this.weakSelf = GCHandle.Alloc(this, GCHandleType.Weak);
             // Cache UID
             var buffer = new StringBuilder(2048);
@@ -134,7 +135,7 @@ namespace VideoKit {
         }
 
         ~MediaDevice () {
-            if (!weak)
+            if (strong)
                 device.ReleaseMediaDevice();
             weakSelf.Free();
         }
