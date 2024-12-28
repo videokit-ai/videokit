@@ -7,6 +7,7 @@
 
 namespace VideoKit.UI {
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -15,7 +16,6 @@ namespace VideoKit.UI {
     using UnityEngine.EventSystems;
     using UnityEngine.Serialization;
     using UnityEngine.UI;
-    using Unity.Collections;
     using Unity.Collections.LowLevel.Unsafe;
     using Function;
     using Internal;
@@ -134,7 +134,6 @@ namespace VideoKit.UI {
 
 
         #region --Operations--
-        private NativeArray<byte> previewData;
         private PixelBuffer pixelBuffer;
         private RawImage rawImage;
         private AspectRatioFitter aspectFitter;
@@ -162,7 +161,7 @@ namespace VideoKit.UI {
         private unsafe void Update () {
             bool upload = false;
             lock (fence) {
-                if (pixelBuffer.width == 0 || pixelBuffer.height == 0)
+                if (pixelBuffer == IntPtr.Zero)
                     return;
                 if (
                     texture != null &&
@@ -172,7 +171,12 @@ namespace VideoKit.UI {
                     texture = null;
                 }
                 if (texture == null)
-                    texture = new Texture2D(pixelBuffer.width, pixelBuffer.height, TextureFormat.RGBA32, false);
+                    texture = new Texture2D(
+                        pixelBuffer.width,
+                        pixelBuffer.height,
+                        TextureFormat.RGBA32,
+                        false
+                    );
                 if (viewMode == ViewMode.CameraTexture) {
                     using var buffer = new PixelBuffer(
                         texture.width,
@@ -189,7 +193,7 @@ namespace VideoKit.UI {
                         tag: VideoKitCameraManager.HumanTextureTag,
                         inputs: new () {
                             ["image"] = new Image(
-                                (byte*)previewData.GetUnsafeReadOnlyPtr(),
+                                (byte*)pixelBuffer.data.GetUnsafePtr(),
                                 pixelBuffer.width,
                                 pixelBuffer.height,
                                 4
@@ -220,21 +224,20 @@ namespace VideoKit.UI {
                 rotation
             );
             lock (fence) {
-                if (pixelBuffer.width != width || pixelBuffer.height != height) {
+                if (
+                    pixelBuffer != IntPtr.Zero &&
+                    (pixelBuffer.width != width || pixelBuffer.height != height)
+                ) {
                     pixelBuffer.Dispose();
-                    previewData.Dispose();
+                    pixelBuffer = default;
                 }
-                previewData = new NativeArray<byte>(
-                    width * height * 4,
-                    Allocator.Persistent
-                );
-                pixelBuffer = new PixelBuffer(
-                    width,
-                    height,
-                    PixelBuffer.Format.RGBA8888,
-                    (byte*)previewData.GetUnsafePtr(),
-                    mirrored: true
-                );
+                if (pixelBuffer == IntPtr.Zero)
+                    pixelBuffer = new PixelBuffer(
+                        width,
+                        height,
+                        PixelBuffer.Format.RGBA8888,
+                        mirrored: true
+                    );
                 cameraBuffer.CopyTo(pixelBuffer, rotation: rotation);
             }
         }
@@ -246,9 +249,7 @@ namespace VideoKit.UI {
 
         private void OnDestroy () {
             pixelBuffer.Dispose();
-            previewData.Dispose();
             pixelBuffer = default;
-            previewData = default;
         }
         #endregion
 

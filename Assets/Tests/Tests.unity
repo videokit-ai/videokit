@@ -715,6 +715,7 @@ GameObject:
   - component: {fileID: 1493259194}
   - component: {fileID: 1493259193}
   - component: {fileID: 1493259199}
+  - component: {fileID: 1493259206}
   - component: {fileID: 1493259192}
   - component: {fileID: 1493259205}
   - component: {fileID: 1493259197}
@@ -775,8 +776,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capabilities: 6
   playOnAwake: 1
-  _facing: 1
-  allowFacingFallback: 1
+  _facing: 2
+  facingRequired: 0
   resolution: 3
   frameRate: 0
   focusMode: 0
@@ -1050,6 +1051,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rawImage: {fileID: 840997204}
+--- !u!114 &1493259206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3966bfa723fa342babf2911911027db5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1553569355
 GameObject:
   m_ObjectHideFlags: 0

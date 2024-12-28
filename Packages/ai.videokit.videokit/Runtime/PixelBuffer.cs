@@ -139,6 +139,8 @@ namespace VideoKit {
         /// </summary>
         public unsafe readonly NativeArray<byte> data {
             get {
+                if (dataBuffer.IsCreated)
+                    return dataBuffer;
                 pixelBuffer.GetPixelBufferData(out var data);
                 pixelBuffer.GetPixelBufferDataSize(out var size);
                 if (data == default)
@@ -224,10 +226,10 @@ namespace VideoKit {
         /// <param name="metadata">Pixel buffer metadata.</param>
         /// <returns>Created pixel buffer.</returns>
         public PixelBuffer (Texture2D texture, long timestamp = 0L) : this(
-            texture.width,
-            texture.height,
-            ToImageFormat(texture.format),
-            texture.GetRawTextureData<byte>(),
+            width: texture.width,
+            height: texture.height,
+            format: ToImageFormat(texture.format),
+            data: texture.GetRawTextureData<byte>(),
             timestamp: timestamp,
             mirrored: false
         ) { }
@@ -252,23 +254,14 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) {
-            // Copy
-            pixelData = (byte*)UnsafeUtility.Malloc(data.Length, 16, Allocator.Persistent);
-            fixed (byte* srcData = data)
-                UnsafeUtility.MemCpy(pixelData, srcData, data.Length);
-            // Create
-            VideoKit.CreatePixelBuffer(
-                width,
-                height,
-                format,
-                pixelData,
-                rowStride > 0 ? rowStride : GetDefaultStride(format, width),
-                timestamp,
-                mirrored,
-                out pixelBuffer
-            ).Throw();
-        }
+        ) : this(
+            width: width,
+            height: height,
+            format: format,
+            rowStride: rowStride,
+            timestamp: timestamp,
+            mirrored: mirrored
+        ) => dataBuffer.CopyFrom(data);
 
         /// <summary>
         /// Create an interleaved pixel buffer from pixel data.
@@ -289,7 +282,15 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) : this(width, height, format, (byte*)data.GetUnsafePtr(), rowStride, timestamp, mirrored) { }
+        ) : this(
+            width: width,
+            height: height,
+            format: format,
+            data: (byte*)data.GetUnsafePtr(),
+            rowStride: rowStride,
+            timestamp: timestamp,
+            mirrored: mirrored
+        ) { }
 
         /// <summary>
         /// Create an interleaved pixel buffer from pixel data in native memory.
@@ -311,23 +312,26 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) : this(VideoKit.CreatePixelBuffer(
-            width,
-            height,
-            format,
-            data,
-            rowStride > 0 ? rowStride : GetDefaultStride(format, width),
-            timestamp,
-            mirrored,
-            out var pixelBuffer
-        ).Throw() == Status.Ok ? pixelBuffer : default) { }
+        ) {
+            VideoKit.CreatePixelBuffer(
+                width,
+                height,
+                format,
+                data,
+                rowStride > 0 ? rowStride : GetDefaultStride(format, width),
+                timestamp,
+                mirrored,
+                out pixelBuffer
+            ).Throw();
+            dataBuffer = default;
+        }
 
         /// <summary>
         /// Dispose the pixel buffer and release resources.
         /// </summary>
         public void Dispose () {
             pixelBuffer.ReleaseSampleBuffer();
-            UnsafeUtility.Free(pixelData, Allocator.Persistent);
+            dataBuffer.Dispose();
         }
         #endregion
 
@@ -347,11 +351,33 @@ namespace VideoKit {
 
         #region --Operations--
         private readonly IntPtr pixelBuffer;
-        private readonly byte* pixelData;
+        private readonly NativeArray<byte> dataBuffer;
 
         internal PixelBuffer (IntPtr pixelBuffer) {
             this.pixelBuffer = pixelBuffer;
-            this.pixelData = null;
+            this.dataBuffer = default;
+        }
+
+        internal PixelBuffer ( // might wanna make this public
+            int width,
+            int height,
+            Format format,
+            int rowStride = 0,
+            long timestamp = 0L,
+            bool mirrored = false
+        ) {
+            rowStride = rowStride > 0 ? rowStride : GetDefaultStride(format, width);
+            dataBuffer = new NativeArray<byte>(rowStride * height, Allocator.Persistent);
+            VideoKit.CreatePixelBuffer(
+                width,
+                height,
+                format,
+                (byte*)dataBuffer.GetUnsafePtr(),
+                rowStride,
+                timestamp,
+                mirrored,
+                out pixelBuffer
+            ).Throw();
         }
 
         public static implicit operator IntPtr (PixelBuffer pixelBuffer) => pixelBuffer.pixelBuffer;

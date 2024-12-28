@@ -337,7 +337,7 @@ namespace VideoKit {
         #region --Utilties--
 
         private static async Task<MediaDevice[]> GetAllDevices () {
-            var cameraDevices = await CameraDevice.Discover();
+            var cameraDevices = await CameraDevice.Discover(); // MUST always come before multi-cameras
             var multiCameraDevices = await MultiCameraDevice.Discover();
             var result = cameraDevices.Cast<MediaDevice>().Concat(multiCameraDevices).ToArray();
             return result;
@@ -348,19 +348,9 @@ namespace VideoKit {
             Facing facing,
             bool facingRequired
         ) {
-            if (devices == null)
-                return null;
-            if (facing == (Facing)(Facing.User | Facing.World))
-                return devices.FirstOrDefault(device =>
-                    device is MultiCameraDevice multiCameraDevice &&
-                    multiCameraDevice.cameras.Any(camera => camera.frontFacing) &&
-                    multiCameraDevice.cameras.Any(camera => !camera.frontFacing)
-                );
-            var fallbackDevice = facingRequired ? null : devices.FirstOrDefault();
-            return devices.FirstOrDefault(device =>
-                device is CameraDevice cameraDevice &&
-                (GetCameraFacing(cameraDevice) & facing) != 0
-            ) ?? fallbackDevice;
+            var fallbackDevice = facingRequired ? null : devices?.FirstOrDefault();
+            var requestedDevice = devices?.FirstOrDefault(device => (GetCameraFacing(device) & facing) != 0);
+            return requestedDevice ?? fallbackDevice;
         }
 
         private static IEnumerable<CameraDevice> EnumerateCameraDevices (MediaDevice device) {
@@ -384,9 +374,11 @@ namespace VideoKit {
             _                       => (1280, 720),
         };
 
-        internal static Facing GetCameraFacing (CameraDevice cameraDevice) => cameraDevice.frontFacing ?
-            Facing.User :
-            Facing.World;
+        internal static Facing GetCameraFacing (MediaDevice mediaDevice) => mediaDevice switch {
+            CameraDevice cameraDevice => cameraDevice.frontFacing ? Facing.User : Facing.World,
+            MultiCameraDevice multiCameraDevice => multiCameraDevice.cameras.Select(GetCameraFacing).Aggregate((a, b) => a | b),
+            _ => 0,
+        };
         #endregion
     }
 }

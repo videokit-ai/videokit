@@ -109,7 +109,7 @@ typedef VKTSampleBuffer VKTPixelBuffer;
  @param pixelBuffer
  Output pixel buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCreate (
+VKT_API VKTStatus VKTPixelBufferCreate (
     int32_t width,
     int32_t height,
     VKTPixelFormat format,
@@ -163,7 +163,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCreate (
  @param pixelBuffer
  Output pixel buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCreatePlanar (
+VKT_API VKTStatus VKTPixelBufferCreatePlanar (
     int32_t width,
     int32_t height,
     VKTPixelFormat format,
@@ -195,7 +195,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCreatePlanar (
  @param data
  Pixel data.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetData (
+VKT_API VKTStatus VKTPixelBufferGetData (
     VKTPixelBuffer* pixelBuffer,
     void** data
 );
@@ -213,7 +213,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetData (
  @param size
  Pixel buffer data size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetDataSize (
+VKT_API VKTStatus VKTPixelBufferGetDataSize (
     VKTPixelBuffer* pixelBuffer,
     int32_t* size
 );
@@ -231,7 +231,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetDataSize (
  @param format
  Pixel buffer format.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetFormat (
+VKT_API VKTStatus VKTPixelBufferGetFormat (
     VKTPixelBuffer* pixelBuffer,
     VKTPixelFormat* format
 );
@@ -249,7 +249,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetFormat (
  @param width
  Width of the pixel buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetWidth (
+VKT_API VKTStatus VKTPixelBufferGetWidth (
     VKTPixelBuffer* pixelBuffer,
     int32_t* width
 );
@@ -267,7 +267,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetWidth (
  @param height
  Height of the pixel buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetHeight (
+VKT_API VKTStatus VKTPixelBufferGetHeight (
     VKTPixelBuffer* pixelBuffer,
     int32_t* height
 );
@@ -285,7 +285,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetHeight (
  @param rowStride
  Pixel buffer row stride in bytes.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetRowStride (
+VKT_API VKTStatus VKTPixelBufferGetRowStride (
     VKTPixelBuffer* pixelBuffer,
     int32_t* rowStride
 );
@@ -303,7 +303,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetRowStride (
  @param isMirrored
  Whether pixel buffer is vertically mirrored.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferIsVerticallyMirrored (
+VKT_API VKTStatus VKTPixelBufferIsVerticallyMirrored (
     VKTPixelBuffer* pixelBuffer,
     bool* isMirrored
 );
@@ -321,7 +321,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferIsVerticallyMirrored (
  @param planeCount
  Pixel buffer plane count.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneCount (
+VKT_API VKTStatus VKTPixelBufferGetPlaneCount (
     VKTPixelBuffer* pixelBuffer,
     int32_t* planeCount
 );
@@ -342,7 +342,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneCount (
  @param planeData
  Pixel buffer plane data.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneData (
+VKT_API VKTStatus VKTPixelBufferGetPlaneData (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     void** planeData
@@ -364,7 +364,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneData (
  @param dataSize
  Pixel buffer plane data size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneDataSize (
+VKT_API VKTStatus VKTPixelBufferGetPlaneDataSize (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     int32_t* dataSize
@@ -386,7 +386,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneDataSize (
  @param width
  Plane width.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneWidth (
+VKT_API VKTStatus VKTPixelBufferGetPlaneWidth (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     int32_t* width
@@ -408,7 +408,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneWidth (
  @param height
  Plane height.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneHeight (
+VKT_API VKTStatus VKTPixelBufferGetPlaneHeight (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     int32_t* height
@@ -430,7 +430,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneHeight (
  @param pixelStride
  Plane pixel stride in bytes.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlanePixelStride (
+VKT_API VKTStatus VKTPixelBufferGetPlanePixelStride (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     int32_t* pixelStride
@@ -452,7 +452,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlanePixelStride (
  @param rowStride
  Plane row stride in bytes.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneRowStride (
+VKT_API VKTStatus VKTPixelBufferGetPlaneRowStride (
     VKTPixelBuffer* pixelBuffer,
     int32_t planeIdx,
     int32_t* rowStride
@@ -475,7 +475,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferGetPlaneRowStride (
  @param size
  Size of metadata buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCopyMetadata (
+VKT_API VKTStatus VKTPixelBufferCopyMetadata (
     VKTPixelBuffer* pixelBuffer,
     char* metadata,
     int32_t size
@@ -501,7 +501,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCopyMetadata (
  @param rotation
  Rotation to apply when copying.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTPixelBufferCopyTo (
+VKT_API VKTStatus VKTPixelBufferCopyTo (
     VKTPixelBuffer* source,
     VKTPixelBuffer* destination,
     VKTPixelRotation rotation
