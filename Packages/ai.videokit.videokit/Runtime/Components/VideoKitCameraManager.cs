@@ -20,7 +20,7 @@ namespace VideoKit {
     [Tooltip(@"VideoKit camera manager for streaming video from camera devices.")]
     [HelpURL(@"https://videokit.ai/reference/videokitcameramanager")]
     [DisallowMultipleComponent]
-    public sealed class VideoKitCameraManager : MonoBehaviour { // INCOMPLETE // Test pause handling
+    public sealed class VideoKitCameraManager : MonoBehaviour {
 
         #region --Enumerations--
         /// <summary>
@@ -348,8 +348,9 @@ namespace VideoKit {
             Facing facing,
             bool facingRequired
         ) {
+            facing &= Facing.User | Facing.World;
             var fallbackDevice = facingRequired ? null : devices?.FirstOrDefault();
-            var requestedDevice = devices?.FirstOrDefault(device => (GetCameraFacing(device) & facing) != 0);
+            var requestedDevice = devices?.FirstOrDefault(device => GetCameraFacing(device).HasFlag(facing));
             return requestedDevice ?? fallbackDevice;
         }
 
@@ -375,9 +376,9 @@ namespace VideoKit {
         };
 
         internal static Facing GetCameraFacing (MediaDevice mediaDevice) => mediaDevice switch {
-            CameraDevice cameraDevice => cameraDevice.frontFacing ? Facing.User : Facing.World,
+            CameraDevice cameraDevice           => cameraDevice.frontFacing ? Facing.User : Facing.World,
             MultiCameraDevice multiCameraDevice => multiCameraDevice.cameras.Select(GetCameraFacing).Aggregate((a, b) => a | b),
-            _ => 0,
+            _                                   => 0,
         };
         #endregion
     }

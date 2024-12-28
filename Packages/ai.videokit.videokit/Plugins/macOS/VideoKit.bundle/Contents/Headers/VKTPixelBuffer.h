@@ -47,19 +47,19 @@ typedef enum VKTPixelFormat VKTPixelFormat;
  No rotation.
 
  @constant VKT_PIXEL_BUFFER_ROTATION_90
- Rotate 90 degrees counter-clockwise.
+ Rotate 90 degrees clockwise.
 
  @constant VKT_PIXEL_BUFFER_ROTATION_180
- Rotate 180 degrees counter-clockwise.
+ Rotate 180 degrees clockwise.
 
  @constant VKT_PIXEL_BUFFER_ROTATION_270
- Rotate 270 degrees counter-clockwise.
+ Rotate 270 degrees clockwise.
 */
 enum VKTPixelRotation {
     VKT_PIXEL_ROTATION_0     = 0,
-    VKT_PIXEL_ROTATION_90    = 1,
+    VKT_PIXEL_ROTATION_90    = 3,
     VKT_PIXEL_ROTATION_180   = 2,
-    VKT_PIXEL_ROTATION_270   = 3,
+    VKT_PIXEL_ROTATION_270   = 1,
 };
 typedef enum VKTPixelRotation VKTPixelRotation;
 #pragma endregion

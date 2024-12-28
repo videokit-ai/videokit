@@ -55,17 +55,17 @@ namespace VideoKit {
             /// </summary>
             _0 = 0,
             /// <summary>
-            /// Rotate 90 degrees counter-clockwise.
+            /// Rotate 90 degrees clockwise.
             /// </summary>
-            _90 = 1,
+            _90 = 3,
             /// <summary>
             /// Rotate 180 degrees.
             /// </summary>
             _180 = 2,
             /// <summary>
-            /// Rotate 270 degrees counter-clockwise.
+            /// Rotate 270 degrees clockwise.
             /// </summary>
-            _270 = 3
+            _270 = 1
         }
         #endregion
 
