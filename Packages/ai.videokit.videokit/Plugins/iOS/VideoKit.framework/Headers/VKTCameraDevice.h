@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 5/15/2023.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -157,7 +157,7 @@ typedef VKTMediaDevice VKTCameraDevice;
 
  @returns Status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceDiscoverDevices (
+VKT_API VKTStatus VKTCameraDeviceDiscoverDevices (
     VKTMediaDeviceDiscoveryHandler handler,
     void* context
 );
@@ -178,7 +178,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceDiscoverDevices (
  @param height
  Output FOV height in degrees. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFieldOfView (
+VKT_API VKTStatus VKTCameraDeviceGetFieldOfView (
     VKTCameraDevice* camera,
     float* width,
     float* height
@@ -200,7 +200,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFieldOfView (
  @param outMax
  Output maximum exposure bias.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureBiasRange (
+VKT_API VKTStatus VKTCameraDeviceGetExposureBiasRange (
     VKTCameraDevice* camera,
     float* outMin,
     float* outMax
@@ -222,7 +222,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureBiasRange (
  @param max
  Maximum exposure duration in seconds. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureDurationRange (
+VKT_API VKTStatus VKTCameraDeviceGetExposureDurationRange (
     VKTCameraDevice* camera,
     float* min,
     float* max
@@ -244,7 +244,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureDurationRange 
  @param max
  Maximum ISO sensitivity value. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetISORange (
+VKT_API VKTStatus VKTCameraDeviceGetISORange (
     VKTCameraDevice* camera,
     float* min,
     float* max
@@ -266,7 +266,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetISORange (
  @param max
  Maximum zoom ratio. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetZoomRange (
+VKT_API VKTStatus VKTCameraDeviceGetZoomRange (
     VKTCameraDevice* camera, 
     float* min, 
     float* max
@@ -288,7 +288,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetZoomRange (
  @param height
  Height in pixels. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetPreviewResolution (
+VKT_API VKTStatus VKTCameraDeviceGetPreviewResolution (
     VKTCameraDevice* camera,
     int32_t* width,
     int32_t* height
@@ -315,7 +315,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetPreviewResolution (
  @param height
  Height in pixels.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetPreviewResolution (
+VKT_API VKTStatus VKTCameraDeviceSetPreviewResolution (
     VKTCameraDevice* camera,
     int32_t width,
     int32_t height
@@ -337,7 +337,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetPreviewResolution (
  @param height
  Output height in pixels. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetPhotoResolution (
+VKT_API VKTStatus VKTCameraDeviceGetPhotoResolution (
     VKTCameraDevice* camera,
     int32_t* width,
     int32_t* height
@@ -364,7 +364,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetPhotoResolution (
  @param height
  Height in pixels.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetPhotoResolution (
+VKT_API VKTStatus VKTCameraDeviceSetPhotoResolution (
     VKTCameraDevice* camera,
     int32_t width,
     int32_t height
@@ -383,7 +383,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetPhotoResolution (
  @param frameRate
  Preview frame rate.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFrameRate (
+VKT_API VKTStatus VKTCameraDeviceGetFrameRate (
     VKTCameraDevice* camera,
     float* frameRate
 );
@@ -403,7 +403,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFrameRate (
  @param frameRate
  Frame rate.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFrameRate (
+VKT_API VKTStatus VKTCameraDeviceSetFrameRate (
     VKTCameraDevice* camera,
     float frameRate
 );
@@ -421,7 +421,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFrameRate (
  @param exposureMode
  Exposure mode.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureMode (
+VKT_API VKTStatus VKTCameraDeviceGetExposureMode (
     VKTCameraDevice* camera,
     VKTExposureMode* exposureMode
 );
@@ -439,7 +439,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureMode (
  @param mode
  Exposure mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureMode (
+VKT_API VKTStatus VKTCameraDeviceSetExposureMode (
     VKTCameraDevice* camera,
     VKTExposureMode mode
 );
@@ -457,7 +457,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureMode (
  @param bias
  Exposure bias.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureBias (
+VKT_API VKTStatus VKTCameraDeviceGetExposureBias (
     VKTCameraDevice* camera,
     float* bias
 );
@@ -477,7 +477,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureBias (
  @param bias
  Exposure bias value to set.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureBias (
+VKT_API VKTStatus VKTCameraDeviceSetExposureBias (
     VKTCameraDevice* camera,
     float bias
 );
@@ -495,7 +495,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureBias (
  @param duration
  Exposure duration in seconds.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureDuration (
+VKT_API VKTStatus VKTCameraDeviceGetExposureDuration (
     VKTCameraDevice* camera,
     float* duration
 );
@@ -513,7 +513,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetExposureDuration (
  @param ISO
  Camera sensitivity.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetISO (
+VKT_API VKTStatus VKTCameraDeviceGetISO (
     VKTCameraDevice* camera,
     float* ISO
 );
@@ -535,7 +535,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetISO (
  @param ISO
  Shutter sensitivity. MUST be in `ISORange`.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureDuration (
+VKT_API VKTStatus VKTCameraDeviceSetExposureDuration (
     VKTCameraDevice* camera,
     float duration,
     float ISO
@@ -558,7 +558,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposureDuration (
  @param y
  Exposure point y-coordinate in viewport space.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposurePoint (
+VKT_API VKTStatus VKTCameraDeviceSetExposurePoint (
     VKTCameraDevice* camera,
     float x,
     float y
@@ -577,7 +577,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetExposurePoint (
  @param mode
  Photo flash mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFlashMode (
+VKT_API VKTStatus VKTCameraDeviceGetFlashMode (
     VKTCameraDevice* camera,
     VKTFlashMode* mode
 );
@@ -595,7 +595,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFlashMode (
  @param mode
  Flash mode to set.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFlashMode (
+VKT_API VKTStatus VKTCameraDeviceSetFlashMode (
     VKTCameraDevice* camera,
     VKTFlashMode mode
 );
@@ -613,7 +613,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFlashMode (
  @param mode
  Focus mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFocusMode (
+VKT_API VKTStatus VKTCameraDeviceGetFocusMode (
     VKTCameraDevice* camera,
     VKTFocusMode* mode
 );
@@ -631,7 +631,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetFocusMode (
  @param mode
  Focus mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFocusMode (
+VKT_API VKTStatus VKTCameraDeviceSetFocusMode (
     VKTCameraDevice* camera,
     VKTFocusMode mode
 );
@@ -655,7 +655,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFocusMode (
  @param y
  Focus point y-coordinate in viewport space.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFocusPoint (
+VKT_API VKTStatus VKTCameraDeviceSetFocusPoint (
     VKTCameraDevice* camera,
     float x,
     float y
@@ -674,7 +674,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetFocusPoint (
  @param mode
  Torch mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetTorchMode (
+VKT_API VKTStatus VKTCameraDeviceGetTorchMode (
     VKTCameraDevice* camera,
     VKTTorchMode* mode
 );
@@ -692,7 +692,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetTorchMode (
  @param mode
  Torch mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetTorchMode (
+VKT_API VKTStatus VKTCameraDeviceSetTorchMode (
     VKTCameraDevice* camera,
     VKTTorchMode mode
 );
@@ -710,7 +710,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetTorchMode (
  @param mode
  White balance mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetWhiteBalanceMode (
+VKT_API VKTStatus VKTCameraDeviceGetWhiteBalanceMode (
     VKTCameraDevice* camera,
     VKTWhiteBalanceMode* mode
 );
@@ -728,7 +728,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetWhiteBalanceMode (
  @param mode
  White balance mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetWhiteBalanceMode (
+VKT_API VKTStatus VKTCameraDeviceSetWhiteBalanceMode (
     VKTCameraDevice* camera,
     VKTWhiteBalanceMode mode
 );
@@ -746,7 +746,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetWhiteBalanceMode (
  @param mode
  Video stabilization mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetVideoStabilizationMode (
+VKT_API VKTStatus VKTCameraDeviceGetVideoStabilizationMode (
     VKTCameraDevice* camera,
     VKTVideoStabilizationMode* mode
 );
@@ -764,7 +764,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetVideoStabilizationMode
  @param mode
  Video stabilization mode.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetVideoStabilizationMode (
+VKT_API VKTStatus VKTCameraDeviceSetVideoStabilizationMode (
     VKTCameraDevice* camera,
     VKTVideoStabilizationMode mode
 );
@@ -783,7 +783,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetVideoStabilizationMode
  @param ratio
  Zoom ratio.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetZoomRatio (
+VKT_API VKTStatus VKTCameraDeviceGetZoomRatio (
     VKTCameraDevice* camera,
     float* ratio
 );
@@ -802,7 +802,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceGetZoomRatio (
  @param ratio
  Zoom ratio.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetZoomRatio (
+VKT_API VKTStatus VKTCameraDeviceSetZoomRatio (
     VKTCameraDevice* camera,
     float ratio
 );
@@ -823,7 +823,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceSetZoomRatio (
  @param context
  User-provided context.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTCameraDeviceCapturePhoto (
+VKT_API VKTStatus VKTCameraDeviceCapturePhoto (
     VKTCameraDevice* camera,
     VKTSampleBufferHandler handler,
     void* context

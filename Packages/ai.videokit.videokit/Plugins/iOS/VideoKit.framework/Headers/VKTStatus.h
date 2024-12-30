@@ -3,10 +3,20 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/05/2024.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
+
+#ifdef __cplusplus
+    #ifdef _WIN64
+        #define VKT_API extern "C" __declspec(dllexport)
+    #else
+        #define VKT_API extern "C"
+    #endif
+#else
+    #define VKT_API extern
+#endif
 
 #pragma region --Enumerations--
 /*!

@@ -587,6 +587,9 @@ PlayerSettings:
   - serializedVersion: 3
     m_BuildTarget: WebGL
     m_Formats: 00000000
+  - serializedVersion: 3
+    m_BuildTarget: iOS
+    m_Formats: 03000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
@@ -830,10 +833,10 @@ PlayerSettings:
   webGLShowDiagnostics: 0
   webGLDataCaching: 1
   webGLDebugSymbols: 0
-  webGLEmscriptenArgs: '                                                                                                                                                                                                       
-    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT -Xlinker --features=mutable-globals,sign-ext,simd128
-    -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS -Wl,-uFXN_WEBGL_POP -Wl,-uVKT_WEBGL_PUSH
-    -Wl,-uVKT_WEBGL_POP'
+  webGLEmscriptenArgs: '                                                                                                                                                                                                        
+    -Wl,-uVKT_WEBGL_PUSH -Wl,-uVKT_WEBGL_POP  -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
+    -Xlinker --features=mutable-globals,sign-ext,simd128 -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS
+    -Wl,-uFXN_WEBGL_POP'
   webGLModulesDirectory: 
   webGLTemplate: APPLICATION:Default
   webGLAnalyzeBuildSize: 0

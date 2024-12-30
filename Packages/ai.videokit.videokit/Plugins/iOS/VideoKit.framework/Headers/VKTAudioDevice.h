@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 5/15/2023.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -36,7 +36,7 @@ typedef VKTMediaDevice VKTAudioDevice;
  @param context
  Handler context. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceDiscoverDevices (
+VKT_API VKTStatus VKTAudioDeviceDiscoverDevices (
     VKTMediaDeviceDiscoveryHandler handler,
     void* context
 );
@@ -54,7 +54,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceDiscoverDevices (
  @param echoCancellation
  Echo cancellation.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetEchoCancellation (
+VKT_API VKTStatus VKTAudioDeviceGetEchoCancellation (
     VKTAudioDevice* audioDevice,
     bool* echoCancellation
 );
@@ -72,7 +72,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetEchoCancellation (
  @param echoCancellation
  Echo cancellation.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceSetEchoCancellation (
+VKT_API VKTStatus VKTAudioDeviceSetEchoCancellation (
     VKTAudioDevice* audioDevice,
     bool echoCancellation
 );
@@ -90,7 +90,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceSetEchoCancellation (
  @param sampleRate
  Sample rate.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetSampleRate (
+VKT_API VKTStatus VKTAudioDeviceGetSampleRate (
     VKTAudioDevice* audioDevice,
     int32_t* sampleRate
 );
@@ -108,7 +108,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetSampleRate (
  @param sampleRate
  Sample rate.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceSetSampleRate (
+VKT_API VKTStatus VKTAudioDeviceSetSampleRate (
     VKTAudioDevice* audioDevice,
     int32_t sampleRate
 );
@@ -126,7 +126,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceSetSampleRate (
  @param channelCount
  Channel count.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetChannelCount (
+VKT_API VKTStatus VKTAudioDeviceGetChannelCount (
     VKTAudioDevice* audioDevice,
     int32_t* channelCount
 );
@@ -144,7 +144,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceGetChannelCount (
  @param channelCount
  Channel count.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTAudioDeviceSetChannelCount (
+VKT_API VKTStatus VKTAudioDeviceSetChannelCount (
     VKTAudioDevice* audioDevice,
     int32_t channelCount
 );

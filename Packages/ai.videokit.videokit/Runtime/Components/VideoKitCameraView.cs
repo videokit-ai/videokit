@@ -3,13 +3,24 @@
 *   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
 */
 
+#nullable enable
+
 namespace VideoKit.UI {
 
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
     using UnityEngine.Serialization;
     using UnityEngine.UI;
+    using Unity.Collections.LowLevel.Unsafe;
+    using Function;
+    using Internal;
+    using Facing = VideoKitCameraManager.Facing;
+    using Image = Function.Types.Image;
 
     /// <summary>
     /// VideoKit UI component for displaying the camera preview from a camera manager.
@@ -66,7 +77,13 @@ namespace VideoKit.UI {
         /// VideoKit camera manager.
         /// </summary>
         [Tooltip(@"VideoKit camera manager.")]
-        public VideoKitCameraManager cameraManager;
+        public VideoKitCameraManager? cameraManager;
+
+        /// <summary>
+        /// Desired camera facing to display.
+        /// </summary>
+        [Tooltip(@"Desired camera facing to display.")]
+        public Facing facing = Facing.User | Facing.World;
 
         /// <summary>
         /// View mode of the view.
@@ -95,54 +112,154 @@ namespace VideoKit.UI {
 
         [Header(@"Events")]
         /// <summary>
-        /// Event raised when the camera preview is presented on the UI panel.
+        /// Event raised when a new camera frame is available in the camera manager.
+        /// The preview texture, human texture, and image feature will contain the latest camera image.
         /// </summary>
-        [Tooltip(@"Event raised when the camera preview is presented on the UI panel.")]
-        public UnityEvent<VideoKitCameraView> OnPresent;
+        [Tooltip(@"Event raised when a new camera frame is available.")]
+        public UnityEvent? OnCameraFrame;
+        #endregion
+
+
+        #region --Client API--
+        /// <summary>
+        /// Get the camera preview texture.
+        /// </summary>
+        public Texture2D? texture { get; private set; }
+
+        /// <summary>
+        /// Get the camera preview rotation to become upright.
+        /// </summary>
+        public PixelBuffer.Rotation rotation { get; private set; }
         #endregion
 
 
         #region --Operations--
+        private PixelBuffer pixelBuffer;
         private RawImage rawImage;
         private AspectRatioFitter aspectFitter;
-        private bool presented;
+        private readonly object fence = new();
+        private static readonly List<RuntimePlatform> OrientationSupport = new() {
+            RuntimePlatform.Android,
+            RuntimePlatform.IPhonePlayer
+        };
 
-        private void Reset () => cameraManager = FindObjectOfType<VideoKitCameraManager>();
+        private void Reset () {
+            cameraManager = FindFirstObjectByType<VideoKitCameraManager>();
+        }
 
         private void Awake () {
-            // Get components
             rawImage = GetComponent<RawImage>();
             aspectFitter = GetComponent<AspectRatioFitter>();
-            presented = false;
-            // Listen for frames
-            if (cameraManager)
-                cameraManager.OnCameraFrame.AddListener(OnCameraFrame);
         }
 
-        private void Update () => presented &= rawImage.texture;
+        private void OnEnable () {
+            rotation = GetPreviewRotation(Screen.orientation);
+            if (cameraManager != null)
+                cameraManager.OnPixelBuffer += OnPixelBuffer;
+        }
 
-        private void OnCameraFrame () {
-            // Check
-            if (!isActiveAndEnabled)
-                return;
-            // Get texture
-            var texture = viewMode == ViewMode.HumanTexture ? cameraManager.humanTexture : cameraManager.texture;
-            if (!texture)
-                return;
-            // Display
+        private unsafe void Update () {
+            bool upload = false;
+            lock (fence) {
+                if (pixelBuffer == IntPtr.Zero)
+                    return;
+                if (
+                    texture != null &&
+                    (texture.width != pixelBuffer.width || texture.height != pixelBuffer.height)
+                ) {
+                    Texture2D.Destroy(texture);
+                    texture = null;
+                }
+                if (texture == null)
+                    texture = new Texture2D(
+                        pixelBuffer.width,
+                        pixelBuffer.height,
+                        TextureFormat.RGBA32,
+                        false
+                    );
+                if (viewMode == ViewMode.CameraTexture) {
+                    using var buffer = new PixelBuffer(
+                        texture.width,
+                        texture.height,
+                        PixelBuffer.Format.RGBA8888,
+                        texture.GetRawTextureData<byte>(),
+                        mirrored: false
+                    );
+                    pixelBuffer.CopyTo(buffer);
+                    upload = true;
+                } else if (viewMode == ViewMode.HumanTexture) {
+                    var fxn = VideoKitClient.Instance!.fxn;
+                    var prediction = fxn.Predictions.Create(
+                        tag: VideoKitCameraManager.HumanTextureTag,
+                        inputs: new () {
+                            ["image"] = new Image(
+                                (byte*)pixelBuffer.data.GetUnsafePtr(),
+                                pixelBuffer.width,
+                                pixelBuffer.height,
+                                4
+                            )
+                        }
+                    ).Throw().Result;
+                    var image = (Image)prediction.results![0]!;
+                    image.ToTexture(texture);
+                    upload = true;
+                }
+            }
+            if (upload)
+                texture.Apply();
             rawImage.texture = texture;
             aspectFitter.aspectRatio = (float)texture.width / texture.height;
-            // Invoke event
-            if (!presented)
-                OnPresent?.Invoke(this);
-            presented = true;
+            OnCameraFrame?.Invoke();
         }
 
-        private void OnDisable () => presented = false;
+        private unsafe void OnPixelBuffer (
+            CameraDevice cameraDevice,
+            PixelBuffer cameraBuffer
+        ) {
+            if ((VideoKitCameraManager.GetCameraFacing(cameraDevice) & facing) == 0)
+                return;
+            var (width, height) = GetPreviewTextureSize(
+                cameraBuffer.width,
+                cameraBuffer.height,
+                rotation
+            );
+            lock (fence) {
+                if (
+                    pixelBuffer != IntPtr.Zero &&
+                    (pixelBuffer.width != width || pixelBuffer.height != height)
+                ) {
+                    pixelBuffer.Dispose();
+                    pixelBuffer = default;
+                }
+                if (pixelBuffer == IntPtr.Zero)
+                    pixelBuffer = new PixelBuffer(
+                        width,
+                        height,
+                        PixelBuffer.Format.RGBA8888,
+                        mirrored: true
+                    );
+                cameraBuffer.CopyTo(pixelBuffer, rotation: rotation);
+            }
+        }
+
+        private void OnDisable () {
+            if (cameraManager != null)
+                cameraManager.OnPixelBuffer -= OnPixelBuffer;
+        }
+
+        private void OnDestroy () {
+            pixelBuffer.Dispose();
+            pixelBuffer = default;
+        }
+        #endregion
+
+
+        #region --Handlers--
 
         void IPointerUpHandler.OnPointerUp (PointerEventData data) {
-            // Check manager
-            if (!cameraManager)
+            // Check device
+            var cameraDevice = GetCameraDevice(cameraManager?.device, facing);
+            if (cameraDevice == null)
                 return;
             // Check focus mode
             if (focusGesture != GestureMode.Tap && exposureGesture != GestureMode.Tap)
@@ -157,8 +274,7 @@ namespace VideoKit.UI {
             ))
                 return;
             // Focus
-            var cameraDevice = cameraManager.device;
-            var point = Rect.PointToNormalized(rectTransform.rect, localPoint);
+            var point = Rect.PointToNormalized(rectTransform!.rect, localPoint);
             if (cameraDevice.focusPointSupported && focusGesture == GestureMode.Tap)
                 cameraDevice.SetFocusPoint(point.x, point.y);
             if (cameraDevice.exposurePointSupported && exposureGesture == GestureMode.Tap)
@@ -171,6 +287,40 @@ namespace VideoKit.UI {
 
         void IDragHandler.OnDrag (PointerEventData data) {
 
+        }
+        #endregion
+
+
+        #region --Utilities--
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static PixelBuffer.Rotation GetPreviewRotation (ScreenOrientation orientation) => orientation switch {
+            var _ when !OrientationSupport.Contains(Application.platform)   => PixelBuffer.Rotation._0,
+            ScreenOrientation.LandscapeLeft                                 => PixelBuffer.Rotation._0,
+            ScreenOrientation.Portrait                                      => PixelBuffer.Rotation._90,
+            ScreenOrientation.LandscapeRight                                => PixelBuffer.Rotation._180,
+            ScreenOrientation.PortraitUpsideDown                            => PixelBuffer.Rotation._270,
+            _                                                               => PixelBuffer.Rotation._0
+        };
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static (int width, int height) GetPreviewTextureSize (
+            int width,
+            int height,
+            PixelBuffer.Rotation rotation
+        ) => rotation == PixelBuffer.Rotation._90 || rotation == PixelBuffer.Rotation._270 ?
+            (height, width) :
+            (width, height);
+
+        private static CameraDevice? GetCameraDevice (MediaDevice? device, Facing facing) {
+            if (device is CameraDevice cameraDevice)
+                return cameraDevice;
+            else if (device is MultiCameraDevice multiCameraDevice)
+                return multiCameraDevice
+                    .cameras
+                    .FirstOrDefault(camera => (VideoKitCameraManager.GetCameraFacing(camera) & facing) != 0);
+            else
+                return null;
         }
         #endregion
     }

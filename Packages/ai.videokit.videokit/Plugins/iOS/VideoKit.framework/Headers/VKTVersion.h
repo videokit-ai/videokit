@@ -3,16 +3,16 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/05/2024.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
 
-#include <VideoKit/VKTAPI.h>
+#include <VideoKit/VKTStatus.h>
 
 #define VKT_VERSION_MAJOR 0
 #define VKT_VERSION_MINOR 0
-#define VKT_VERSION_PATCH 22
+#define VKT_VERSION_PATCH 23
 
 /*!
  @function VKTGetVersion
@@ -23,4 +23,4 @@
 
  @returns VideoKit version string.
 */
-VKT_BRIDGE VKT_EXPORT const char* VKT_API VKTGetVersion (void);
+VKT_API const char* VKTGetVersion (void);

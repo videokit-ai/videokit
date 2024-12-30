@@ -3,14 +3,13 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 5/15/2023.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <VideoKit/VKTSession.h>
 #include <VideoKit/VKTSampleBuffer.h>
 
 #pragma region --Enumerations--
@@ -19,58 +18,58 @@
  
  @abstract Immutable properties of media devices.
  
- @constant VKT_DEVICE_FLAG_INTERNAL
- Device is internal.
+ @constant VKT_MEDIA_DEVICE_FLAG_INTERNAL
+ Media device is internal.
 
- @constant VKT_DEVICE_FLAG_EXTERNAL
- Device is external.
+ @constant VKT_MEDIA_DEVICE_FLAG_EXTERNAL
+ Media device is external.
 
- @constant VKT_DEVICE_FLAG_DEFAULT
- Device is the default device for its media type.
+ @constant VKT_MEDIA_DEVICE_FLAG_DEFAULT
+ Media device is the default device for its media type.
 
- @constant VKT_MICROPHONE_FLAG_ECHO_CANCELLATION
+ @constant VKT_AUDIO_DEVICE_FLAG_ECHO_CANCELLATION
  Audio device supports echo cancellation.
 
- @constant VKT_CAMERA_FLAG_FRONT_FACING
+ @constant VKT_CAMERA_DEVICE_FLAG_FRONT_FACING
  Camera device is front-facing.
 
- @constant VKT_CAMERA_FLAG_FLASH
+ @constant VKT_CAMERA_DEVICE_FLAG_FLASH
  Camera device supports flash when capturing photos.
 
- @constant VKT_CAMERA_FLAG_TORCH
+ @constant VKT_CAMERA_DEVICE_FLAG_TORCH
  Camera device supports torch.
 
- @constant VKT_CAMERA_FLAG_DEPTH
+ @constant VKT_CAMERA_DEVICE_FLAG_DEPTH
  Camera device supports depth streaming.
 
- @constant VKT_CAMERA_FLAG_EXPOSURE_CONTINUOUS
+ @constant VKT_CAMERA_DEVICE_FLAG_EXPOSURE_CONTINUOUS
  Camera device supports continuous auto exposure.
 
- @constant VKT_CAMERA_FLAG_EXPOSURE_LOCK
+ @constant VKT_CAMERA_DEVICE_FLAG_EXPOSURE_LOCK
  Camera device supports locked auto exposure.
 
- @constant VKT_CAMERA_FLAG_EXPOSURE_MANUAL
+ @constant VKT_CAMERA_DEVICE_FLAG_EXPOSURE_MANUAL
  Camera device supports manual exposure.
 
- @constant VKT_CAMERA_FLAG_EXPOSURE_POINT
+ @constant VKT_CAMERA_DEVICE_FLAG_EXPOSURE_POINT
  Camera device supports setting exposure point.
 
- @constant VKT_CAMERA_FLAG_FOCUS_CONTINUOUS
+ @constant VKT_CAMERA_DEVICE_FLAG_FOCUS_CONTINUOUS
  Camera device supports continuous auto exposure.
 
- @constant VKT_CAMERA_FLAG_LOCKED_FOCUS
+ @constant VKT_CAMERA_DEVICE_FLAG_LOCKED_FOCUS
  Camera device supports locked auto focus.
 
- @constant VKT_CAMERA_FLAG_FOCUS_POINT
+ @constant VKT_CAMERA_DEVICE_FLAG_FOCUS_POINT
  Camera device supports setting focus point.
 
- @constant VKT_CAMERA_FLAG_WHITE_BALANCE_CONTINUOUS
+ @constant VKT_CAMERA_DEVICE_FLAG_WHITE_BALANCE_CONTINUOUS
  Camera device supports continuous auto white balance.
 
- @constant VKT_CAMERA_FLAG_WHITE_BALANCE_LOCK
+ @constant VKT_CAMERA_DEVICE_FLAG_WHITE_BALANCE_LOCK
  Camera device supports locked auto white balance.
 
- @constant VKT_CAMERA_FLAG_VIDEO_STABILIZATION
+ @constant VKT_CAMERA_DEVICE_FLAG_VIDEO_STABILIZATION
  Camera device supports video stabilization.
 */
 enum VKTMediaDeviceFlags {
@@ -145,10 +144,7 @@ typedef enum VKTMediaDevicePermissionStatus VKTMediaDevicePermissionStatus;
 */
 struct VKTMediaDevice;
 typedef struct VKTMediaDevice VKTMediaDevice;
-#pragma endregion
 
-
-#pragma region --Delegates--
 /*!
  @abstract Callback invoked with discovered media devices.
  
@@ -208,7 +204,7 @@ typedef void (*VKTMediaDevicePermissionHandler) (
  @param device
  Media device.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceRelease (VKTMediaDevice* device);
+VKT_API VKTStatus VKTMediaDeviceRelease (VKTMediaDevice* device);
 
 /*!
  @function VKTMediaDeviceGetUniqueID
@@ -226,7 +222,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceRelease (VKTMediaDevice* d
  @param size
  Destination buffer size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetUniqueID (
+VKT_API VKTStatus VKTMediaDeviceGetUniqueID (
     VKTMediaDevice* device,
     char* destination,
     int32_t size
@@ -248,7 +244,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetUniqueID (
  @param size
  Destination buffer size.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetName (
+VKT_API VKTStatus VKTMediaDeviceGetName (
     VKTMediaDevice* device,
     char* destination,
     int32_t size
@@ -267,7 +263,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetName (
  @param flags
  Device flags.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetFlags (
+VKT_API VKTStatus VKTMediaDeviceGetFlags (
     VKTMediaDevice* device,
     VKTMediaDeviceFlags* flags
 );
@@ -285,7 +281,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceGetFlags (
  @param running
  Whether the device is running.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceIsRunning (
+VKT_API VKTStatus VKTMediaDeviceIsRunning (
     VKTMediaDevice* device,
     bool* running
 );
@@ -306,7 +302,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceIsRunning (
  @param context
  User-provided context to be passed to the sample buffer delegate. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceStartRunning (
+VKT_API VKTStatus VKTMediaDeviceStartRunning (
     VKTMediaDevice* device,
     VKTSampleBufferHandler sampleBufferHandler,
     void* context
@@ -322,7 +318,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceStartRunning (
  @param device
  Media device.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceStopRunning (VKTMediaDevice* device);
+VKT_API VKTStatus VKTMediaDeviceStopRunning (VKTMediaDevice* device);
 
 /*!
  @function VKTMediaDeviceSetDisconnectHandler
@@ -341,7 +337,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceStopRunning (VKTMediaDevic
  @param context
  User-provided context. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceSetDisconnectHandler (
+VKT_API VKTStatus VKTMediaDeviceSetDisconnectHandler (
     VKTMediaDevice* device,
     VKTMediaDeviceDisconnectHandler disconnectHandler,
     void* context
@@ -366,7 +362,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceSetDisconnectHandler (
  @param context
  User-provided context to be passed to the permission delegate. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaDeviceCheckPermissions (
+VKT_API VKTStatus VKTMediaDeviceCheckPermissions (
     VKTMediaDevicePermissionType type,
     bool request,
     VKTMediaDevicePermissionHandler handler,

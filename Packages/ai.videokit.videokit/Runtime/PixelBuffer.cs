@@ -55,17 +55,17 @@ namespace VideoKit {
             /// </summary>
             _0 = 0,
             /// <summary>
-            /// Rotate 90 degrees counter-clockwise.
+            /// Rotate 90 degrees clockwise.
             /// </summary>
-            _90 = 1,
+            _90 = 3,
             /// <summary>
             /// Rotate 180 degrees.
             /// </summary>
             _180 = 2,
             /// <summary>
-            /// Rotate 270 degrees counter-clockwise.
+            /// Rotate 270 degrees clockwise.
             /// </summary>
-            _270 = 3
+            _270 = 1
         }
         #endregion
 
@@ -139,8 +139,12 @@ namespace VideoKit {
         /// </summary>
         public unsafe readonly NativeArray<byte> data {
             get {
+                if (dataBuffer.IsCreated)
+                    return dataBuffer;
                 pixelBuffer.GetPixelBufferData(out var data);
                 pixelBuffer.GetPixelBufferDataSize(out var size);
+                if (data == default)
+                    return default;
                 var nativeArray = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<byte>(
                     data,
                     size,
@@ -156,34 +160,34 @@ namespace VideoKit {
         /// <summary>
         /// Pixel buffer format.
         /// </summary>
-        public readonly Format format => pixelBuffer.GetPixelBufferFormat(out var format).Throw() == Status.Ok ? format : default;
+        public readonly Format format => pixelBuffer.GetPixelBufferFormat(out var format) == Status.Ok ? format : default;
 
         /// <summary>
         /// Pixel buffer width.
         /// </summary>
-        public readonly int width => pixelBuffer.GetPixelBufferWidth(out var width).Throw() == Status.Ok ? width : default;
+        public readonly int width => pixelBuffer.GetPixelBufferWidth(out var width) == Status.Ok ? width : default;
 
         /// <summary>
         /// Pixel buffer height.
         /// </summary>
-        public readonly int height => pixelBuffer.GetPixelBufferHeight(out var height).Throw() == Status.Ok ? height : default;
+        public readonly int height => pixelBuffer.GetPixelBufferHeight(out var height) == Status.Ok ? height : default;
 
         /// <summary>
         /// Pixel buffer row stride in bytes.
         /// This is zero if the pixel data is planar.
         /// </summary>
-        public readonly int rowStride => pixelBuffer.GetPixelBufferRowStride(out var stride).Throw() == Status.Ok ? stride : default;
+        public readonly int rowStride => pixelBuffer.GetPixelBufferRowStride(out var stride) == Status.Ok ? stride : default;
 
         /// <summary>
         /// Pixel buffer timestamp in nanoseconds.
         /// The timestamp is based on the system media clock.
         /// </summary>
-        public readonly long timestamp => pixelBuffer.GetSampleBufferTimestamp(out var timestamp).Throw() == Status.Ok ? timestamp : default;
+        public readonly long timestamp => pixelBuffer.GetSampleBufferTimestamp(out var timestamp) == Status.Ok ? timestamp : default;
 
         /// <summary>
         /// Whether the pixel buffer is vertically mirrored.
         /// </summary>
-        public readonly bool verticallyMirrored => pixelBuffer.GetPixelBufferIsVerticallyMirrored(out var mirrored).Throw() == Status.Ok ? mirrored : default;
+        public readonly bool verticallyMirrored => pixelBuffer.GetPixelBufferIsVerticallyMirrored(out var mirrored) == Status.Ok ? mirrored : default;
 
         /// <summary>
         /// Pixel buffer planes for planar formats.
@@ -222,10 +226,10 @@ namespace VideoKit {
         /// <param name="metadata">Pixel buffer metadata.</param>
         /// <returns>Created pixel buffer.</returns>
         public PixelBuffer (Texture2D texture, long timestamp = 0L) : this(
-            texture.width,
-            texture.height,
-            ToImageFormat(texture.format),
-            texture.GetRawTextureData<byte>(),
+            width: texture.width,
+            height: texture.height,
+            format: ToImageFormat(texture.format),
+            data: texture.GetRawTextureData<byte>(),
             timestamp: timestamp,
             mirrored: false
         ) { }
@@ -250,23 +254,14 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) {
-            // Copy
-            pixelData = (byte*)UnsafeUtility.Malloc(data.Length, 16, Allocator.Persistent);
-            fixed (byte* srcData = data)
-                UnsafeUtility.MemCpy(pixelData, srcData, data.Length);
-            // Create
-            VideoKit.CreatePixelBuffer(
-                width,
-                height,
-                format,
-                pixelData,
-                rowStride > 0 ? rowStride : GetDefaultStride(format, width),
-                timestamp,
-                mirrored,
-                out pixelBuffer
-            ).Throw();
-        }
+        ) : this(
+            width: width,
+            height: height,
+            format: format,
+            rowStride: rowStride,
+            timestamp: timestamp,
+            mirrored: mirrored
+        ) => dataBuffer.CopyFrom(data);
 
         /// <summary>
         /// Create an interleaved pixel buffer from pixel data.
@@ -287,7 +282,15 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) : this(width, height, format, (byte*)data.GetUnsafePtr(), rowStride, timestamp, mirrored) { }
+        ) : this(
+            width: width,
+            height: height,
+            format: format,
+            data: (byte*)data.GetUnsafePtr(),
+            rowStride: rowStride,
+            timestamp: timestamp,
+            mirrored: mirrored
+        ) { }
 
         /// <summary>
         /// Create an interleaved pixel buffer from pixel data in native memory.
@@ -309,23 +312,26 @@ namespace VideoKit {
             int rowStride = 0,
             long timestamp = 0L,
             bool mirrored = false
-        ) : this(VideoKit.CreatePixelBuffer(
-            width,
-            height,
-            format,
-            data,
-            rowStride > 0 ? rowStride : GetDefaultStride(format, width),
-            timestamp,
-            mirrored,
-            out var pixelBuffer
-        ).Throw() == Status.Ok ? pixelBuffer : default) { }
+        ) {
+            VideoKit.CreatePixelBuffer(
+                width,
+                height,
+                format,
+                data,
+                rowStride > 0 ? rowStride : GetDefaultStride(format, width),
+                timestamp,
+                mirrored,
+                out pixelBuffer
+            ).Throw();
+            dataBuffer = default;
+        }
 
         /// <summary>
         /// Dispose the pixel buffer and release resources.
         /// </summary>
         public void Dispose () {
             pixelBuffer.ReleaseSampleBuffer();
-            UnsafeUtility.Free(pixelData, Allocator.Persistent);
+            dataBuffer.Dispose();
         }
         #endregion
 
@@ -345,11 +351,33 @@ namespace VideoKit {
 
         #region --Operations--
         private readonly IntPtr pixelBuffer;
-        private readonly byte* pixelData;
+        private readonly NativeArray<byte> dataBuffer;
 
         internal PixelBuffer (IntPtr pixelBuffer) {
             this.pixelBuffer = pixelBuffer;
-            this.pixelData = null;
+            this.dataBuffer = default;
+        }
+
+        internal PixelBuffer ( // might wanna make this public
+            int width,
+            int height,
+            Format format,
+            int rowStride = 0,
+            long timestamp = 0L,
+            bool mirrored = false
+        ) {
+            rowStride = rowStride > 0 ? rowStride : GetDefaultStride(format, width);
+            dataBuffer = new NativeArray<byte>(rowStride * height, Allocator.Persistent);
+            VideoKit.CreatePixelBuffer(
+                width,
+                height,
+                format,
+                (byte*)dataBuffer.GetUnsafePtr(),
+                rowStride,
+                timestamp,
+                mirrored,
+                out pixelBuffer
+            ).Throw();
         }
 
         public static implicit operator IntPtr (PixelBuffer pixelBuffer) => pixelBuffer.pixelBuffer;

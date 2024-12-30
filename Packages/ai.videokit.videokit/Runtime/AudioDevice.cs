@@ -116,7 +116,7 @@ namespace VideoKit {
             }
         }
 
-        internal AudioDevice (IntPtr device) : base(device) { }
+        internal AudioDevice (IntPtr device, bool strong = true) : base(device, strong: strong) { }
 
         public override string ToString () => $"AudioDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 
@@ -133,8 +133,9 @@ namespace VideoKit {
                 // Complete task
                 var microphones = Enumerable
                     .Range(0, count)
-                    .Select(idx => new AudioDevice(((IntPtr*)devices)[idx]))
-                    .OrderBy(microphone => microphone.priority)
+                    .Select(idx => ((IntPtr*)devices)[idx])
+                    .Select(device => new AudioDevice(device, strong: true))
+                    .OrderBy(device => device.priority)
                     .ToArray();
                 tcs?.SetResult(microphones);
             } catch (Exception ex) {

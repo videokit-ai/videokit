@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 5/15/2023.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -94,7 +94,7 @@ typedef struct VKTMediaRecorder VKTMediaRecorder;
  @param format
  Recording format.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderIsFormatSupported (VKTMediaFormat format);
+VKT_API VKTStatus VKTMediaRecorderIsFormatSupported (VKTMediaFormat format);
 
 /*!
  @function VKTMediaRecorderGetFormat
@@ -109,7 +109,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderIsFormatSupported (VKTMe
  @param format
  Output format. MUST NOT be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetFormat (
+VKT_API VKTStatus VKTMediaRecorderGetFormat (
     VKTMediaRecorder* recorder,
     VKTMediaFormat* format
 );
@@ -131,7 +131,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetFormat (
  `VKT_ERROR_INVALID_ARGUMENT` if the `recorder` or `width` arguments are `NULL`.
  `VKT_ERROR_INVALID_OPERATION` if the recorder does not support recording video frames.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetWidth (
+VKT_API VKTStatus VKTMediaRecorderGetWidth (
     VKTMediaRecorder* recorder,
     int32_t* width
 );
@@ -153,7 +153,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetWidth (
  `VKT_ERROR_INVALID_ARGUMENT` if the `recorder` or `height` arguments are `NULL`.
  `VKT_ERROR_INVALID_OPERATION` if the recorder does not support recording video frames.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetHeight (
+VKT_API VKTStatus VKTMediaRecorderGetHeight (
     VKTMediaRecorder* recorder,
     int32_t* height
 );
@@ -175,7 +175,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetHeight (
  `VKT_ERROR_INVALID_ARGUMENT` if the `recorder` or `sampleRate` arguments are `NULL`.
  `VKT_ERROR_INVALID_OPERATION` if the recorder does not support recording audio frames.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetSampleRate (
+VKT_API VKTStatus VKTMediaRecorderGetSampleRate (
     VKTMediaRecorder* recorder,
     int32_t* sampleRate
 );
@@ -197,7 +197,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetSampleRate (
  `VKT_ERROR_INVALID_ARGUMENT` if the `recorder` or `channelCount` arguments are `NULL`.
  `VKT_ERROR_INVALID_OPERATION` if the recorder does not support recording audio frames.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetChannelCount (
+VKT_API VKTStatus VKTMediaRecorderGetChannelCount (
     VKTMediaRecorder* recorder,
     int32_t* channelCount
 );
@@ -215,7 +215,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderGetChannelCount (
  @param pixelBuffer
  Pixel buffer.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderAppendPixelBuffer (
+VKT_API VKTStatus VKTMediaRecorderAppendPixelBuffer (
     VKTMediaRecorder* recorder,
     VKTPixelBuffer* pixelBuffer
 );
@@ -233,7 +233,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderAppendPixelBuffer (
  @param audioBuffer
  Audio buffer.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderAppendAudioBuffer (
+VKT_API VKTStatus VKTMediaRecorderAppendAudioBuffer (
     VKTMediaRecorder* recorder,
     VKTAudioBuffer* audioBuffer
 );
@@ -259,7 +259,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderAppendAudioBuffer (
  @param context
  Context passed to completion handler. Can be `NULL`.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderFinishWriting (
+VKT_API VKTStatus VKTMediaRecorderFinishWriting (
     VKTMediaRecorder* recorder,
     VKTMediaAssetHandler handler,
     void* context
@@ -307,7 +307,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderFinishWriting (
 
  @returns Recorder creation status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateMP4 (
+VKT_API VKTStatus VKTMediaRecorderCreateMP4 (
     const char* path,
     int32_t width,
     int32_t height,
@@ -359,7 +359,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateMP4 (
 
  @returns Recorder creation status.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateHEVC (
+VKT_API VKTStatus VKTMediaRecorderCreateHEVC (
     const char* path,
     int32_t width,
     int32_t height,
@@ -411,7 +411,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateHEVC (
 
  @returns Recorder creation status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateWEBM (
+VKT_API VKTStatus VKTMediaRecorderCreateWEBM (
     const char* path,
     int32_t width,
     int32_t height,
@@ -449,7 +449,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateWEBM (
 
  @returns Recorder creation status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateGIF (
+VKT_API VKTStatus VKTMediaRecorderCreateGIF (
     const char* path,
     int32_t width,
     int32_t height,
@@ -478,7 +478,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateGIF (
 
  @returns Recorder creation status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateWAV (
+VKT_API VKTStatus VKTMediaRecorderCreateWAV (
     const char* path,
     int32_t sampleRate,
     int32_t channelCount,
@@ -507,7 +507,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateWAV (
 
  @returns Recorder creation status.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateJPEG (
+VKT_API VKTStatus VKTMediaRecorderCreateJPEG (
     const char* path,
     int32_t width,
     int32_t height,
@@ -554,7 +554,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateJPEG (
 
  @returns Recorder creation status.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateAV1 (
+VKT_API VKTStatus VKTMediaRecorderCreateAV1 (
     const char* path,
     int32_t width,
     int32_t height,
@@ -597,7 +597,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateAV1 (
 
  @returns Recorder creation status.
  */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaRecorderCreateProRes4444 (
+VKT_API VKTStatus VKTMediaRecorderCreateProRes4444 (
     const char* path,
     int32_t width,
     int32_t height,

@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/05/2024.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -44,7 +44,7 @@ typedef struct VKTMediaReader VKTMediaReader;
  @param reader
  Asset reader.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaReaderCreate (
+VKT_API VKTStatus VKTMediaReaderCreate (
     VKTMediaAsset* asset,
     VKTMediaType type,
     VKTMediaReader** reader
@@ -60,7 +60,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaReaderCreate (
  @param reader
  Asset reader.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaReaderRelease (VKTMediaReader* reader);
+VKT_API VKTStatus VKTMediaReaderRelease (VKTMediaReader* reader);
 
 /*!
  @function VKTMediaReaderReadNextSampleBuffer
@@ -79,7 +79,7 @@ VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaReaderRelease (VKTMediaReader* r
  @returns `VKT_OK` if the sample buffer was successfully read.
  `VKT_ERROR_INVALID_OPERATION` when there are no more sample buffers to be read.
 */
-VKT_BRIDGE VKT_EXPORT VKTStatus VKT_API VKTMediaReaderReadNextSampleBuffer (
+VKT_API VKTStatus VKTMediaReaderReadNextSampleBuffer (
     VKTMediaReader* reader,
     VKTSampleBuffer** sampleBuffer
 );
