@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 11/23/2024.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -66,7 +66,7 @@ VKT_API VKTStatus VKTMultiCameraDeviceDiscoverDevices (
 
 #pragma region --Inspection--
 /*!
- @function VKTMultiCameraDeviceGetCameraCount
+ @function VKTMultiCameraDeviceGetCameraDeviceCount
 
  @abstract Get the number of camera devices in a given multi-camera device.
 
@@ -78,13 +78,13 @@ VKT_API VKTStatus VKTMultiCameraDeviceDiscoverDevices (
  @param count
  Output camera count.
 */
-VKT_API VKTStatus VKTMultiCameraDeviceGetCameraCount (
+VKT_API VKTStatus VKTMultiCameraDeviceGetCameraDeviceCount (
     VKTMultiCameraDevice* device,
     int32_t* count
 );
 
 /*!
- @function VKTMultiCameraDeviceGetCamera
+ @function VKTMultiCameraDeviceGetCameraDevice
 
  @abstract Get the camera device at a given index in the multi-camera device.
 
@@ -100,7 +100,7 @@ VKT_API VKTStatus VKTMultiCameraDeviceGetCameraCount (
  Output camera.
  This pointer MUST NOT be released.
 */
-VKT_API VKTStatus VKTMultiCameraDeviceGetCamera (
+VKT_API VKTStatus VKTMultiCameraDeviceGetCameraDevice (
     VKTMultiCameraDevice* device,
     int32_t index,
     VKTCameraDevice** camera
@@ -110,7 +110,7 @@ VKT_API VKTStatus VKTMultiCameraDeviceGetCamera (
 
 #pragma region --Streaming--
 /*!
- @function VKTMultiCameraDeviceIsRunning
+ @function VKTMultiCameraDeviceIsCameraDeviceRunning
 
  @abstract Check whether a camera device in the multi-camera device is running.
 
@@ -126,14 +126,14 @@ VKT_API VKTStatus VKTMultiCameraDeviceGetCamera (
  @param running
  Output result.
 */
-VKT_API VKTStatus VKTMultiCameraDeviceIsRunning (
+VKT_API VKTStatus VKTMultiCameraDeviceIsCameraDeviceRunning (
     VKTMultiCameraDevice* device,
     VKTCameraDevice* camera,
     bool* running
 );
 
 /*!
- @function VKTMultiCameraDeviceStartRunning
+ @function VKTMultiCameraDeviceStartCameraDevice
 
  @abstract Start running a camera device in the multi-camera device.
 
@@ -146,13 +146,13 @@ VKT_API VKTStatus VKTMultiCameraDeviceIsRunning (
  Camera device to stream.
  This device MUST be in the multi-camera device.
 */
-VKT_API VKTStatus VKTMultiCameraDeviceStartRunning (
+VKT_API VKTStatus VKTMultiCameraDeviceStartCameraDevice (
     VKTMultiCameraDevice* device,
     VKTCameraDevice* camera
 );
 
 /*!
- @function VKTMultiCameraDeviceStopRunning
+ @function VKTMultiCameraDeviceStopCameraDevice
 
  @abstract Stop running a camera device in the multi-camera device.
 
@@ -165,7 +165,7 @@ VKT_API VKTStatus VKTMultiCameraDeviceStartRunning (
  Camera device to stop streaming.
  This device MUST be in the multi-camera device.
 */
-VKT_API VKTStatus VKTMultiCameraDeviceStopRunning (
+VKT_API VKTStatus VKTMultiCameraDeviceStopCameraDevice (
     VKTMultiCameraDevice* device,
     VKTCameraDevice* camera
 );
@@ -236,11 +236,11 @@ VKT_API VKTStatus VKTMultiCameraDeviceSetSystemPressureChangeHandler (
 
 #pragma region --Pixel Buffer--
 /*!
- @function VKTMultiCameraPixelBufferGetCamera
+ @function VKTMultiCameraPixelBufferGetCameraDevice
 
- @abstract Get the specific camera in a multi-camera device that the pixel buffer was generated from.
+ @abstract Get the camera device that generated the pixel buffer.
 
- @discussion Get the specific camera in a multi-camera device that the pixel buffer was generated from.
+ @discussion Get the camera device that generated the pixel buffer.
 
  @param pixelBuffer
  Multi-camera pixel buffer.
@@ -248,7 +248,7 @@ VKT_API VKTStatus VKTMultiCameraDeviceSetSystemPressureChangeHandler (
  @param camera
  Output camera device.
 */
-VKT_API VKTStatus VKTMultiCameraPixelBufferGetCamera (
+VKT_API VKTStatus VKTMultiCameraPixelBufferGetCameraDevice (
     VKTMultiCameraPixelBuffer* pixelBuffer,
     VKTCameraDevice** camera
 );

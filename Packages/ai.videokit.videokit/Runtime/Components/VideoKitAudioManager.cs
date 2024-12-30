@@ -156,7 +156,8 @@ namespace VideoKit {
             if (permissions != MediaDevice.PermissionStatus.Authorized)
                 throw new InvalidOperationException(@"VideoKit: User did not grant microphone permissions");
             // Check device
-            _device ??= (await AudioDevice.Discover(configureAudioSession: false)).FirstOrDefault(); // configure once in `Awake` instead.
+            var devices = await AudioDevice.Discover(configureAudioSession: false);
+            _device ??= devices.FirstOrDefault(); // configure once in `Awake` instead.
             if (_device == null)
                 throw new InvalidOperationException(@"VideoKit: Audio manager failed to start running because no audio device is available");
             // Configure microphone

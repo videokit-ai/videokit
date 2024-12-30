@@ -31,12 +31,12 @@ namespace VideoKit {
         /// <summary>
         /// Get the multi-camera device normalized hardware cost in range [0.0, 1.0].
         /// </summary>
-        public float hardwareCost => device.GetMultiCameraDeviceHardwareCost(out var cost).Throw() == Status.Ok ? cost : default;
+        public float? hardwareCost => device.GetMultiCameraDeviceHardwareCost(out var cost) == Status.Ok ? cost : default;
 
         /// <summary>
         /// Get the multi-camera device normalized system pressure cost in range [0.0, 1.0].
         /// </summary>
-        public float systemPressureCost => device.GetMultiCameraDeviceSystemPressureCost(out var cost).Throw() == Status.Ok ? cost : default;
+        public float? systemPressureCost => device.GetMultiCameraDeviceSystemPressureCost(out var cost) == Status.Ok ? cost : default;
 
         /// <summary>
         /// Event raised when the system pressure level changes.

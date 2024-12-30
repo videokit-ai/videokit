@@ -1,7 +1,7 @@
 ## 0.0.23
 + Improved camera streaming performance especially when streaming with high frame rate or with human texture.
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
-+ Added `VideoKitCameraManager.Facing.RequireUserAndWorld` enumeration member to stream from user- and world-facing cameras simultaneously.
++ Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
 + Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
 + Fixed `VideoKitCameraManager.StartRunning` method crashing on some Android devices when `Capabilities.HumanTexture` capability is enabled (#157).
@@ -13,6 +13,10 @@
 + Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.
 + Refactored `VideoKitViewManager.focusMode` field to `focusGesture`.
 + Refactored `VideoKitViewManager.zoomMode` field to `zoomGesture`.
++ Refactored `VideoKitCameraManager.Facing.RequireUser` enumeration member to `Facing.User`.
++ Refactored `VideoKitCameraManager.Facing.PreferWorld` enumeration member to `Facing.World`.
++ Removed `VideoKitCameraManager.Facing.RequireWorld` enumeration member. Use `Facing.World` enumeration member instead.
++ Removed `VideoKitCameraManager.Facing.PreferUser` enumeration member. Use `Facing.User` enumeration member instead.
 + Removed `VideoKitCameraManager.OnCameraFrame` event. Use `VideoKitCameraView.OnCameraFrame` event instead.
 + Removed `VideoKitCameraManager.texture` field. Use `VideoKitCameraView.texture` field instead.
 + Removed `VideoKitCameraManager.humanTexture` field. Use `VideoKitCameraView.texture` field with `VideoKitCameraView.ViewMode.HumanTexture` view mode instead.

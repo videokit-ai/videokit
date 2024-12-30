@@ -768,39 +768,34 @@ namespace VideoKit.Internal {
 
 
         #region --VKTMultiCameraDevice--
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraPixelBufferGetCamera")]
-        public static extern Status GetMultiCameraPixelBufferCamera (
-            this IntPtr pixelBuffer,
-            out IntPtr camera
-        );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceDiscoverDevices")]
         public static extern Status DiscoverMultiCameraDevices (
             MediaDeviceDiscoveryHandler handler,
             IntPtr context
         );
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraCount")]
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraDeviceCount")]
         public static extern Status GetMultiCameraDeviceCameraCount (
             this IntPtr device,
             out int count
         );
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCamera")]
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraDevice")]
         public static extern Status GetMultiCameraDeviceCamera (
             this IntPtr device,
             int index,
             out IntPtr camera
         );
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceIsRunning")]
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceIsCameraDeviceRunning")]
         public static extern Status GetMultiCameraDeviceIsRunning (
             this IntPtr device,
             IntPtr camera,
             out bool running
         );
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStartRunning")]
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStartCameraDevice")]
         public static extern Status StartRunning (
             this IntPtr device,
             IntPtr camera
         );
-        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStopRunning")]
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStopCameraDevice")]
         public static extern Status StopRunning (
             this IntPtr device,
             IntPtr camera
@@ -820,6 +815,11 @@ namespace VideoKit.Internal {
             this IntPtr device,
             MultiCameraDeviceSystemPressureHandler handler,
             IntPtr context
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMultiCameraPixelBufferGetCameraDevice")]
+        public static extern Status GetMultiCameraPixelBufferCamera (
+            this IntPtr pixelBuffer,
+            out IntPtr camera
         );
         #endregion
 
