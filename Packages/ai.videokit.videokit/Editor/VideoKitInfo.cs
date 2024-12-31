@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
 */
 
 using System.Reflection;
@@ -11,5 +11,5 @@ using VideoKit.Internal;
 [assembly: AssemblyCompany(@"Yusuf Olokoba")]
 [assembly: AssemblyTitle(@"VideoKit.Editor")]
 [assembly: AssemblyVersion(VideoKitClient.Version)]
-[assembly: AssemblyCopyright(@"Copyright © 2024 Yusuf Olokoba. All Rights Reserved.")]
+[assembly: AssemblyCopyright(@"Copyright © 2025 Yusuf Olokoba. All Rights Reserved.")]
 [assembly: AssemblyIsEditorAssembly]

@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 Yusuf Olokoba. All rights reserved.
+*   Copyright © 2025 Yusuf Olokoba. All rights reserved.
 */
 
 namespace VideoKit.Tests {

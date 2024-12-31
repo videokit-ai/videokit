@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Tests {
@@ -16,7 +16,7 @@ namespace VideoKit.Tests {
             West,
             South    
         }
-        
+
         struct Command {
             [JsonProperty(Required = Required.Always)]
             public string name;

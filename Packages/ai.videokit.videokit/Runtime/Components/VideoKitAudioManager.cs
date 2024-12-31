@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit {

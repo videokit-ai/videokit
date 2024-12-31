@@ -1,6 +1,6 @@
 ﻿/* 
 *   VideoKit
-*   Copyright © 2024 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.UI {
@@ -10,6 +10,7 @@ namespace VideoKit.UI {
 	using UnityEngine.UI;
 	using UnityEngine.Events;
 	using UnityEngine.EventSystems;
+    using UnityEngine.Serialization;
 
     /// <summary>
     /// Lightweight record button with press-and-hold gesture.
@@ -34,22 +35,29 @@ namespace VideoKit.UI {
 
         [Header(@"Events")]
         /// <summary>
-        /// Event invoked when recording is started.
+        /// Event invoked when the button is tapped.
         /// </summary>
-        [Tooltip(@"Event invoked when recording is started.")]
-        public UnityEvent OnStartRecording;
+        [Tooltip(@"Event invoked when the button is tapped.")]
+        public UnityEvent OnTap;
 
         /// <summary>
-        /// Event invoked when recording is stopped.
+        /// Event invoked when the button starts being held.
         /// </summary>
-        [Tooltip(@"Event invoked when recording is stopped.")]
-        public UnityEvent OnStopRecording;
+        [Tooltip(@"Event invoked when the button starts being held."), FormerlySerializedAs(@"OnStartRecording")]
+        public UnityEvent OnBeginHold;
+
+        /// <summary>
+        /// Event invoked when the button stops being held.
+        /// </summary>
+        [Tooltip(@"Event invoked when the button stops being held."), FormerlySerializedAs(@"OnStopRecording")]
+        public UnityEvent OnEndHold;
         #endregion
 
 
         #region --Operations--
         private Image button;
         private bool touch;
+        private const float TapDelay = 0.2f;
 
         private void Awake () => button = GetComponent<Image>();
 
@@ -63,11 +71,13 @@ namespace VideoKit.UI {
         private IEnumerator Countdown () {
             touch = true;
             // Wait for false touch
-            yield return new WaitForSeconds(0.2f);
-            if (!touch)
+            yield return new WaitForSeconds(TapDelay);
+            if (!touch) {
+                OnTap?.Invoke();
                 yield break;
+            }
             // Start recording
-            OnStartRecording?.Invoke();
+            OnBeginHold?.Invoke();
             // Animate the countdown
             var startTime = Time.time;
             while (touch) {
@@ -79,7 +89,7 @@ namespace VideoKit.UI {
             }
             // Reset
             Zero();
-            OnStopRecording?.Invoke();
+            OnEndHold?.Invoke();
         }
 
         void IPointerDownHandler.OnPointerDown (PointerEventData eventData) => StartCoroutine(Countdown());
