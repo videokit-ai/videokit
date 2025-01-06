@@ -7,6 +7,7 @@
 + Fixed `VideoKitCameraManager.StartRunning` method crashing on some Android devices when `Capabilities.HumanTexture` capability is enabled (#157).
 + Fixed missing native library errors in Xcode when building universal macOS binary (#154).
 + Fixed human texture predictor embedding errors causing Unity build to fail (#156).
++ Fixed `CameraDevice.StartRunning` method causing crash instead of throwing exception when devie is not supported on Windows (#126).
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
