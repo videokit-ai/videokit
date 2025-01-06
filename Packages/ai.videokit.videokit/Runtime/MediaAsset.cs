@@ -285,7 +285,7 @@ namespace VideoKit {
         /// <returns>Media asset.</returns>
         public static async Task<MediaAsset?> FromStreamingAssets (string path) {
             // Get absolute path
-            var absolutePath = await FunctionUnity.StreamingAssetsToAbsolutePath(path);
+            var absolutePath = await StreamingAssetsToAbsolutePath(path);
             if (absolutePath == null)
                 throw new InvalidOperationException($"Failed to create media asset because file '{path}' could not be found in `StreamingAssets`");
             // Create asset
@@ -573,6 +573,25 @@ namespace VideoKit {
 
 
         #region --Utilities--
+
+        private static async Task<string?> StreamingAssetsToAbsolutePath (string relativePath) {
+            var fullPath = Path.Combine(Application.streamingAssetsPath, relativePath);
+            if (Application.platform != RuntimePlatform.Android)
+                return File.Exists(fullPath) ? fullPath : null;
+            var persistentPath = Path.Combine(Application.persistentDataPath, relativePath);
+            if (File.Exists(persistentPath))
+                return persistentPath;
+            var directory = Path.GetDirectoryName(persistentPath);
+            Directory.CreateDirectory(directory);
+            using var request = UnityWebRequest.Get(fullPath);
+            request.SendWebRequest();
+            while (!request.isDone)
+                await Task.Yield();
+            if (request.result != UnityWebRequest.Result.Success)
+                return null;
+            File.WriteAllBytes(persistentPath, request.downloadHandler.data);
+            return persistentPath;
+        }
 
         private static string GetValueExtension (Dtype type) => type switch {
             Dtype.Image => ".png",
