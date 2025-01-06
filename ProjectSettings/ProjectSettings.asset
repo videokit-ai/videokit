@@ -168,7 +168,8 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: app.videokit.videokit
-    iPhone: app.natml.videokit
+    Standalone: app.videokit.videokit
+    iPhone: app.videokit.videokit
   buildNumber:
     Bratwurst: 0
     Standalone: 0
@@ -545,6 +546,12 @@ PlayerSettings:
   - m_BuildTarget: WebGLSupport
     m_APIs: 0b000000
     m_Automatic: 0
+  - m_BuildTarget: WindowsStandaloneSupport
+    m_APIs: 12000000
+    m_Automatic: 0
+  - m_BuildTarget: LinuxStandaloneSupport
+    m_APIs: 11000000
+    m_Automatic: 0
   m_BuildTargetVRSettings:
   - m_BuildTarget: Standalone
     m_Enabled: 0
@@ -586,7 +593,7 @@ PlayerSettings:
     m_Formats: 00000000
   - serializedVersion: 3
     m_BuildTarget: WebGL
-    m_Formats: 00000000
+    m_Formats: 05000000
   - serializedVersion: 3
     m_BuildTarget: iOS
     m_Formats: 03000000

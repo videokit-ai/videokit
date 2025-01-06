@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1440
     height: 794
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Console
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 14
+  controlID: 64
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneHierarchyWindow
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -221,14 +221,14 @@ MonoBehaviour:
     y: 0
     width: 296
     height: 422
-  m_MinSize: {x: 202, y: 226}
+  m_MinSize: {x: 102, y: 126}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectSettingsWindow
+  m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -274,14 +274,14 @@ MonoBehaviour:
     y: 0
     width: 351.5
     height: 738
-  m_MinSize: {x: 311, y: 226}
+  m_MinSize: {x: 276, y: 76}
   m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -303,10 +303,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project Settings\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1089.5
-    y: 24
+    x: 1088.5
+    y: 36
     width: 350.5
-    height: 712
+    height: 818
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 89
     width: 382.5
     height: 712
   m_SerializedDataModeController:
@@ -1952,8 +1952,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 384.5
-    y: 24
+    x: 383.5
+    y: 89
     width: 407
     height: 712
   m_SerializedDataModeController:
@@ -2052,8 +2052,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 24
+    x: 792.5
+    y: 89
     width: 294
     height: 396
   m_SerializedDataModeController:
@@ -2119,9 +2119,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 792.5
-    y: 36
+    y: 89
     width: 294
-    height: 456.5
+    height: 396
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2154,8 +2154,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 446
+    x: 792.5
+    y: 511
     width: 294
     height: 290
   m_SerializedDataModeController:
@@ -2180,7 +2180,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Tests
+    - Packages/ai.videokit.videokit/Runtime
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2190,16 +2190,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Tests
+  - Packages/ai.videokit.videokit/Runtime
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/yusuf/Documents/Projects/vkt3d/videokit
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: da560000
-    m_LastClickedID: 22234
-    m_ExpandedIDs: 0000000076560000
+    scrollPos: {x: 0, y: 242}
+    m_SelectedIDs: 00570000
+    m_LastClickedID: 22272
+    m_ExpandedIDs: 0000000074560000f656000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2228,7 +2228,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000076560000
+    m_ExpandedIDs: 0000000074560000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2256,7 +2256,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -2282,7 +2282,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 493.5}
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 132.5

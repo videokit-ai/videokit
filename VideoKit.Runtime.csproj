@@ -65,6 +65,7 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.0.28f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages/ai.videokit.videokit/Runtime/CameraDevice.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Internal/VideoKitEvents.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Components/VideoKitAudioManager.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/AudioComponentSource.cs" />
@@ -87,7 +88,6 @@
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/TextureSource.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/ScreenSource.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioBuffer.cs" />
-    <Compile Include="Packages/ai.videokit.videokit/Runtime/CameraDevics.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Clocks/FixedClock.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/AudioDevice.cs" />
     <Compile Include="Packages/ai.videokit.videokit/Runtime/Sources/CameraViewSource.cs" />
