@@ -26,7 +26,7 @@ namespace VideoKit.Tests {
             // Read pixel buffers
             foreach (var pixelBuffer in asset.Read<PixelBuffer>()) {
                 // Copy pixel data into the texture
-                var textureBuffer = new PixelBuffer(texture);
+                using var textureBuffer = new PixelBuffer(texture);
                 pixelBuffer.CopyTo(textureBuffer);
                 // Upload the texture data to the GPU
                 texture.Apply();
