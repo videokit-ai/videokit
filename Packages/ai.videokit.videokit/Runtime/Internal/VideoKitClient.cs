@@ -11,6 +11,7 @@ namespace VideoKit.Internal {
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -114,9 +115,10 @@ namespace VideoKit.Internal {
                 new AuthenticationHeaderValue(@"Bearer", apiKey) :
                 null;
             // Request
+            var version = Marshal.PtrToStringUTF8(VideoKit.GetVersion()); // INCOMPLETE // CHECK
             var payload = new Dictionary<string, object> {
                 [@"platform"] = platform,
-                [@"version"] = Version
+                [@"version"] = version
             };
             var payloadStr = JsonConvert.SerializeObject(payload);
             using var content = new StringContent(payloadStr, Encoding.UTF8, @"application/json");
