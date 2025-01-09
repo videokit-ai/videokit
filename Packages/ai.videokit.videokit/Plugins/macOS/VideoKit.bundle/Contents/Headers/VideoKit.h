@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 5/15/2023.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once

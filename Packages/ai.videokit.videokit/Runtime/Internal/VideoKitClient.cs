@@ -115,7 +115,7 @@ namespace VideoKit.Internal {
                 new AuthenticationHeaderValue(@"Bearer", apiKey) :
                 null;
             // Request
-            var version = Marshal.PtrToStringUTF8(VideoKit.GetVersion()); // INCOMPLETE // CHECK
+            var version = Marshal.PtrToStringUTF8(VideoKit.GetVersion());
             var payload = new Dictionary<string, object> {
                 [@"platform"] = platform,
                 [@"version"] = version

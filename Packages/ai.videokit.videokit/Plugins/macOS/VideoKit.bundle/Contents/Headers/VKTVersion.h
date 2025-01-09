@@ -3,7 +3,7 @@
 //  VideoKit
 //
 //  Created by Yusuf Olokoba on 3/05/2024.
-//  Copyright © 2024 Yusuf Olokoba. All rights reserved.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
 //
 
 #pragma once
@@ -12,7 +12,7 @@
 
 #define VKT_VERSION_MAJOR 0
 #define VKT_VERSION_MINOR 0
-#define VKT_VERSION_PATCH 3
+#define VKT_VERSION_PATCH 23
 
 /*!
  @function VKTGetVersion
