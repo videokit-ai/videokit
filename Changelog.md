@@ -4,6 +4,7 @@
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
 + Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
++ Fixed recorded videos being upside-down when recording with `VideoKitRecorder.VideoMode.Screen` video mode (#143).
 + Fixed `VideoKitCameraManager.StartRunning` method crashing on some Android devices when `Capabilities.HumanTexture` capability is enabled (#157).
 + Fixed missing native library errors in Xcode when building universal macOS binary (#154).
 + Fixed human texture predictor embedding errors causing Unity build to fail (#156).
@@ -12,9 +13,9 @@
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
 + Refactored `TextureSource.cropRect` field to `regionOfInterest`.
-+ Refactored `VideoKitViewManager.exposureMode` field to `exposureGesture`.
-+ Refactored `VideoKitViewManager.focusMode` field to `focusGesture`.
-+ Refactored `VideoKitViewManager.zoomMode` field to `zoomGesture`.
++ Refactored `VideoKitCameraView.exposureMode` field to `exposureGesture`.
++ Refactored `VideoKitCameraView.focusMode` field to `focusGesture`.
++ Refactored `VideoKitCameraView.zoomMode` field to `zoomGesture`.
 + Refactored `VideoKitCameraManager.Facing.RequireUser` enumeration member to `Facing.User`.
 + Refactored `VideoKitCameraManager.Facing.PreferWorld` enumeration member to `Facing.World`.
 + Removed `VideoKitCameraManager.Facing.RequireWorld` enumeration member. Use `Facing.World` enumeration member instead.

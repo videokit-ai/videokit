@@ -58,7 +58,12 @@ namespace VideoKit.Sources {
         ) {
             // Create texture source
             this.clock = clock;
-            this.descriptor = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBHalf, 0);
+            this.descriptor = new RenderTextureDescriptor(
+                width,
+                height,
+                RenderTextureFormat.ARGBHalf,
+                0
+            );
             this.textureSource = new TextureSource(width, height, handler);
             // Listen for frame events
             if (useLateUpdate)
@@ -88,17 +93,24 @@ namespace VideoKit.Sources {
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
             // Capture screen
+            var screenBuffer = RenderTexture.GetTemporary(
+                Screen.width,
+                Screen.height,
+                0,
+                RenderTextureFormat.ARGBHalf
+            );
             var frameBuffer = RenderTexture.GetTemporary(descriptor);
-            if (SystemInfo.graphicsUVStartsAtTop) {
-                var tempBuffer = RenderTexture.GetTemporary(descriptor);
-                ScreenCapture.CaptureScreenshotIntoRenderTexture(tempBuffer);
-                Graphics.Blit(tempBuffer, frameBuffer, new Vector2(1, -1), Vector2.up);
-                RenderTexture.ReleaseTemporary(tempBuffer);
-            } else
-                ScreenCapture.CaptureScreenshotIntoRenderTexture(frameBuffer);
+            ScreenCapture.CaptureScreenshotIntoRenderTexture(screenBuffer);
+            Graphics.Blit(
+                screenBuffer,
+                frameBuffer,
+                SystemInfo.graphicsUVStartsAtTop ? new Vector2(1, -1) : Vector2.one,
+                SystemInfo.graphicsUVStartsAtTop ? Vector2.up : Vector2.zero
+            );
             // Append
             textureSource.Append(frameBuffer, clock?.timestamp ?? 0L);
             RenderTexture.ReleaseTemporary(frameBuffer);
+            RenderTexture.ReleaseTemporary(screenBuffer);
         }
         #endregion
     }
