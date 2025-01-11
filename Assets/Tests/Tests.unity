@@ -998,7 +998,7 @@ MonoBehaviour:
   configureAudioManager: 1
   audioListener: {fileID: 963194226}
   audioSource: {fileID: 1493259196}
-  recordingAction: 0
+  recordingAction: 2
   OnRecordingCompleted:
     m_PersistentCalls:
       m_Calls: []
