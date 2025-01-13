@@ -3,6 +3,7 @@
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
++ Fixed `VideoKitCameraManager` failing to start camera preview when `HumanTexture` capability is enabled on Android (#161).
 + Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
 + Fixed recorded videos being upside-down when recording with `VideoKitRecorder.VideoMode.Screen` video mode (#143).
 + Fixed `VideoKitCameraManager.StartRunning` method crashing on some Android devices when `Capabilities.HumanTexture` capability is enabled (#157).

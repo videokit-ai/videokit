@@ -74,14 +74,23 @@
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Types/Tensor.cs">
       <Link>Runtime/Types/Tensor.cs</Link>
     </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Beta/PredictionService.cs">
+      <Link>Runtime/Beta/PredictionService.cs</Link>
+    </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Types/Image.cs">
       <Link>Runtime/Types/Image.cs</Link>
     </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/C/Predictor.cs">
       <Link>Runtime/C/Predictor.cs</Link>
     </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Beta/RemotePredictionService.cs">
+      <Link>Runtime/Beta/RemotePredictionService.cs</Link>
+    </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Types/Dtype.cs">
       <Link>Runtime/Types/Dtype.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Beta/BetaClient.cs">
+      <Link>Runtime/Beta/BetaClient.cs</Link>
     </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Types/User.cs">
       <Link>Runtime/Types/User.cs</Link>
@@ -107,6 +116,9 @@
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Types/Predictor.cs">
       <Link>Runtime/Types/Predictor.cs</Link>
     </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Beta/Value.cs">
+      <Link>Runtime/Beta/Value.cs</Link>
+    </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/API/FunctionClient.cs">
       <Link>Runtime/API/FunctionClient.cs</Link>
     </Compile>
@@ -118,6 +130,9 @@
     </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Services/Predictor.cs">
       <Link>Runtime/Services/Predictor.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/Beta/RemoteAcceleration.cs">
+      <Link>Runtime/Beta/RemoteAcceleration.cs</Link>
     </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Runtime/C/Function.cs">
       <Link>Runtime/C/Function.cs</Link>

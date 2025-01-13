@@ -68,8 +68,8 @@
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Unity/FunctionUnity.cs">
       <Link>Unity/FunctionUnity.cs</Link>
     </Compile>
-    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Unity/Internal/FunctionInfo.cs">
-      <Link>Unity/Internal/FunctionInfo.cs</Link>
+    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Unity/Types/CachedPrediction.cs">
+      <Link>Unity/Types/CachedPrediction.cs</Link>
     </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Unity/API/PredictionCacheClient.cs">
       <Link>Unity/API/PredictionCacheClient.cs</Link>

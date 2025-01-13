@@ -77,9 +77,6 @@
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Editor/Build/WindowsBuildHandler.cs">
       <Link>Editor/Build/WindowsBuildHandler.cs</Link>
     </Compile>
-    <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Editor/FunctionInfo.cs">
-      <Link>Editor/FunctionInfo.cs</Link>
-    </Compile>
     <Compile Include="/Users/yusuf/Documents/Projects/fxnai/fxn3d/Packages/ai.fxn.fxn3d/Editor/FunctionSettingsProvider.cs">
       <Link>Editor/FunctionSettingsProvider.cs</Link>
     </Compile>

@@ -272,8 +272,16 @@ namespace VideoKit {
             }
             // Preload human texture predictor
             var fxn = VideoKitClient.Instance!.fxn;
-            if (capabilities.HasFlag(Capabilities.HumanTexture))
+            if (capabilities.HasFlag(Capabilities.HumanTexture)) {
+                try { await fxn.Predictions.Create(HumanTextureTag, new()); }
+                catch {
+                    System.IO.Directory.Delete( // CHECK // REMOVE
+                        System.IO.Path.Join(Application.persistentDataPath, @"fxn", @"predictors"),
+                        true
+                    );
+                }
                 await fxn.Predictions.Create(HumanTextureTag, new());
+            }
             // Start running
             StartRunning(_device, OnCameraBuffer);
             // Listen for events
