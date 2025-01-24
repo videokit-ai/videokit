@@ -1020,6 +1020,14 @@
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.28f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Function.Runtime">
+      <HintPath>Library/ScriptAssemblies/Function.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Function.Unity">
+      <HintPath>Library/ScriptAssemblies/Function.Unity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
       <Private>False</Private>
@@ -1030,8 +1038,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Function.Runtime.csproj" />
-    <ProjectReference Include="Function.Unity.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

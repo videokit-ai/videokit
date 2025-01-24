@@ -1000,8 +1000,16 @@
       <HintPath>Library/ScriptAssemblies/Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Function.Runtime">
+      <HintPath>Library/ScriptAssemblies/Function.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Sysroot.Linux_x86_64">
       <HintPath>Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Function.Unity">
+      <HintPath>Library/ScriptAssemblies/Function.Unity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
@@ -1014,6 +1022,10 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Function.Editor">
+      <HintPath>Library/ScriptAssemblies/Function.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
@@ -1040,9 +1052,6 @@
   <ItemGroup>
     <ProjectReference Include="VideoKit.Runtime.csproj" />
     <ProjectReference Include="VideoKit.Tests.Runtime.csproj" />
-    <ProjectReference Include="Function.Runtime.csproj" />
-    <ProjectReference Include="Function.Unity.csproj" />
-    <ProjectReference Include="Function.Editor.csproj" />
     <ProjectReference Include="VideoKit.Editor.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

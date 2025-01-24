@@ -956,7 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capabilities: 0
   playOnAwake: 1
-  _facing: 2
+  _facing: 1
   facingRequired: 0
   resolution: 3
   frameRate: 0
@@ -976,7 +976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 2
+  videoMode: 1
   resolution: 7
   customResolution: {x: 1280, y: 720}
   cameras:
