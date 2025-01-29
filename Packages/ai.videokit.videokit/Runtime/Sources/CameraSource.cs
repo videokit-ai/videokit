@@ -29,11 +29,6 @@ namespace VideoKit.Sources {
         public readonly TextureSource textureSource;
 
         /// <summary>
-        /// Clear color to use before rendering cameras to a texture.
-        /// </summary>
-        public Color clearColor = Color.black;
-
-        /// <summary>
         /// Control number of successive camera frames to skip while recording.
         /// This is very useful for GIF recording, which typically has a lower framerate appearance.
         /// </summary>
@@ -97,7 +92,7 @@ namespace VideoKit.Sources {
             Array.Sort(cameras, (a, b) => (int)(100 * (a.depth - b.depth)));
             this.cameras = cameras;
             this.clock = clock;
-            this.descriptor = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBHalf, 24) {
+            this.descriptor = new(width, height, RenderTextureFormat.ARGBHalf, 24) {
                 sRGB = true,
                 msaaSamples = Mathf.Max(QualitySettings.antiAliasing, 1)
             };
@@ -128,7 +123,7 @@ namespace VideoKit.Sources {
             var frameBuffer = RenderTexture.GetTemporary(descriptor);
             var prevActive = RenderTexture.active;
             RenderTexture.active = frameBuffer;
-            GL.Clear(true, true, clearColor);
+            GL.Clear(true, true, Color.clear);
             RenderTexture.active = prevActive;
             // Render cameras
             for (var i = 0; i < cameras.Length; i++) {

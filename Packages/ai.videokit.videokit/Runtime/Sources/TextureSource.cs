@@ -203,7 +203,7 @@ namespace VideoKit.Sources {
             // Render
             var prevActive = RenderTexture.active;
             RenderTexture.active = destination;
-            GL.Clear(true, true, Color.black);
+            GL.Clear(true, true, Color.clear);
             GL.PushMatrix();
             GL.LoadPixelMatrix(0, destination.width, destination.height, 0);
             Graphics.DrawTexture(drawRect, source);
@@ -218,7 +218,7 @@ namespace VideoKit.Sources {
             // Render source
             var prevActive = RenderTexture.active;
             RenderTexture.active = destination;
-            GL.Clear(true, true, Color.black);
+            GL.Clear(true, true, Color.clear);
             GL.PushMatrix();
             GL.LoadPixelMatrix(0, destination.width, destination.height, 0);
             Graphics.Blit(source, destination);

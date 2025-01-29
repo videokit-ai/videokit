@@ -26,6 +26,7 @@
 + Removed `VideoKitCameraManager.humanTexture` field. Use `VideoKitCameraView.texture` field with `VideoKitCameraView.ViewMode.HumanTexture` view mode instead.
 + Removed `VideoKitCameraManager.rotation` field. Use `VideoKitCameraView.rotation` field instead.
 + Removed `VideoKitRecorder.cameraManager` field. Use `VideoKitRecorder.cameraView` field instead.
++ Removed `CameraSource.clearColor` field. The clear flags of the `CameraSource.cameras` will be used instead.
 
 ## 0.0.22
 + Improved native error propagation into C# code allowing you to `try..catch` more errors.
