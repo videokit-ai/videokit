@@ -2,6 +2,7 @@
 + Improved camera streaming performance especially when streaming with high frame rate or with human texture.
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
++ Added `VideoKitCameraView.OnPixelBuffer` event to listen for processed camera buffers to be displayed in the camera texture.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
 + Fixed `VideoKitCameraManager` failing to start camera preview when `HumanTexture` capability is enabled on Android (#161).
 + Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
@@ -19,6 +20,8 @@
 + Refactored `VideoKitCameraView.zoomMode` field to `zoomGesture`.
 + Refactored `VideoKitCameraManager.Facing.RequireUser` enumeration member to `Facing.User`.
 + Refactored `VideoKitCameraManager.Facing.PreferWorld` enumeration member to `Facing.World`.
++ Deprecated the `ScreenSource` constructor that accepts a `MediaRecorder` instance. Use the `handler` constructor instead.
++ Removed the `TextureSource` constructor that accepts a `MediaRecorder` instance. Use the `handler` constructor instead.
 + Removed `VideoKitCameraManager.Facing.RequireWorld` enumeration member. Use `Facing.World` enumeration member instead.
 + Removed `VideoKitCameraManager.Facing.PreferUser` enumeration member. Use `Facing.User` enumeration member instead.
 + Removed `VideoKitCameraManager.OnCameraFrame` event. Use `VideoKitCameraView.OnCameraFrame` event instead.

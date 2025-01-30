@@ -27,22 +27,6 @@ namespace VideoKit.Sources {
         /// Create a camera device source.
         /// </summary>
         /// <param name="view">Camera view to capture pixel buffers from.</param>
-        /// <param name="recorder">Media recorder to receive pixel buffers</param>
-        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        /// <exception cref="ArgumentException"></exception>
-        public CameraViewSource (
-            VideoKitCameraView view,
-            MediaRecorder recorder,
-            IClock? clock = null
-        ) : this(view, recorder.Append, clock) {
-            if (recorder.width != view.texture!.width || recorder.height != view.texture.height)
-                throw new ArgumentException("Cannot create camera view source because camera preview resolution does not match recorder resolution");
-        }
-
-        /// <summary>
-        /// Create a camera device source.
-        /// </summary>
-        /// <param name="view">Camera view to capture pixel buffers from.</param>
         /// <param name="handler"></param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
         /// <exception cref="ArgumentException">Raised when the camera preview is not running.</exception>
@@ -56,10 +40,13 @@ namespace VideoKit.Sources {
             this.handler = handler;
             this.clock = clock;
             this.view = view;
-            view.OnCameraFrame?.AddListener(OnFrame);
+            view.OnPixelBuffer += OnPixelBuffer;
         }
 
-        public void Dispose () => view.OnCameraFrame?.RemoveListener(OnFrame);
+        /// <summary>
+        /// Stop the camera view source and release resources.
+        /// </summary>
+        public void Dispose () => view.OnPixelBuffer -= OnPixelBuffer;
         #endregion
 
 
@@ -69,20 +56,19 @@ namespace VideoKit.Sources {
         private readonly VideoKitCameraView view;
         private int frameIdx;
 
-        private void OnFrame () {
-            // Check frame index
+        private void OnPixelBuffer (PixelBuffer pixelBuffer) {
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
-            // Invoke
-            var texture = view.texture!;
-            using var pixelBuffer = new PixelBuffer(
-                texture.width,
-                texture.height,
-                PixelBuffer.Format.RGBA8888,
-                texture.GetRawTextureData(),
-                timestamp: clock?.timestamp ?? 0L
+            using var outputBuffer = new PixelBuffer(
+                width: pixelBuffer.width,
+                height: pixelBuffer.height,
+                format: pixelBuffer.format,
+                data: pixelBuffer.data,
+                rowStride: pixelBuffer.rowStride,
+                timestamp: clock?.timestamp ?? 0L,
+                mirrored: pixelBuffer.verticallyMirrored
             );
-            handler?.Invoke(pixelBuffer);
+            handler(outputBuffer);
         }
         #endregion
     }

@@ -16,10 +16,20 @@ namespace VideoKit.Sources {
     internal sealed class AudioManagerSource : IDisposable {
 
         #region --Client API--
-        public AudioManagerSource (MediaRecorder recorder, IClock? clock, VideoKitAudioManager audioManager) {
-            this.recorder = recorder;
-            this.clock = clock;
+        /// <summary>
+        /// Create an audio manager source.
+        /// </summary>
+        /// <param name="audioManager">Audio manager.</param>
+        /// <param name="handler">Handler to receive audio buffers.</param>
+        /// <param name="clock">Clock for generating timestamps.</param>
+        public AudioManagerSource (
+            VideoKitAudioManager audioManager,
+            Action<AudioBuffer> handler,
+            IClock? clock = null
+        ) {
             this.audioManager = audioManager;
+            this.handler = handler;
+            this.clock = clock;
             audioManager.OnAudioBuffer += OnAudioBuffer;
         }
 
@@ -28,9 +38,9 @@ namespace VideoKit.Sources {
 
 
         #region --Operations--
-        private readonly MediaRecorder recorder;
-        private readonly IClock? clock;
         private readonly VideoKitAudioManager audioManager;
+        private readonly Action<AudioBuffer> handler;
+        private readonly IClock? clock;
 
         private void OnAudioBuffer (AudioBuffer srcBuffer) {
             using var audioBuffer = new AudioBuffer(
@@ -39,7 +49,7 @@ namespace VideoKit.Sources {
                 srcBuffer.data,
                 clock?.timestamp ?? 0L
             );
-            recorder.Append(audioBuffer);
+            handler(audioBuffer);
         }
         #endregion
     }

@@ -112,8 +112,7 @@ namespace VideoKit.UI {
 
         [Header(@"Events")]
         /// <summary>
-        /// Event raised when a new camera frame is available in the camera manager.
-        /// The preview texture, human texture, and image feature will contain the latest camera image.
+        /// Event raised when a new camera frame is available in the preview texture.
         /// </summary>
         [Tooltip(@"Event raised when a new camera frame is available.")]
         public UnityEvent? OnCameraFrame;
@@ -121,6 +120,13 @@ namespace VideoKit.UI {
 
 
         #region --Client API--
+        /// <summary>
+        /// Get the camera device that this view displays.
+        /// </summary>
+        internal CameraDevice? device => VideoKitCameraManager // CHECK // Should we make this public??
+            .EnumerateCameraDevices(cameraManager?.device)
+            .FirstOrDefault(device => facing.HasFlag(VideoKitCameraManager.GetCameraFacing(device)));
+
         /// <summary>
         /// Get the camera preview texture.
         /// </summary>
@@ -130,6 +136,13 @@ namespace VideoKit.UI {
         /// Get the camera preview rotation to become upright.
         /// </summary>
         public PixelBuffer.Rotation rotation { get; private set; }
+
+        /// <summary>
+        /// Event raised when a new pixel buffer is available.
+        /// Unlike the `VideoKitCameraManager`, this pixel buffer has an `RGBA8888` format and is rotated upright.
+        /// This event is invoked on a dedicated camera thread, NOT the Unity main thread.
+        /// </summary>
+        public event Action<PixelBuffer>? OnPixelBuffer;
         #endregion
 
 
@@ -155,7 +168,7 @@ namespace VideoKit.UI {
         private void OnEnable () {
             rotation = GetPreviewRotation(Screen.orientation);
             if (cameraManager != null)
-                cameraManager.OnPixelBuffer += OnPixelBuffer;
+                cameraManager.OnPixelBuffer += OnCameraBuffer;
         }
 
         private unsafe void Update () {
@@ -212,7 +225,7 @@ namespace VideoKit.UI {
             OnCameraFrame?.Invoke();
         }
 
-        private unsafe void OnPixelBuffer (
+        private unsafe void OnCameraBuffer (
             CameraDevice cameraDevice,
             PixelBuffer cameraBuffer
         ) {
@@ -240,11 +253,12 @@ namespace VideoKit.UI {
                     );
                 cameraBuffer.CopyTo(pixelBuffer, rotation: rotation);
             }
+            OnPixelBuffer?.Invoke(pixelBuffer);
         }
 
         private void OnDisable () {
             if (cameraManager != null)
-                cameraManager.OnPixelBuffer -= OnPixelBuffer;
+                cameraManager.OnPixelBuffer -= OnCameraBuffer;
         }
 
         private void OnDestroy () {
@@ -258,8 +272,8 @@ namespace VideoKit.UI {
 
         void IPointerUpHandler.OnPointerUp (PointerEventData data) {
             // Check device
-            var cameraDevice = GetCameraDevice(cameraManager?.device, facing);
-            if (cameraDevice == null)
+            var device = this.device;
+            if (device == null)
                 return;
             // Check focus mode
             if (focusGesture != GestureMode.Tap && exposureGesture != GestureMode.Tap)
@@ -275,10 +289,10 @@ namespace VideoKit.UI {
                 return;
             // Focus
             var point = Rect.PointToNormalized(rectTransform!.rect, localPoint);
-            if (cameraDevice.focusPointSupported && focusGesture == GestureMode.Tap)
-                cameraDevice.SetFocusPoint(point.x, point.y);
-            if (cameraDevice.exposurePointSupported && exposureGesture == GestureMode.Tap)
-                cameraDevice.SetExposurePoint(point.x, point.y);
+            if (device.focusPointSupported && focusGesture == GestureMode.Tap)
+                device.SetFocusPoint(point.x, point.y);
+            if (device.exposurePointSupported && exposureGesture == GestureMode.Tap)
+                device.SetExposurePoint(point.x, point.y);
         }
 
         void IBeginDragHandler.OnBeginDrag (PointerEventData data) {
@@ -311,17 +325,6 @@ namespace VideoKit.UI {
         ) => rotation == PixelBuffer.Rotation._90 || rotation == PixelBuffer.Rotation._270 ?
             (height, width) :
             (width, height);
-
-        private static CameraDevice? GetCameraDevice (MediaDevice? device, Facing facing) {
-            if (device is CameraDevice cameraDevice)
-                return cameraDevice;
-            else if (device is MultiCameraDevice multiCameraDevice)
-                return multiCameraDevice
-                    .cameras
-                    .FirstOrDefault(camera => (VideoKitCameraManager.GetCameraFacing(camera) & facing) != 0);
-            else
-                return null;
-        }
         #endregion
     }
 }

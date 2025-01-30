@@ -32,18 +32,6 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Create a screen source.
         /// </summary>
-        /// <param name="recorder">Media recorder to receive images.</param>
-        /// <param name="clock">Clock for generating image timestamps.</param>
-        /// <param name="useLateUpdate">Whether to use` LateUpdate` instead of end of frame for capturing frames. See #52.</param>
-        public ScreenSource (
-            MediaRecorder recorder,
-            IClock? clock = null,
-            bool useLateUpdate = false
-        ) : this(recorder.width, recorder.height, recorder.Append, clock, useLateUpdate) { }
-
-        /// <summary>
-        /// Create a screen source.
-        /// </summary>
         /// <param name="width">Image width.</param>
         /// <param name="height">Image height.</param>
         /// <param name="handler">Handler to receive images.</param>
@@ -58,13 +46,8 @@ namespace VideoKit.Sources {
         ) {
             // Create texture source
             this.clock = clock;
-            this.descriptor = new RenderTextureDescriptor(
-                width,
-                height,
-                RenderTextureFormat.ARGBHalf,
-                0
-            );
-            this.textureSource = new TextureSource(width, height, handler);
+            this.descriptor = new(width, height, RenderTextureFormat.ARGBHalf, 0);
+            this.textureSource = new(width, height, handler);
             // Listen for frame events
             if (useLateUpdate)
                 VideoKitEvents.Instance.onLateUpdate += OnFrame;
@@ -73,7 +56,7 @@ namespace VideoKit.Sources {
         }
 
         /// <summary>
-        /// Stop the media source and release resources.
+        /// Stop the screen source and release resources.
         /// </summary>
         public void Dispose () {
             textureSource.Dispose();
@@ -112,6 +95,16 @@ namespace VideoKit.Sources {
             RenderTexture.ReleaseTemporary(frameBuffer);
             RenderTexture.ReleaseTemporary(screenBuffer);
         }
+        #endregion
+
+
+        #region --Deprecated--
+        [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the ScreenSource(width, height, handler, clock) constructor instead.", false)]
+        public ScreenSource (
+            MediaRecorder recorder,
+            IClock? clock = null,
+            bool useLateUpdate = false
+        ) : this(recorder.width, recorder.height, recorder.Append, clock, useLateUpdate) { }
         #endregion
     }
 }

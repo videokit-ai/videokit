@@ -53,21 +53,6 @@ namespace VideoKit.Sources {
         /// This is very useful for GIF recording, which typically has a lower framerate appearance.
         /// </summary>
         public int frameSkip;
-        
-        /// <summary>
-        /// Create a texture source.
-        /// </summary>
-        /// <param name="recorder">Media recorder to receive pixel buffers.</param>
-        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        public TextureSource (
-            MediaRecorder recorder,
-            IClock? clock = null
-        ) : this(
-            recorder.width,
-            recorder.height,
-            recorder.Append,
-            clock
-        ) { }
 
         /// <summary>
         /// Create a texture source.

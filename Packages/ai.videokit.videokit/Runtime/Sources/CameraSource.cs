@@ -35,59 +35,35 @@ namespace VideoKit.Sources {
         public int frameSkip;
 
         /// <summary>
-        /// Create a pixel buffer source from one or more game cameras.
-        /// </summary>
-        /// <param name="recorder">Media recorder to receive pixel buffers.</param>
-        /// <param name="cameras">Game cameras to capture images from.</param>
-        public CameraSource (MediaRecorder recorder, params Camera[] cameras) : this(
-            recorder,
-            default,
-            cameras
-        ) { }
-
-        /// <summary>
-        /// Create a pixel buffer source from one or more game cameras.
-        /// </summary>
-        /// <param name="recorder">Media recorder to receive pixel buffers.</param>
-        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
-        public CameraSource (MediaRecorder recorder, IClock? clock, params Camera[] cameras) : this(
-            recorder.width,
-            recorder.height,
-            recorder.Append,
-            clock,
-            cameras
-        ) { }
-
-        /// <summary>
-        /// Create a pixel buffer source from one or more game cameras.
+        /// Create a camera source.
         /// </summary>
         /// <param name="width">Pixel buffer width.</param>
         /// <param name="height">Pixel buffer height.</param>
-        /// <param name="handler">Handler to receive pixel buffers.</param>
-        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
-        public CameraSource (int width, int height, Action<PixelBuffer> handler, params Camera[] cameras) : this(
-            width,
-            height,
-            handler,
-            default,
-            cameras
-        ) { }
-
-        /// <summary>
-        /// Create a pixel buffer source from one or more game cameras.
-        /// </summary>
-        /// <param name="width">Pixel buffer width.</param>
-        /// <param name="height">Pixel buffer height.</param>
+        /// <param name="cameras">Game camera to capture pixel buffers from.</param>
         /// <param name="handler">Handler to receive pixel buffers.</param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
         public CameraSource (
             int width,
             int height,
+            Camera camera,
             Action<PixelBuffer> handler,
-            IClock? clock,
-            params Camera[] cameras
+            IClock? clock = null
+        ) : this(width, height, new [] { camera }, handler, clock) { }
+
+        /// <summary>
+        /// Create a camera source.
+        /// </summary>
+        /// <param name="width">Pixel buffer width.</param>
+        /// <param name="height">Pixel buffer height.</param>
+        /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
+        /// <param name="handler">Handler to receive pixel buffers.</param>
+        /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
+        public CameraSource (
+            int width,
+            int height,
+            Camera[] cameras,
+            Action<PixelBuffer> handler,
+            IClock? clock = null
         ) {
             Array.Sort(cameras, (a, b) => (int)(100 * (a.depth - b.depth)));
             this.cameras = cameras;
@@ -138,6 +114,22 @@ namespace VideoKit.Sources {
             // Release framebuffer
             RenderTexture.ReleaseTemporary(frameBuffer);
         }
+        #endregion
+
+
+        #region --Deprecated--
+        [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the CameraSource(width, height, cameras, handler, clock) constructor instead.", false)]
+        public CameraSource (
+            MediaRecorder recorder,
+            params Camera[] cameras
+        ) : this(recorder.width, recorder.height, cameras, recorder.Append) { }
+
+        [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the CameraSource(width, height, cameras, handler, clock) constructor instead.", false)]
+        public CameraSource (
+            MediaRecorder recorder,
+            IClock? clock,
+            params Camera[] cameras
+        ) : this(recorder.width, recorder.height, cameras, recorder.Append, clock) { }
         #endregion
     }
 }

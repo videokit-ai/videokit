@@ -27,7 +27,7 @@ namespace VideoKit.Clocks {
         }
 
         /// <summary>
-        /// Is the clock paused?
+        /// Whether the clock is paused.
         /// </summary>
         public bool paused {
             [MethodImpl(MethodImplOptions.Synchronized)] get => isPaused;

@@ -24,12 +24,12 @@ namespace VideoKit {
 
         #region --Properties--
         /// <summary>
-        /// Is echo cancellation supported?
+        /// Whether acoustic echo cancellation is supported.
         /// </summary>
         public bool echoCancellationSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.EchoCancellation) : default;
 
         /// <summary>
-        /// Enable or disable Adaptive Echo Cancellation (AEC).
+        /// Enable or disable acoustic echo cancellation (AEC).
         /// </summary>
         public bool echoCancellation {
             get => device.GetAudioDeviceEchoCancellation(out var echoCancellation) == Status.Ok ? echoCancellation : default;

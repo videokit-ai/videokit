@@ -344,6 +344,22 @@ namespace VideoKit {
 
         #region --Utilties--
 
+        internal static IEnumerable<CameraDevice> EnumerateCameraDevices (MediaDevice? device) {
+            if (device is CameraDevice cameraDevice)
+                yield return cameraDevice;
+            else if (device is MultiCameraDevice multiCameraDevice)
+                foreach (var camera in multiCameraDevice.cameras)
+                    yield return camera;
+            else
+                yield break;
+        }
+
+        internal static Facing GetCameraFacing (MediaDevice mediaDevice) => mediaDevice switch {
+            CameraDevice cameraDevice           => cameraDevice.frontFacing ? Facing.User : Facing.World,
+            MultiCameraDevice multiCameraDevice => multiCameraDevice.cameras.Select(GetCameraFacing).Aggregate((a, b) => a | b),
+            _                                   => 0,
+        };
+
         private static async Task<MediaDevice[]> GetAllDevices () {
             var cameraDevices = await CameraDevice.Discover(); // MUST always come before multi-cameras
             var multiCameraDevices = await MultiCameraDevice.Discover();
@@ -362,16 +378,6 @@ namespace VideoKit {
             return requestedDevice ?? fallbackDevice;
         }
 
-        private static IEnumerable<CameraDevice> EnumerateCameraDevices (MediaDevice device) {
-            if (device is CameraDevice cameraDevice)
-                yield return cameraDevice;
-            else if (device is MultiCameraDevice multiCameraDevice)
-                foreach (var camera in multiCameraDevice.cameras)
-                    yield return camera;
-            else
-                yield break;
-        }
-
         private static (int width, int height) GetResolutionFrameSize (Resolution resolution) => resolution switch {
             Resolution.Lowest       => (176, 144),
             Resolution._640x480     => (640, 480),
@@ -381,12 +387,6 @@ namespace VideoKit {
             Resolution._3840x2160   => (3840, 2160),
             Resolution.Highest      => (5120, 2880),
             _                       => (1280, 720),
-        };
-
-        internal static Facing GetCameraFacing (MediaDevice mediaDevice) => mediaDevice switch {
-            CameraDevice cameraDevice           => cameraDevice.frontFacing ? Facing.User : Facing.World,
-            MultiCameraDevice multiCameraDevice => multiCameraDevice.cameras.Select(GetCameraFacing).Aggregate((a, b) => a | b),
-            _                                   => 0,
         };
         #endregion
     }

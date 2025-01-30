@@ -674,7 +674,7 @@ namespace VideoKit {
 
         private float frameRate => videoMode switch {
             var _ when format == MediaFormat.GIF    => _frameRate,
-            //VideoMode.CameraDevice                  => cameraManager!.device!.frameRate,
+            VideoMode.CameraDevice                  => cameraView!.device!.frameRate,
             _                                       => 30,
         };
 
@@ -731,7 +731,7 @@ namespace VideoKit {
                 source.textureSource.watermarkRect = CreateWatermarkRect(width, height);
                 return source;
             } else if (videoMode == VideoMode.Camera) {
-                var source = new CameraSource(width, height, handler, clock, cameras) {
+                var source = new CameraSource(width, height, cameras, handler, clock) {
                     frameSkip = frameSkip
                 };
                 source.textureSource.watermark = watermark;
@@ -755,9 +755,9 @@ namespace VideoKit {
 
         private IDisposable? CreateAudioInput () => audioMode switch {
             var _ when !MediaRecorder.CanAppend<AudioBuffer>(format) => null,
-            AudioMode.AudioDevice   => new AudioManagerSource(recorder!, clock, audioManager!),
-            AudioMode.AudioListener => new AudioComponentSource(recorder!, clock, audioListener!),
-            AudioMode.AudioSource   => new AudioComponentSource(recorder!, clock, audioSource!),
+            AudioMode.AudioDevice   => new AudioManagerSource(audioManager!, recorder!, clock),
+            AudioMode.AudioListener => new AudioComponentSource(audioListener!, recorder!, clock),
+            AudioMode.AudioSource   => new AudioComponentSource(audioSource!, recorder!, clock),
             _                       => null,
         };
         #endregion
