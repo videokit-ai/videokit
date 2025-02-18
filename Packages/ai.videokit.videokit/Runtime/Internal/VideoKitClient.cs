@@ -51,7 +51,7 @@ namespace VideoKit.Internal {
         /// <summary>
         /// Check the application VideoKit session status.
         /// </summary>
-        public async Task<Status> CheckSession () {
+        public async Task<Status> CheckSession () {  // INCOMPLETE // Try local, then fallback, then save
             try {
                 // Set
                 var session = sessionToken ?? await CreateSessionToken();

@@ -484,6 +484,13 @@ PlayerSettings:
       m_Height: 36
       m_Kind: 0
       m_SubKind: 
+  - m_BuildTarget: VisionOS
+    m_Icons:
+    - m_Textures: []
+      m_Width: 1024
+      m_Height: 1024
+      m_Kind: 0
+      m_SubKind: 
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
     m_StaticBatching: 1
@@ -841,7 +848,7 @@ PlayerSettings:
   webGLDataCaching: 1
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: '                                                                                                                                                                                                        
-    -Wl,-uVKT_WEBGL_PUSH -Wl,-uVKT_WEBGL_POP   -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
+    -Wl,-uVKT_WEBGL_PUSH -Wl,-uVKT_WEBGL_POP    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
     -Xlinker --features=mutable-globals,sign-ext,simd128 -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS
     -Wl,-uFXN_WEBGL_POP'
   webGLModulesDirectory: 
