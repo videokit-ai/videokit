@@ -12,6 +12,7 @@
         "LinuxStandalone64",
         "CloudRendering",
         "macOSStandalone",
+        "VisionOS",
         "WebGL",
         "WindowsStandalone64"
     ],

@@ -16,7 +16,7 @@ namespace VideoKit.Internal {
     public static class VideoKit {
 
         public const string Assembly =
-        #if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        #if (UNITY_IOS || UNITY_VISIONOS || UNITY_WEBGL) && !UNITY_EDITOR
         @"__Internal";
         #else
         @"VideoKit";
@@ -831,7 +831,7 @@ namespace VideoKit.Internal {
 
 
         #region --iOS--
-        #if UNITY_IOS && !UNITY_EDITOR
+        #if (UNITY_IOS || UNITY_VISIONOS) && !UNITY_EDITOR
         [DllImport(Assembly, EntryPoint = @"VKTConfigureAudioSession")]
         public static extern void ConfigureAudioSession ();
         #else

@@ -16,10 +16,6 @@ namespace VideoKit.Editor.Build {
     using UnityEditor.Build.Reporting;
     using Internal;
 
-    #if UNITY_IOS
-    using UnityEditor.iOS.Xcode;
-    #endif
-
     internal sealed class VideoKitBuildHandler : IPreprocessBuildWithReport, IPostprocessBuildWithReport {
 
         #region --Operations--
@@ -62,7 +58,10 @@ namespace VideoKit.Editor.Build {
         }
 
         void IPostprocessBuildWithReport.OnPostprocessBuild (BuildReport report) {
-            if (report.summary.platform == BuildTarget.iOS)
+            if (
+                report.summary.platform == BuildTarget.iOS ||
+                report.summary.platform == BuildTarget.VisionOS
+            )
                 AddPhotoLibraryUsageDescription(report);
         }
         #endregion
@@ -77,6 +76,7 @@ namespace VideoKit.Editor.Build {
             [BuildTarget.LinuxHeadlessSimulation]   = @"linux",
             [BuildTarget.EmbeddedLinux]             = @"linux",
             [BuildTarget.StandaloneOSX]             = @"macos",
+            [BuildTarget.VisionOS]                  = @"visionos",
             [BuildTarget.WebGL]                     = @"web",
             [BuildTarget.StandaloneWindows]         = @"windows",
             [BuildTarget.StandaloneWindows64]       = @"windows",
@@ -109,21 +109,18 @@ namespace VideoKit.Editor.Build {
         }
 
         private static void AddPhotoLibraryUsageDescription (BuildReport report) {
-            #if UNITY_IOS
             var description = VideoKitProjectSettings.instance.photoLibraryUsageDescription;
             var outputPath = report.summary.outputPath;
-            if (!string.IsNullOrEmpty(description)) {
-                // Read plist
-                var plistPath = Path.Combine(outputPath, @"Info.plist");
-                var plist = new PlistDocument();
-                plist.ReadFromString(File.ReadAllText(plistPath));
-                // Add photo library descriptions
-                plist.root.SetString(@"NSPhotoLibraryUsageDescription", description);
-                plist.root.SetString(@"NSPhotoLibraryAddUsageDescription", description);
-                // Write to file
-                File.WriteAllText(plistPath, plist.WriteToString());
-            }
-            #endif
+            if (string.IsNullOrEmpty(description))
+                return;
+        #if UNITY_IOS || UNITY_VISIONOS
+            var plistPath = Path.Combine(outputPath, @"Info.plist");
+            var plist = new UnityEditor.iOS.Xcode.PlistDocument();
+            plist.ReadFromString(File.ReadAllText(plistPath));
+            plist.root.SetString(@"NSPhotoLibraryUsageDescription", description);
+            plist.root.SetString(@"NSPhotoLibraryAddUsageDescription", description);
+            File.WriteAllText(plistPath, plist.WriteToString());
+        #endif
         }
         #endregion
     }
