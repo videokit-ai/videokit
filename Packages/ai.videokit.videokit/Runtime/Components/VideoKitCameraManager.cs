@@ -9,6 +9,7 @@ namespace VideoKit {
 
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -274,11 +275,10 @@ namespace VideoKit {
             var fxn = VideoKitClient.Instance!.fxn;
             if (capabilities.HasFlag(Capabilities.HumanTexture)) {
                 try { await fxn.Predictions.Create(HumanTextureTag, new()); }
-                catch {
-                    System.IO.Directory.Delete( // CHECK // REMOVE
-                        System.IO.Path.Join(Application.persistentDataPath, @"fxn", @"predictors"),
-                        true
-                    );
+                catch { // CHECK // REMOVE
+                    var predictorCachePath = Path.Join(Application.persistentDataPath, @"fxn", @"predictors");
+                    if (Directory.Exists(predictorCachePath))
+                        Directory.Delete(predictorCachePath, recursive: true);
                 }
                 await fxn.Predictions.Create(HumanTextureTag, new());
             }
