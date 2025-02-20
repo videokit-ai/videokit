@@ -1,0 +1,509 @@
+//
+//  VKTPixelBuffer.h
+//  VideoKit
+//
+//  Created by Yusuf Olokoba on 3/05/2024.
+//  Copyright © 2025 Yusuf Olokoba. All rights reserved.
+//
+
+#pragma once
+
+#include <stdbool.h>
+#include <stdint.h>
+#include <VideoKit/VKTSampleBuffer.h>
+
+#pragma region --Enumerations--
+/*!
+ @enum VKTPixelFormat
+
+ @abstract Pixel buffer format.
+
+ @constant VKT_PIXEL_FORMAT_UNKNOWN
+ Unknown or invalid format.
+
+ @constant VKT_PIXEL_FORMAT_YCbCr420
+ YUV semi-planar format.
+
+ @constant VKT_PIXEL_FORMAT_RGBA8888
+ RGBA8888 interleaved format.
+
+ @constant VKT_PIXEL_FORMAT_BGRA8888
+ BGRA8888 interleaved format.
+ */
+enum VKTPixelFormat {
+    VKT_PIXEL_FORMAT_UNKNOWN     = 0,
+    VKT_PIXEL_FORMAT_YCbCr420    = 1,
+    VKT_PIXEL_FORMAT_RGBA8888    = 2,
+    VKT_PIXEL_FORMAT_BGRA8888    = 3,
+};
+typedef enum VKTPixelFormat VKTPixelFormat;
+
+/*!
+ @enum VKTPixelRotation
+
+ @abstract Pixel buffer rotation constant.
+
+ @constant VKT_PIXEL_ROTATION_0
+ No rotation.
+
+ @constant VKT_PIXEL_BUFFER_ROTATION_90
+ Rotate 90 degrees clockwise.
+
+ @constant VKT_PIXEL_BUFFER_ROTATION_180
+ Rotate 180 degrees clockwise.
+
+ @constant VKT_PIXEL_BUFFER_ROTATION_270
+ Rotate 270 degrees clockwise.
+*/
+enum VKTPixelRotation {
+    VKT_PIXEL_ROTATION_0     = 0,
+    VKT_PIXEL_ROTATION_90    = 3,
+    VKT_PIXEL_ROTATION_180   = 2,
+    VKT_PIXEL_ROTATION_270   = 1,
+};
+typedef enum VKTPixelRotation VKTPixelRotation;
+#pragma endregion
+
+
+#pragma region --Types--
+/*!
+ @typedef VKTPixelBuffer
+ 
+ @abstract Pixel buffer.
+
+ @discussion Pixel buffer.
+*/
+typedef VKTSampleBuffer VKTPixelBuffer;
+#pragma endregion
+
+
+#pragma region --Lifecycle--
+/*!
+ @function VKTPixelBufferCreate
+ 
+ @abstract Create a pixel buffer.
+ 
+ @discussion Create a pixel buffer.
+
+ @param width
+ Pixel buffer width.
+
+ @param height
+ Pixel buffer height.
+
+ @param format
+ Pixel buffer format.
+
+ @param data
+ Pixel data.
+
+ @param rowStride
+ Pixel buffer row stride.
+
+ @param timestamp
+ Pixel buffer timestamp in nanoseconds.
+
+ @param mirrored
+ Whether the pixel buffer is vertically mirrored.
+
+ @param pixelBuffer
+ Output pixel buffer.
+*/
+VKT_API VKTStatus VKTPixelBufferCreate (
+    int32_t width,
+    int32_t height,
+    VKTPixelFormat format,
+    const uint8_t* data,
+    int32_t rowStride,
+    int64_t timestamp,
+    bool mirrored,
+    VKTPixelBuffer** pixelBuffer
+);
+
+/*!
+ @function VKTPixelBufferCreatePlanar
+ 
+ @abstract Create a planar pixel buffer.
+ 
+ @discussion Create a planar pixel buffer.
+ 
+ @param width
+ Pixel buffer width.
+
+ @param height
+ Pixel buffer height.
+
+ @param format
+ Pixel buffer format.
+
+ @param planeCount
+ Pixel buffer plane count.
+
+ @param planeData
+ Pixel buffer plane data. The size of this array must be `planeCount`.
+
+ @param planeWidth
+ Pixel buffer plane widths. The size of this array must be `planeCount`.
+
+ @param planeHeight
+ Pixel buffer plane heights. The size of this array must be `planeCount`.
+
+ @param planeRowStride
+ Pixel buffer plane row strides. The size of this array must be `planeCount`.
+
+ @param planePixelStride
+ Pixel buffer plane pixel strides. The size of this array must be `planeCount`.
+
+ @param timestamp
+ Pixel buffer timestamp in nanoseconds.
+
+ @param mirrored
+ Whether the pixel buffer is vertically mirrored.
+
+ @param pixelBuffer
+ Output pixel buffer.
+*/
+VKT_API VKTStatus VKTPixelBufferCreatePlanar (
+    int32_t width,
+    int32_t height,
+    VKTPixelFormat format,
+    int32_t planeCount,
+    const uint8_t* const * planeData,
+    const int32_t* planeWidth,
+    const int32_t* planeHeight,
+    const int32_t* planeRowStride,
+    const int32_t* planePixelStride,
+    int64_t timestamp,
+    bool mirrored,
+    VKTPixelBuffer** pixelBuffer
+);
+#pragma endregion
+
+
+#pragma region --Operations--
+/*!
+ @function VKTPixelBufferGetData
+
+ @abstract Get the image data of a pixel buffer.
+
+ @discussion Get the image data of a pixel buffer
+ If the camera image uses a planar format, this will return `NULL`.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param data
+ Pixel data.
+*/
+VKT_API VKTStatus VKTPixelBufferGetData (
+    VKTPixelBuffer* pixelBuffer,
+    void** data
+);
+
+/*!
+ @function VKTPixelBufferGetDataSize
+
+ @abstract Get the image data size of a pixel buffer in bytes.
+
+ @discussion Get the image data size of a pixel buffer in bytes.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param size
+ Pixel buffer data size.
+*/
+VKT_API VKTStatus VKTPixelBufferGetDataSize (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t* size
+);
+
+/*!
+ @function VKTPixelBufferGetFormat
+
+ @abstract Get the format of a pixel buffer.
+
+ @discussion Get the format of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param format
+ Pixel buffer format.
+*/
+VKT_API VKTStatus VKTPixelBufferGetFormat (
+    VKTPixelBuffer* pixelBuffer,
+    VKTPixelFormat* format
+);
+
+/*!
+ @function VKTPixelBufferGetWidth
+
+ @abstract Get the width of a pixel buffer.
+
+ @discussion Get the width of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param width
+ Width of the pixel buffer.
+*/
+VKT_API VKTStatus VKTPixelBufferGetWidth (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t* width
+);
+
+/*!
+ @function VKTPixelBufferGetHeight
+
+ @abstract Get the height of a pixel buffer.
+
+ @discussion Get the height of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param height
+ Height of the pixel buffer.
+*/
+VKT_API VKTStatus VKTPixelBufferGetHeight (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t* height
+);
+
+/*!
+ @function VKTPixelBufferGetRowStride
+
+ @abstract Get the row stride of a pixel buffer in bytes.
+
+ @discussion Get the row stride of a pixel buffer in bytes.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param rowStride
+ Pixel buffer row stride in bytes.
+*/
+VKT_API VKTStatus VKTPixelBufferGetRowStride (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t* rowStride
+);
+
+/*!
+ @function VKTPixelBufferIsVerticallyMirrored
+
+ @abstract Whether the pixel buffer is vertically mirrored.
+
+ @discussion Whether the pixel buffer is vertically mirrored.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param isMirrored
+ Whether pixel buffer is vertically mirrored.
+*/
+VKT_API VKTStatus VKTPixelBufferIsVerticallyMirrored (
+    VKTPixelBuffer* pixelBuffer,
+    bool* isMirrored
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneCount
+
+ @abstract Get the plane count of a pixel buffer.
+
+ @discussion Get the plane count of a pixel buffer. If the buffer uses an interleaved format or only has a single plane, this function returns zero.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param planeCount
+ Pixel buffer plane count.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneCount (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t* planeCount
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneData
+
+ @abstract Get the plane data for a given plane of a pixel buffer.
+
+ @discussion Get the plane data for a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+
+ @param planeIdx
+ Plane index.
+
+ @param planeData
+ Pixel buffer plane data.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneData (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    void** planeData
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneDataSize
+
+ @abstract Get the plane data size of a given plane of a pixel buffer.
+
+ @discussion Get the plane data size of a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param planeIdx
+ Plane index.
+
+ @param dataSize
+ Pixel buffer plane data size.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneDataSize (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    int32_t* dataSize
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneWidth
+
+ @abstract Get the width of a given plane of a pixel buffer.
+
+ @discussion Get the width of a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param planeIdx
+ Plane index.
+
+ @param width
+ Plane width.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneWidth (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    int32_t* width
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneHeight
+
+ @abstract Get the height of a given plane of a pixel buffer.
+
+ @discussion Get the height of a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param planeIdx
+ Plane index.
+
+ @param height
+ Plane height.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneHeight (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    int32_t* height
+);
+
+/*!
+ @function VKTPixelBufferGetPlanePixelStride
+
+ @abstract Get the plane pixel stride for a given plane of a pixel buffer.
+
+ @discussion Get the plane pixel stride for a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param planeIdx
+ Plane index.
+
+ @param pixelStride
+ Plane pixel stride in bytes.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlanePixelStride (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    int32_t* pixelStride
+);
+
+/*!
+ @function VKTPixelBufferGetPlaneRowStride
+
+ @abstract Get the plane row stride for a given plane of a pixel buffer.
+
+ @discussion Get the plane row stride for a given plane of a pixel buffer.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param planeIdx
+ Plane index.
+
+ @param rowStride
+ Plane row stride in bytes.
+*/
+VKT_API VKTStatus VKTPixelBufferGetPlaneRowStride (
+    VKTPixelBuffer* pixelBuffer,
+    int32_t planeIdx,
+    int32_t* rowStride
+);
+
+/*!
+ @function VKTPixelBufferCopyMetadata
+
+ @abstract Copy the pixel buffer metadata.
+
+ @discussion Copy the pixel buffer metadata.
+ The metadata dictionary is specified as a JSON-encoded dictionary.
+
+ @param pixelBuffer
+ Pixel buffer.
+ 
+ @param metadata
+ Pixel buffer metadata as a JSON-encoded UTF-8 string.
+
+ @param size
+ Size of metadata buffer.
+*/
+VKT_API VKTStatus VKTPixelBufferCopyMetadata (
+    VKTPixelBuffer* pixelBuffer,
+    char* metadata,
+    int32_t size
+);
+#pragma endregion
+
+
+#pragma region --Conversions--
+/*!
+ @function VKTPixelBufferCopyTo
+
+ @abstract Copy the pixel buffer data to another pixel buffer.
+
+ @discussion Copy the pixel buffer data to another pixel buffer.
+ This handles pixel buffer format conversions.
+
+ @param source
+ Source pixel buffer.
+ 
+ @param destination
+ Destination pixel buffer.
+
+ @param rotation
+ Rotation to apply when copying.
+*/
+VKT_API VKTStatus VKTPixelBufferCopyTo (
+    VKTPixelBuffer* source,
+    VKTPixelBuffer* destination,
+    VKTPixelRotation rotation
+);
+#pragma endregion

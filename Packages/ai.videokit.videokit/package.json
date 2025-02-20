@@ -1,11 +1,11 @@
 {
     "name": "ai.videokit.videokit",
-    "version": "0.0.23-alpha.15",
+    "version": "0.0.23-alpha.16",
     "displayName": "VideoKit",
     "description": "The cross-platform media solution for Unity Engine.",
     "unity": "2022.3",
     "dependencies": {
-        "ai.fxn.fxn3d": "0.0.35"
+        "ai.fxn.fxn3d": "0.0.37"
     },
     "keywords": [
         "unity3d",

@@ -215,7 +215,7 @@ namespace VideoKit {
         /// </summary>
         public ExposureMode exposureMode {
             get => device.GetCameraDeviceExposureMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceExposureMode(value);
+            set => device.SetCameraDeviceExposureMode(value).Throw();
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace VideoKit {
         /// </summary>
         public float exposureBias {
             get => device.GetCameraDeviceExposureBias(out var bias) == Status.Ok ? bias : default;
-            set => device.SetCameraDeviceExposureBias(value);
+            set => device.SetCameraDeviceExposureBias(value).Throw();
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace VideoKit {
         /// </summary>
         public FlashMode flashMode {
             get => device.GetCameraDeviceFlashMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceFlashMode(value);
+            set => device.SetCameraDeviceFlashMode(value).Throw();
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace VideoKit {
         /// </summary>
         public FocusMode focusMode {
             get => device.GetCameraDeviceFocusMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceFocusMode(value);
+            set => device.SetCameraDeviceFocusMode(value).Throw();
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace VideoKit {
         /// </summary>
         public TorchMode torchMode {
             get => device.GetCameraDeviceTorchMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceTorchMode(value);
+            set => device.SetCameraDeviceTorchMode(value).Throw();
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace VideoKit {
         /// </summary>
         public WhiteBalanceMode whiteBalanceMode {
             get => device.GetCameraDeviceWhiteBalanceMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceWhiteBalanceMode(value);
+            set => device.SetCameraDeviceWhiteBalanceMode(value).Throw();
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace VideoKit {
         /// </summary>
         public VideoStabilizationMode videoStabilizationMode {
             get => device.GetCameraDeviceVideoStabilizationMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceVideoStabilizationMode(value);
+            set => device.SetCameraDeviceVideoStabilizationMode(value).Throw();
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace VideoKit {
         /// </summary>
         public float zoomRatio {
             get => device.GetCameraDeviceZoomRatio(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceZoomRatio(value);
+            set => device.SetCameraDeviceZoomRatio(value).Throw();
         }
         #endregion
 
@@ -335,7 +335,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="duration">Exposure duration in seconds. MUST be in `exposureDurationRange`.</param>
         /// <param name="ISO">Sensor sensitivity ISO value. MUST be in `ISORange`.</param>
-        public void SetExposureDuration (float duration, float ISO) => device.SetCameraDeviceExposureDuration(duration, ISO);
+        public void SetExposureDuration (float duration, float ISO) => device.SetCameraDeviceExposureDuration(duration, ISO).Throw();
 
         /// <summary>
         /// Set the exposure point of interest.
@@ -343,7 +343,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetExposurePoint (float x, float y) => device.SetCameraDeviceExposurePoint(x, y);
+        public void SetExposurePoint (float x, float y) => device.SetCameraDeviceExposurePoint(x, y).Throw();
 
         /// <summary>
         /// Set the focus point of interest.
@@ -351,7 +351,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetFocusPoint (float x, float y) => device.SetCameraDeviceFocusPoint(x, y);
+        public void SetFocusPoint (float x, float y) => device.SetCameraDeviceFocusPoint(x, y).Throw();
         #endregion
 
 
@@ -370,7 +370,7 @@ namespace VideoKit {
         /// <param name="handler">Delegate to receive high-resolution photo. Note that this delegate is invoked on a dedicated thread.</param>
         public void CapturePhoto (Action<PixelBuffer> handler) {
             var handle = GCHandle.Alloc(handler, GCHandleType.Normal);
-            device.CapturePhoto(OnCapturePhoto, (IntPtr)handle);
+            device.CapturePhoto(OnCapturePhoto, (IntPtr)handle).Throw();
         }
         #endregion
 

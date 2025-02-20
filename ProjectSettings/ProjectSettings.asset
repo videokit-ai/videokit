@@ -169,6 +169,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: app.videokit.videokit
     Standalone: app.videokit.videokit
+    VisionOS: ai.videokit.videokit
     iPhone: app.videokit.videokit
   buildNumber:
     Bratwurst: 0

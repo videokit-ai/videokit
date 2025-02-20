@@ -24,7 +24,7 @@ PluginImporter:
         Exclude Editor: 1
         Exclude Linux64: 1
         Exclude OSXUniversal: 1
-        Exclude VisionOS: 1
+        Exclude VisionOS: 0
         Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
@@ -44,7 +44,7 @@ PluginImporter:
       settings:
         CPU: None
     VisionOS:
-      enabled: 0
+      enabled: 1
       settings:
         AddToEmbeddedBinaries: true
         CPU: ARM64
