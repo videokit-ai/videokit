@@ -592,11 +592,10 @@ namespace VideoKit {
                 await asset.SaveToCameraRoll();
             if (recordingAction.HasFlag(RecordingAction.Share))
                 await asset.Share();
-            if (recordingAction.HasFlag(RecordingAction.Playback) && asset.type == MediaType.Video) {
-                #if UNITY_IOS || UNITY_ANDROID
+        #if UNITY_ANDROID || UNITY_IOS || UNITY_VISIONOS
+            if (recordingAction.HasFlag(RecordingAction.Playback) && asset.type == MediaType.Video)
                 Handheld.PlayFullScreenMovie($"file://{asset.path}");
-                #endif
-            }
+        #endif
         }
 
         /// <summary>
