@@ -40,9 +40,6 @@ Add the following items to your Unity project's `Packages/manifest.json`:
 }
 ```
 
-> [!IMPORTANT]
-> VideoKit is still in alpha. As such, the C# API is expected to change a lot between releases.
-
 ## Retrieving your Access Key
 To use VideoKit, you will need to generate an access key. First, head over to [videokit.ai](https://videokit.ai) to create an account by logging in. Once you do, generate an access key:
 
