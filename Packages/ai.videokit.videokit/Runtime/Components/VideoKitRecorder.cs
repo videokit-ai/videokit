@@ -610,21 +610,19 @@ namespace VideoKit {
                 compressionQuality: 0.8f,
                 prefix: mediaPathPrefix
             );
-            var tcs = new TaskCompletionSource<MediaAsset>();
-            IDisposable? source = null;
-            source = CreateVideoInput(
-                recorder.width,
-                recorder.height,
-                async pixelBuffer => {
-                    recorder.Append(pixelBuffer);
-                    source!.Dispose();
-                    var sequenceAsset = await recorder.FinishWriting();
-                    var imageAsset = sequenceAsset.assets[0];
-                    tcs.SetResult(imageAsset);
-                }
-            );
-            var result = await tcs.Task;
-            return result;
+            {
+                var tcs = new TaskCompletionSource<bool>();
+                using var source = CreateVideoInput(recorder.width, recorder.height, pixelBuffer => {
+                    if (!tcs.Task.IsCompleted) {
+                        recorder.Append(pixelBuffer);
+                        tcs.SetResult(true);
+                    }
+                });
+                await tcs.Task;
+            }
+            var sequenceAsset = await recorder.FinishWriting();
+            var imageAsset = sequenceAsset.assets[0];
+            return imageAsset;
         }
         #endregion
 

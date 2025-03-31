@@ -1,4 +1,4 @@
-## 0.0.23
+## 1.0.0
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
 + Added experimental support for Apple Vision Pro (visionOS 2.1+).
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
