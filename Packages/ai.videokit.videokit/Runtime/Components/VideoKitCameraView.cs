@@ -133,9 +133,10 @@ namespace VideoKit.UI {
         public Texture2D? texture { get; private set; }
 
         /// <summary>
-        /// Get the camera preview rotation to become upright.
+        /// Get or set the camera preview rotation.
+        /// This is automatically reset when the component is enabled.
         /// </summary>
-        public PixelBuffer.Rotation rotation { get; private set; }
+        public PixelBuffer.Rotation rotation { get; set; }
 
         /// <summary>
         /// Event raised when a new pixel buffer is available.

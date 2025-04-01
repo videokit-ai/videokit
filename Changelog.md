@@ -14,6 +14,7 @@
 + Fixed `CameraDevice.StartRunning` method causing crash instead of throwing exception when devie is not supported on Windows (#126).
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
++ Updated `VideoKitCameraView.rotation` property to be writable, allowing for arbitrary preview orientations.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
 + Refactored `TextureSource.cropRect` field to `regionOfInterest`.
 + Refactored `VideoKitCameraView.exposureMode` field to `exposureGesture`.
