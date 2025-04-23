@@ -9,9 +9,7 @@ namespace VideoKit {
 
     using AOT;
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -109,11 +107,14 @@ namespace VideoKit {
         public virtual int channelCount => recorder.GetMediaRecorderChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
 
         /// <summary>
-        /// Check whether the media recorder supports appending sample buffers of the given type.
+        /// Whether the recorder supports appending pixel buffers.
         /// </summary>
-        /// <typeparam name="T">Sample buffer type.</typeparam>
-        /// <returns>Whether the media recorder supports appending sample buffers of the given type.</returns>
-        public virtual bool CanAppend<T> () where T : struct => CanAppend<T>(format);
+        public virtual bool canAppendPixelBuffer => recorder.CanAppendPixelBuffer(out var result).Throw() == Status.Ok && result;
+
+        /// <summary>
+        /// Whether the recorder supports appendind audio buffers.
+        /// </summary>
+        public virtual bool canAppendAudioBuffer => recorder.CanAppendAudioBuffer(out var result).Throw() == Status.Ok && result;
 
         /// <summary>
         /// Append a video frame to the recorder.
@@ -259,38 +260,19 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Check whether the media recorder supports appending sample buffers of the given type.
-        /// </summary>
-        /// <typeparam name="T">Sample buffer type.</typeparam>
-        /// <param name="format">Media recorder format.</param>
-        /// <returns>Whether the media recorder supports appending sample buffers of the given type.</returns>
-        public static bool CanAppend<T> (Format format) where T : struct => FormatSampleBufferSupportMatrix.TryGetValue(typeof(T), out var formats) && formats.Contains(format);
-
-        /// <summary>
         /// Check whether the current device supports recording to this format.
         /// </summary>
         /// <param name="format">Recording format.</param>
         /// <returns>Whether the current device supports recording to this format.</returns>
-        public static bool CanCreate (Format format) => VideoKit.IsMediaRecorderFormatSupported(format) == Status.Ok;
+        public static bool IsFormatSupported (Format format) => VideoKit.IsMediaRecorderFormatSupported(format) == Status.Ok;
         #endregion
 
 
         #region --Operations--
         private readonly IntPtr recorder;
         private static string directory = string.Empty;
-        private static readonly Dictionary<Type, Format[]> FormatSampleBufferSupportMatrix = new () {
-            [typeof(PixelBuffer)] = new [] {
-                Format.MP4, Format.HEVC, Format.WEBM,
-                Format.GIF, Format.JPEG, Format.AV1,
-                Format.ProRes4444
-            },
-            [typeof(AudioBuffer)] = new [] {
-                Format.MP4, Format.HEVC, Format.WEBM,
-                Format.WAV, Format.AV1, Format.ProRes4444
-            },
-        };
 
-        protected MediaRecorder (IntPtr recorder = default) => this.recorder = recorder;
+        protected MediaRecorder (IntPtr recorder) => this.recorder = recorder;
 
         public static implicit operator IntPtr (MediaRecorder recorder) => recorder.recorder;
 
@@ -298,7 +280,7 @@ namespace VideoKit {
 
         public static implicit operator Action<AudioBuffer> (MediaRecorder recorder) => recorder.Append;
 
-        private static string CreatePath (string? extension = null, string? prefix = null) {
+        protected static string CreatePath (string? extension = null, string? prefix = null) {
             // Create parent directory
             var parentDirectory = !string.IsNullOrEmpty(prefix) ? Path.Combine(directory, prefix) : directory;
             Directory.CreateDirectory(parentDirectory);

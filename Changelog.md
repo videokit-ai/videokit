@@ -1,6 +1,9 @@
 ## 1.0.0
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
 + Added experimental support for Apple Vision Pro (visionOS 2.1+).
++ Added `MediaRecorder.canAppendPixelBuffer` property to check whether the recorder supports appending pixel buffers.
++ Added `MediaRecorder.canAppendAudioBuffer` property to check whether the recorder supports appending audio buffers.
++ Added `VideoKitRecorder.Configuration` struct to access resolved recording configuration.
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
 + Added `VideoKitCameraView.OnPixelBuffer` event to listen for processed camera buffers to be displayed in the camera texture.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
@@ -15,6 +18,7 @@
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `VideoKitCameraView.rotation` property to be writable, allowing for arbitrary preview orientations.
++ Refactord `MediaRecorder.CanCreate` static method to `MediaRecorder.IsFormatSupported`.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
 + Refactored `TextureSource.cropRect` field to `regionOfInterest`.
 + Refactored `VideoKitCameraView.exposureMode` field to `exposureGesture`.

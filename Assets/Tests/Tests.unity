@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fffa95ffc0b4c7a87ce2d4c7fd1873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  format: 0
+  format: 6
   prepareOnAwake: 1
   videoMode: 1
   resolution: 7

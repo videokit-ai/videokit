@@ -388,10 +388,20 @@ namespace VideoKit.Internal {
             this IntPtr recorder,
             out int channelCount
         );
+        [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCanAppendPixelBuffer")]
+        public static extern unsafe Status CanAppendPixelBuffer (
+            this IntPtr recorder,
+            out bool result
+        );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderAppendPixelBuffer")]
         public static extern unsafe Status AppendPixelBuffer (
             this IntPtr recorder,
             IntPtr pixelBuffer
+        );
+        [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCanAppendAudioBuffer")]
+        public static extern unsafe Status CanAppendAudioBuffer (
+            this IntPtr recorder,
+            out bool result
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderAppendAudioBuffer")]
         public static extern unsafe Status AppendSampleBuffer (

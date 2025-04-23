@@ -15,9 +15,11 @@ Logs/
 
 # Function
 ProjectSettings/Function.asset
+UserSettings/Function.asset
 
 # VideoKit
 ProjectSettings/VideoKit.asset
+UserSettings/VideoKit.asset
 
 # Recordings
 recordings/

@@ -19,7 +19,6 @@ namespace VideoKit {
     using Sources;
     using UI;
     using MediaFormat = MediaRecorder.Format;
-    using MediaType = MediaAsset.MediaType;
 
     /// <summary>
     /// VideoKit recorder for recording videos.
@@ -233,6 +232,55 @@ namespace VideoKit {
         #endregion
 
 
+        #region --Types--
+        /// <summary>
+        /// Resolved recording configuration.
+        /// </summary>
+        public struct Configuration {
+            /// <summary>
+            /// Recording format.
+            /// </summary>
+            public MediaFormat foamt;
+            /// <summary>
+            /// Video width.
+            /// </summary>
+            public int width;
+            /// <summary>
+            /// Video height.
+            /// </summary>
+            public int height;
+            /// <summary>
+            /// Video frame rate.
+            /// </summary>
+            public float frameRate;
+            /// <summary>
+            /// Audio sample rate.
+            /// </summary>
+            public int sampleRate;
+            /// <summary>
+            /// Audio channel count.
+            /// </summary>
+            public int channelCount;
+            /// <summary>
+            /// Video bitrate in bits per second.
+            /// </summary>
+            public int videoBitRate;
+            /// <summary>
+            /// Video keyframe interval in seconds.
+            /// </summary>
+            public int keyframeInterval;
+            /// <summary>
+            /// Audio bitrate in bits per second.
+            /// </summary>
+            public int audioBitRate;
+            /// <summary>
+            /// Path prefix.
+            /// </summary>
+            public string recordingPathPrefix;
+        }
+        #endregion
+
+
         #region --Inspector--
         [Header(@"Format")]
         /// <summary>
@@ -393,12 +441,88 @@ namespace VideoKit {
         public int audioBitRate = 64_000;
 
         /// <summary>
+        /// Recorder factory when using a custom recorder.
+        /// Note that this variable takes precedence over the `format` when creating a recorder.
+        /// </summary>
+        public Func<Configuration, Task<MediaRecorder>>? recorderFactory;
+
+        /// <summary>
+        /// Resolved recording configuration.
+        /// </summary>
+        public Configuration configuration {
+            get {
+                var width = resolution switch {
+                    var _ when videoMode == 0   => 0,
+                    var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.width,
+                    Resolution._240xAuto        => 240,
+                    Resolution._320xAuto        => 320,
+                    Resolution._480xAuto        => 480,
+                    Resolution._640xAuto        => 640,
+                    Resolution._720xAuto        => 720,
+                    Resolution._1080xAuto       => 1080,
+                    Resolution._1280xAuto       => 1280,
+                    Resolution._1920xAuto       => 1920,
+                    Resolution._1440xAuto       => 1440,
+                    Resolution._2560xAuto       => 2560,
+                    Resolution._3840xAuto       => 3840,
+                    Resolution.Screen           => Screen.width >> 1 << 1,
+                    Resolution.HalfScreen       => Screen.width >> 2 << 1,
+                    Resolution.Custom           => customResolution.x,
+                    _                           => 1280,
+                };
+                var aspect = videoMode switch {
+                    VideoMode.Camera            => (float)Screen.width / Screen.height,
+                    VideoMode.Screen            => (float)Screen.width / Screen.height,
+                    VideoMode.Texture           => (float)texture!.width / texture!.height,
+                    _                           => 0f,
+                };
+                var height = resolution switch {
+                    var _ when videoMode == 0   => 0,
+                    var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.height,
+                    Resolution.Custom           => customResolution.y,
+                    Resolution.Screen           => Screen.height >> 1 << 1,
+                    Resolution.HalfScreen       => Screen.height >> 2 << 1,
+                    _                           => Mathf.RoundToInt(width / aspect) >> 1 << 1,
+                };
+                var frameRate = videoMode switch {
+                    var _ when format == MediaFormat.GIF    => _frameRate,
+                    VideoMode.CameraDevice                  => cameraView!.device!.frameRate,
+                    _                                       => 30,
+                };
+                var sampleRate = audioMode switch {
+                    AudioMode.AudioDevice       => audioManager?.device?.sampleRate ?? 0,
+                    AudioMode.AudioListener     => AudioSettings.outputSampleRate,
+                    AudioMode.AudioSource       => AudioSettings.outputSampleRate,
+                    _                           => 0,
+                };
+                var channelCount = audioMode switch {
+                    AudioMode.AudioDevice       => audioManager?.device?.channelCount ?? 0,
+                    AudioMode.AudioListener     => (int)AudioSettings.speakerMode,
+                    AudioMode.AudioSource       => (int)AudioSettings.speakerMode,
+                    _                           => 0,
+                };
+                return new Configuration {
+                    width = width,
+                    height = height,
+                    frameRate = frameRate,
+                    sampleRate = sampleRate,
+                    channelCount = channelCount,
+                    videoBitRate = videoBitRate,
+                    keyframeInterval = keyframeInterval,
+                    audioBitRate = audioBitRate,
+                    recordingPathPrefix = mediaPathPrefix,
+                };
+            }
+        }
+
+        /// <summary>
         /// Recording watermark.
         /// </summary>
         public Texture? watermark {
-            get => textureSource?.watermark ?? _watermark;
+            get => GetTextureSource(videoInput)?.watermark ?? _watermark;
             set {
                 _watermark = value;
+                var textureSource = GetTextureSource(videoInput);
                 if (textureSource != null)
                     textureSource.watermark = value;
             }
@@ -409,8 +533,12 @@ namespace VideoKit {
         /// </summary>
         public Rect watermarkRect {
             get {
+                var textureSource = GetTextureSource(videoInput);
                 if (textureSource == null)
                     return _watermarkRect;
+                var config = configuration;
+                var width = recorder?.width ?? config.width;
+                var height = recorder?.height ?? config.height;
                 var rect = textureSource!.watermarkRect;
                 return new(
                     rect.x / width,
@@ -421,6 +549,10 @@ namespace VideoKit {
             }
             set {
                 _watermarkRect = value;
+                var config = configuration;
+                var width = recorder?.width ?? config.width;
+                var height = recorder?.height ?? config.height;
+                var textureSource = GetTextureSource(videoInput);
                 if (textureSource != null)
                     textureSource.watermarkRect = new(
                         Mathf.RoundToInt(value.x * width),
@@ -491,23 +623,33 @@ namespace VideoKit {
                 Debug.LogWarning(@"VideoKitRecorder will use WEBM format on WebGL because MP4 is not supported");
             }
             // Create recorder
-            recorder = await MediaRecorder.Create(
-                format,
-                width: width,
-                height: height,
-                frameRate: frameRate,
-                sampleRate: sampleRate,
-                channelCount: channelCount,
-                videoBitRate: videoBitRate,
-                keyframeInterval: keyframeInterval,
-                compressionQuality: 0.8f,
-                audioBitRate: audioBitRate,
-                prefix: mediaPathPrefix
-            );
+            var config = configuration;
+            if (recorderFactory != null)
+                recorder = await recorderFactory(config);
+            else
+                recorder = await MediaRecorder.Create(
+                    format,
+                    width: config.width,
+                    height: config.height,
+                    frameRate: config.frameRate,
+                    sampleRate: config.sampleRate,
+                    channelCount: config.channelCount,
+                    videoBitRate: config.videoBitRate,
+                    keyframeInterval: config.keyframeInterval,
+                    compressionQuality: 0.8f,
+                    audioBitRate: config.audioBitRate,
+                    prefix: config.recordingPathPrefix
+                );
             // Create inputs
             clock = new RealtimeClock();
-            videoInput = CreateVideoInput(recorder!.width, recorder.height, recorder.Append);
-            audioInput = CreateAudioInput();
+            videoInput = recorder.canAppendPixelBuffer ? CreateVideoInput(recorder.width, recorder.height, recorder.Append) : null;
+            audioInput = recorder.canAppendAudioBuffer ? CreateAudioInput(recorder.Append) : null;
+            // Apply watermark
+            var textureSource = GetTextureSource(videoInput);
+            if (textureSource != null) {
+                textureSource.watermark = watermark;
+                textureSource.watermarkRect = CreateWatermarkRect(recorder.width, recorder.height);
+            }
         }
 
         /// <summary>
@@ -542,6 +684,11 @@ namespace VideoKit {
                 Debug.LogError(@"Cannot resume recording because the recording session is not paused");
                 return;
             }
+            // Check recorder
+            if (recorder == null) {
+                Debug.LogError(@"Cannot resume recording because the recording session is invalid");
+                return;
+            }
             // Check active
             if (!isActiveAndEnabled) {
                 Debug.LogError(@"Cannot resume recording because component is disabled");
@@ -553,8 +700,14 @@ namespace VideoKit {
             // Unpause clock
             clock!.paused = false;
             // Create inputs
-            videoInput = CreateVideoInput(recorder!.width, recorder.height, recorder.Append);
-            audioInput = CreateAudioInput();
+            videoInput = recorder.canAppendPixelBuffer ? CreateVideoInput(recorder.width, recorder.height, recorder.Append) : null;
+            audioInput = recorder.canAppendAudioBuffer ? CreateAudioInput(recorder.Append) : null;
+            // Apply watermark
+            var textureSource = GetTextureSource(videoInput);
+            if (textureSource != null) {
+                textureSource.watermark = watermark;
+                textureSource.watermarkRect = CreateWatermarkRect(recorder.width, recorder.height);
+            }
         }
 
         /// <summary>
@@ -603,21 +756,27 @@ namespace VideoKit {
         /// </summary>
         /// <returns>Screenshot image asset.</returns>
         public async Task<MediaAsset> CaptureScreenshot () {
+            var config = configuration;
             var recorder = await MediaRecorder.Create(
                 MediaFormat.JPEG,
-                width,
-                height,
+                config.width,
+                config.height,
                 compressionQuality: 0.8f,
-                prefix: mediaPathPrefix
+                prefix: config.recordingPathPrefix
             );
             {
                 var tcs = new TaskCompletionSource<bool>();
                 using var source = CreateVideoInput(recorder.width, recorder.height, pixelBuffer => {
-                    if (!tcs.Task.IsCompleted) {
-                        recorder.Append(pixelBuffer);
-                        tcs.SetResult(true);
-                    }
+                    if (tcs.Task.IsCompleted)
+                        return;
+                    recorder.Append(pixelBuffer);
+                    tcs.SetResult(true);
                 });
+                var textureSource = GetTextureSource(source);
+                if (textureSource != null) {
+                    textureSource.watermark = watermark;
+                    textureSource.watermarkRect = CreateWatermarkRect(recorder.width, recorder.height);
+                }
                 await tcs.Task;
             }
             var sequenceAsset = await recorder.FinishWriting();
@@ -632,69 +791,6 @@ namespace VideoKit {
         private RealtimeClock? clock;
         private IDisposable? videoInput;
         private IDisposable? audioInput;
-
-        private int width               => resolution switch {
-            var _ when videoMode == 0   => 0,
-            var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.width,
-            Resolution._240xAuto        => 240,
-            Resolution._320xAuto        => 320,
-            Resolution._480xAuto        => 480,
-            Resolution._640xAuto        => 640,
-            Resolution._720xAuto        => 720,
-            Resolution._1080xAuto       => 1080,
-            Resolution._1280xAuto       => 1280,
-            Resolution._1920xAuto       => 1920,
-            Resolution._1440xAuto       => 1440,
-            Resolution._2560xAuto       => 2560,
-            Resolution._3840xAuto       => 3840,
-            Resolution.Screen           => Screen.width >> 1 << 1,
-            Resolution.HalfScreen       => Screen.width >> 2 << 1,
-            Resolution.Custom           => customResolution.x,
-            _                           => 1280,
-        };
-
-        private float aspect            => videoMode switch {
-            VideoMode.Camera            => (float)Screen.width / Screen.height,
-            VideoMode.Screen            => (float)Screen.width / Screen.height,
-            VideoMode.Texture           => (float)texture!.width / texture!.height,
-            _                           => 0f,
-        };
-
-        private int height              => resolution switch {
-            var _ when videoMode == 0   => 0,
-            var _ when videoMode == VideoMode.CameraDevice => cameraView!.texture!.height,
-            Resolution.Custom           => customResolution.y,
-            Resolution.Screen           => Screen.height >> 1 << 1,
-            Resolution.HalfScreen       => Screen.height >> 2 << 1,
-            _                           => Mathf.RoundToInt(width / aspect) >> 1 << 1,
-        };
-
-        private float frameRate => videoMode switch {
-            var _ when format == MediaFormat.GIF    => _frameRate,
-            VideoMode.CameraDevice                  => cameraView!.device!.frameRate,
-            _                                       => 30,
-        };
-
-        private int sampleRate          => audioMode switch {
-            AudioMode.AudioDevice       => audioManager?.device?.sampleRate ?? 0,
-            AudioMode.AudioListener     => AudioSettings.outputSampleRate,
-            AudioMode.AudioSource       => AudioSettings.outputSampleRate,
-            _                           => 0,
-        };
-
-        private int channelCount        => audioMode switch {
-            AudioMode.AudioDevice       => audioManager?.device?.channelCount ?? 0,
-            AudioMode.AudioListener     => (int)AudioSettings.speakerMode,
-            AudioMode.AudioSource       => (int)AudioSettings.speakerMode,
-            _                           => 0,
-        };
-
-        private TextureSource? textureSource => videoInput switch {
-            CameraSource cameraSource   => cameraSource.textureSource,
-            ScreenSource screenSource   => screenSource.textureSource,
-            TextureSource textureSource => textureSource,
-            _                           => null,
-        };
 
         private void Reset () {
             cameras = Camera.allCameras;
@@ -713,48 +809,18 @@ namespace VideoKit {
                 StopRecording();
         }
 
-        private IDisposable? CreateVideoInput (
-            int width,
-            int height,
-            Action<PixelBuffer> handler
-        ) {
-            if (!MediaRecorder.CanAppend<PixelBuffer>(format))
-                return null;
-            if (videoMode == VideoMode.Screen) {
-                var source = new ScreenSource(width, height, handler, clock) {
-                    frameSkip = frameSkip
-                };
-                source.textureSource.watermark = watermark;
-                source.textureSource.watermarkRect = CreateWatermarkRect(width, height);
-                return source;
-            } else if (videoMode == VideoMode.Camera) {
-                var source = new CameraSource(width, height, cameras, handler, clock) {
-                    frameSkip = frameSkip
-                };
-                source.textureSource.watermark = watermark;
-                source.textureSource.watermarkRect = CreateWatermarkRect(width, height);
-                return source;
-            } else if (videoMode == VideoMode.Texture) {
-                var source = new TextureSource(width, height, handler, clock) {
-                    texture = texture,
-                    frameSkip = frameSkip
-                };
-                source.watermark = watermark;
-                source.watermarkRect = CreateWatermarkRect(width, height);
-                return source;
-            } else if (videoMode == VideoMode.CameraDevice) // No support for watermarking yet
-                return new CameraViewSource(cameraView!, handler, clock) {
-                    frameSkip = frameSkip
-                };
-            else
-                return null;
-        }
+        private IDisposable? CreateVideoInput (int width, int height, Action<PixelBuffer> handler) => videoMode switch {
+            VideoMode.Screen        => new ScreenSource(width, height, handler, clock) { frameSkip = frameSkip },
+            VideoMode.Camera        => new CameraSource(width, height, cameras, handler, clock) { frameSkip = frameSkip },
+            VideoMode.Texture       => new TextureSource(width, height, handler, clock) { texture = texture, frameSkip = frameSkip },
+            VideoMode.CameraDevice  => new CameraViewSource(cameraView!, handler, clock) { frameSkip = frameSkip },
+            _ => null,
+        };
 
-        private IDisposable? CreateAudioInput () => audioMode switch {
-            var _ when !MediaRecorder.CanAppend<AudioBuffer>(format) => null,
-            AudioMode.AudioDevice   => new AudioManagerSource(audioManager!, recorder!, clock),
-            AudioMode.AudioListener => new AudioComponentSource(audioListener!, recorder!, clock),
-            AudioMode.AudioSource   => new AudioComponentSource(audioSource!, recorder!, clock),
+        private IDisposable? CreateAudioInput (Action<AudioBuffer> handler) =>  audioMode switch {
+            AudioMode.AudioDevice   => new AudioManagerSource(audioManager!, handler, clock),
+            AudioMode.AudioListener => new AudioComponentSource(audioListener!, handler, clock),
+            AudioMode.AudioSource   => new AudioComponentSource(audioSource!, handler, clock),
             _                       => null,
         };
         #endregion
@@ -825,6 +891,13 @@ namespace VideoKit {
                 File.Delete(asset.path);
             } catch { }
         }
+
+        private static TextureSource? GetTextureSource (IDisposable? videoInput) => videoInput switch {
+            CameraSource cameraSource   => cameraSource.textureSource,
+            ScreenSource screenSource   => screenSource.textureSource,
+            TextureSource textureSource => textureSource,
+            _                           => null,
+        };
         #endregion
     }
 }
