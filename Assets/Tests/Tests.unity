@@ -988,7 +988,7 @@ MonoBehaviour:
   _facing: 1
   facingRequired: 0
   resolution: 3
-  frameRate: 240
+  frameRate: 0
   focusMode: 0
   exposureMode: 0
 --- !u!114 &1493259191
@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fffa95ffc0b4c7a87ce2d4c7fd1873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  format: 6
+  format: 0
   prepareOnAwake: 1
   videoMode: 1
   resolution: 7
@@ -1022,12 +1022,12 @@ MonoBehaviour:
     y: 0
     width: 0.3
     height: 0.3
-  audioMode: 0
+  audioMode: 2
   audioManager: {fileID: 1493259188}
   configureAudioManager: 1
   audioListener: {fileID: 963194226}
   audioSource: {fileID: 1493259196}
-  recordingAction: 4
+  recordingAction: 0
   OnRecordingCompleted:
     m_PersistentCalls:
       m_Calls: []

@@ -203,6 +203,24 @@ VKT_API VKTStatus VKTMediaRecorderGetChannelCount (
 );
 
 /*!
+ @function VKTMediaRecorderCanAppendPixelBuffer
+
+ @abstract Whether the recorder supports appending pixel buffers.
+
+ @discussion Whether the recorder supports appending pixel buffers.
+ 
+ @param recorder
+ Media recorder.
+
+ @param result
+ Result.
+*/
+VKT_API VKTStatus VKTMediaRecorderCanAppendPixelBuffer (
+    VKTMediaRecorder* recorder,
+    bool* result
+);
+
+/*!
  @function VKTMediaRecorderAppendPixelBuffer
 
  @abstract Append a video frame to the recording from a pixel buffer.
@@ -214,10 +232,28 @@ VKT_API VKTStatus VKTMediaRecorderGetChannelCount (
 
  @param pixelBuffer
  Pixel buffer.
- */
+*/
 VKT_API VKTStatus VKTMediaRecorderAppendPixelBuffer (
     VKTMediaRecorder* recorder,
     VKTPixelBuffer* pixelBuffer
+);
+
+/*!
+ @function VKTMediaRecorderCanAppendAudioBuffer
+
+ @abstract Whether the recorder supports appending audio buffers.
+
+ @discussion Whether the recorder supports appending audio buffers.
+ 
+ @param recorder
+ Media recorder.
+
+ @param result
+ Result.
+*/
+VKT_API VKTStatus VKTMediaRecorderCanAppendAudioBuffer (
+    VKTMediaRecorder* recorder,
+    bool* result
 );
 
 /*!

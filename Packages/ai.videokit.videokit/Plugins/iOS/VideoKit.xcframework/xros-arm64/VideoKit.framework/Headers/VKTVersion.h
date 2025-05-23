@@ -10,9 +10,9 @@
 
 #include <VideoKit/VKTStatus.h>
 
-#define VKT_VERSION_MAJOR 0
+#define VKT_VERSION_MAJOR 1
 #define VKT_VERSION_MINOR 0
-#define VKT_VERSION_PATCH 23
+#define VKT_VERSION_PATCH 0
 
 /*!
  @function VKTGetVersion
