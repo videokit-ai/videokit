@@ -932,6 +932,7 @@ GameObject:
   - component: {fileID: 1493259201}
   - component: {fileID: 1493259203}
   - component: {fileID: 1493259207}
+  - component: {fileID: 1493259208}
   - component: {fileID: 1493259196}
   m_Layer: 0
   m_Name: Tests
@@ -1003,7 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fffa95ffc0b4c7a87ce2d4c7fd1873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  format: 0
+  format: 2
   prepareOnAwake: 1
   videoMode: 1
   resolution: 7
@@ -1022,15 +1023,27 @@ MonoBehaviour:
     y: 0
     width: 0.3
     height: 0.3
-  audioMode: 2
+  audioMode: 0
   audioManager: {fileID: 1493259188}
   configureAudioManager: 1
   audioListener: {fileID: 963194226}
   audioSource: {fileID: 1493259196}
-  recordingAction: 0
+  recordingAction: 32
   OnRecordingCompleted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1493259208}
+        m_TargetAssemblyTypeName: VideoKit.Tests.VideoRecordingHandler, VideoKit.Tests.Runtime
+        m_MethodName: OnRecordingCompleted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   mediaPathPrefix: recordings
   videoBitRate: 20000000
   keyframeInterval: 2
@@ -1285,6 +1298,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 1493259190}
+--- !u!114 &1493259208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c95d80210b7ca4744a07783604263ce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1553569355
 GameObject:
   m_ObjectHideFlags: 0

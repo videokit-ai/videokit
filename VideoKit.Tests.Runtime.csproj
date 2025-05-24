@@ -78,6 +78,7 @@
     <Compile Include="Assets/Tests/Runtime/HumanTextureTest.cs" />
     <Compile Include="Assets/Tests/Runtime/MultiCameraDeviceEnumeratTest.cs" />
     <Compile Include="Assets/Tests/Runtime/MediaAssetFromSpeechPromptTest.cs" />
+    <Compile Include="Assets/Tests/Runtime/VideoRecordingHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Tests/Runtime/VideoKit.Tests.Runtime.asmdef" />

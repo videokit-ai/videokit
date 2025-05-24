@@ -19,7 +19,6 @@ namespace VideoKit {
     using Sources;
     using UI;
     using MediaFormat = MediaRecorder.Format;
-    using MediaType = MediaAsset.MediaType;
 
     /// <summary>
     /// VideoKit recorder for recording videos.

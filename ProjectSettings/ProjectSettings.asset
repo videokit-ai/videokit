@@ -146,8 +146,6 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 138b84dd2bf5345ddb15b2ca59a4072c, type: 2}
-  - {fileID: 11400000, guid: e7d555e1eb95b451588e327ca4726625, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -603,7 +601,7 @@ PlayerSettings:
     m_Formats: 00000000
   - serializedVersion: 3
     m_BuildTarget: WebGL
-    m_Formats: 00000000
+    m_Formats: 05000000
   - serializedVersion: 3
     m_BuildTarget: iOS
     m_Formats: 03000000
@@ -851,7 +849,7 @@ PlayerSettings:
   webGLDataCaching: 1
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: '                                                                                                                                                                                                        
-    -Wl,-uVKT_WEBGL_PUSH -Wl,-uVKT_WEBGL_POP    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
+    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
     -Xlinker --features=mutable-globals,sign-ext,simd128 -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS
     -Wl,-uFXN_WEBGL_POP'
   webGLModulesDirectory: 
