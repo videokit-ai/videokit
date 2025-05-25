@@ -746,7 +746,7 @@ namespace VideoKit {
             if (recordingAction.HasFlag(RecordingAction.Share))
                 await asset.Share();
         #if UNITY_ANDROID || UNITY_IOS || UNITY_VISIONOS
-            if (recordingAction.HasFlag(RecordingAction.Playback) && asset.type == MediaType.Video)
+            if (recordingAction.HasFlag(RecordingAction.Playback) && asset.type == MediaAsset.MediaType.Video)
                 Handheld.PlayFullScreenMovie($"file://{asset.path}");
         #endif
         }
