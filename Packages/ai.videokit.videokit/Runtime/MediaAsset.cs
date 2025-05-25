@@ -18,11 +18,9 @@ namespace VideoKit {
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
-    using Function;
     using Function.Types;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
-    using Newtonsoft.Json.Linq;
     using NJsonSchema;
     using NJsonSchema.Generation;
     using Internal;
@@ -411,11 +409,11 @@ namespace VideoKit {
                     (IntPtr)handle
                 ).Throw();
             } catch (NotImplementedException) {
-                handle.Free();
                 tcs.SetResult(null);
             } catch (Exception ex) {
-                handle.Free();
                 tcs.SetException(ex);
+            } finally {
+                handle.Free();
             }
             // Return
             return tcs.Task;
@@ -440,11 +438,11 @@ namespace VideoKit {
                     (IntPtr)handle
                 ).Throw();
             } catch (NotImplementedException) {
-                handle.Free();
                 tcs.SetResult(false);
             } catch (Exception ex) {
-                handle.Free();
                 tcs.SetException(ex);
+            } finally {
+                handle.Free();
             }
             // Return
             return tcs.Task;
@@ -458,7 +456,7 @@ namespace VideoKit {
         /// </summary>
         /// <typeparam name="T">Structure to parse into.</typeparam>
         /// <returns>Parsed structure.</returns>
-        public async Task<T> Parse<T> () {
+        internal async Task<T> Parse<T> () {
             // Check
             if (type != MediaType.Text)
                 throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
@@ -479,7 +477,7 @@ namespace VideoKit {
         /// <summary>
         /// Transcribe the audio asset by performing speech-to-text.
         /// </summary>
-        public async Task<string> Transcribe () {
+        internal async Task<string> Transcribe () {
             // Check type
             if (type != MediaType.Audio)
                 throw new InvalidOperationException($"Cannot caption media asset because asset is not an audio asset");

@@ -7,6 +7,7 @@
 + Added `VideoKitCameraManager.facingRequired` field to require a camera device with the requested facing instead of using a fallback camera device.
 + Added `VideoKitCameraView.OnPixelBuffer` event to listen for processed camera buffers to be displayed in the camera texture.
 + Added support for frame skipping in `VideoKitRecorder` when `videoMode` is set to `VideoMode.CameraDevice`.
++ Added support for WebAssembly 2023 in Unity 6.1+.
 + Improved camera streaming performance especially when streaming with high frame rate or with human texture.
 + Fixed `VideoKitCameraManager` failing to start camera preview when `HumanTexture` capability is enabled on Android (#161).
 + Fixed watermarks not being applied when using `TextureSource.Append` method (#149).
