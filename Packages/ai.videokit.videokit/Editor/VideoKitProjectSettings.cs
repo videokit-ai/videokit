@@ -17,7 +17,7 @@ namespace VideoKit.Editor {
     /// <summary>
     /// VideoKit settings for the current Unity project.
     /// </summary>
-    [FilePath(@"UserSettings/VideoKit.asset", FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(@"ProjectSettings/VideoKit.asset", FilePathAttribute.Location.ProjectFolder)]
     internal sealed class VideoKitProjectSettings : ScriptableSingleton<VideoKitProjectSettings> {
 
         #region --Client API--
