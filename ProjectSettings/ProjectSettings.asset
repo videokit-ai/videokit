@@ -849,9 +849,8 @@ PlayerSettings:
   webGLDataCaching: 1
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: '                                                                                                                                                                                                        
-    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT
-    -Xlinker --features=mutable-globals,sign-ext,simd128 -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS
-    -Wl,-uFXN_WEBGL_POP'
+    -Wl,-uFXN_WEBGL_PUSH -Wl,-uFXN_WEBGL_INIT -Xlinker --features=mutable-globals,sign-ext,simd128
+    -lembind -sEXTRA_EXPORTED_RUNTIME_METHODS=FS -Wl,-uFXN_WEBGL_POP'
   webGLModulesDirectory: 
   webGLTemplate: APPLICATION:Default
   webGLAnalyzeBuildSize: 0
