@@ -6,9 +6,10 @@ Logs/
 .utmp/
 
 # IDE
-.vscode/
+.vscode/*
 .gradle/
 .vs/
+!.vscode/settings.json
 
 # Env
 .env
