@@ -17,6 +17,7 @@
 + Fixed missing native library errors in Xcode when building universal macOS binary (#154).
 + Fixed human texture predictor embedding errors causing Unity build to fail (#156).
 + Fixed `CameraDevice.StartRunning` method causing crash instead of throwing exception when devie is not supported on Windows (#126).
++ Fixed segmentation fault when appending large `AudioBuffer` to a WAV `MediaRecorder` on Android (#182).
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `VideoKitCameraView.rotation` property to be writable, allowing for arbitrary preview orientations.

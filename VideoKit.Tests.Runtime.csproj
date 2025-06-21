@@ -71,6 +71,7 @@
     <Compile Include="Assets/Tests/Runtime/MediaAssetShareTest.cs" />
     <Compile Include="Assets/Tests/Runtime/AudioDeviceEnumerateTest.cs" />
     <Compile Include="Assets/Tests/Runtime/PixelBufferReadTest.cs" />
+    <Compile Include="Assets/Tests/Runtime/MediaAssetFromAudioClipTest.cs" />
     <Compile Include="Assets/Tests/Runtime/CameraDeviceEnumerateTest.cs" />
     <Compile Include="Assets/Tests/Runtime/RecordTextureDataTest.cs" />
     <Compile Include="Assets/Tests/Runtime/MediaAssetCaptionToStructureTest.cs" />
