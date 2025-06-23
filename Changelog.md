@@ -18,6 +18,7 @@
 + Fixed human texture predictor embedding errors causing Unity build to fail (#156).
 + Fixed `CameraDevice.StartRunning` method causing crash instead of throwing exception when devie is not supported on Windows (#126).
 + Fixed segmentation fault when appending large `AudioBuffer` to a WAV `MediaRecorder` on Android (#182).
++ Fixed `CameraDevice.onDisconnected` event not being invoked on Windows (#184).
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `VideoKitCameraView.rotation` property to be writable, allowing for arbitrary preview orientations.
