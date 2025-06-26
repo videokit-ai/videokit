@@ -1,3 +1,6 @@
+## 1.0.1
+*INCOMPLETE*
+
 ## 1.0.0
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
 + Added experimental support for Apple Vision Pro (visionOS 2.1+).
@@ -22,7 +25,7 @@
 + Updated `MediaAsset.Share` method to return `null` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `MediaAsset.SaveToCameraRoll` method to return `false` instead of throw a `NotImplementedException` on platforms where it is not supported.
 + Updated `VideoKitCameraView.rotation` property to be writable, allowing for arbitrary preview orientations.
-+ Refactord `MediaRecorder.CanCreate` static method to `MediaRecorder.IsFormatSupported`.
++ Refactored `MediaRecorder.CanCreate` static method to `MediaRecorder.IsFormatSupported`.
 + Refactored `AudioBuffer.sampleBuffer` field to `AudioBuffer.data`.
 + Refactored `TextureSource.cropRect` field to `regionOfInterest`.
 + Refactored `VideoKitCameraView.exposureMode` field to `exposureGesture`.

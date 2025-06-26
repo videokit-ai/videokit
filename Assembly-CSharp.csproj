@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Assets/Scripts/Oscillate.cs" />
     <Compile Include="Assets/Samples/record-image-sequence/RecordImageSequence.cs" />
+    <Compile Include="Assets/Samples/replay-buffer/ReplayBuffer.cs" />
     <Compile Include="Assets/Samples/slow-motion-capture/SlowMotionCapture.cs" />
     <Compile Include="Assets/Samples/trim-video/TrimVideoSample.cs" />
     <Compile Include="Assets/Samples/photo-capture/PhotoCaptureSample.cs" />
