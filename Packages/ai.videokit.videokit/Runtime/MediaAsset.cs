@@ -184,7 +184,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="path">Path to media file.</param>
         /// <returns>Media asset.</returns>
-        public static Task<MediaAsset> FromFile (string path) {
+        public static Task<MediaAsset> FromFile(string path) {
             var tcs = new TaskCompletionSource<MediaAsset>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
@@ -201,7 +201,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="texture">Texture.</param>
         /// <returns>Image asset.</returns>
-        public static Task<MediaAsset> FromTexture (Texture2D texture) {
+        public static Task<MediaAsset> FromTexture(Texture2D texture) {
             // Check
             if (texture == null)
                 return Task.FromException<MediaAsset>(new ArgumentNullException(nameof(texture)));
@@ -224,7 +224,7 @@ namespace VideoKit {
         /// <param name="clip">Audio clip.</param>
         /// <param name="format">Media format used to encode the audio.</param>
         /// <returns>Audio asset.</returns>
-        public static async Task<MediaAsset> FromAudioClip (
+        public static async Task<MediaAsset> FromAudioClip(
             AudioClip clip,
             MediaRecorder.Format format = MediaRecorder.Format.WAV
         ) {
@@ -249,7 +249,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="text">Text.</param>
         /// <returns>Text asset.</returns>
-        public static Task<MediaAsset> FromText (string text) {
+        public static Task<MediaAsset> FromText(string text) {
             // Write to file
             var name = Guid.NewGuid().ToString("N");
             var path = Path.Combine(Application.temporaryCachePath, $"{name}.txt");
@@ -264,7 +264,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="type">Desired asset type.</param>
         /// <returns>Media asset.</returns>
-        public static Task<MediaAsset?> FromCameraRoll (MediaType type) {
+        public static Task<MediaAsset?> FromCameraRoll(MediaType type) {
             var tcs = new TaskCompletionSource<MediaAsset?>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
@@ -281,7 +281,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="path">Relative file path in `StreamingAssets`.</param>
         /// <returns>Media asset.</returns>
-        public static async Task<MediaAsset?> FromStreamingAssets (string path) {
+        public static async Task<MediaAsset?> FromStreamingAssets(string path) {
             // Get absolute path
             var absolutePath = await StreamingAssetsToAbsolutePath(path);
             if (absolutePath == null)
@@ -296,7 +296,7 @@ namespace VideoKit {
         /// <param name="prompt">Text to synthesize speech from.</param>
         /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
         /// <returns>Generated audio asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedSpeech ( // INCOMPLETE
+        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
             string prompt,
             NarrationVoice voice = 0
         ) {
@@ -310,7 +310,7 @@ namespace VideoKit {
         /// <param name="desiredWidth">Desired image width. NOTE: The generated image is not guaranteed to have this width.</param>
         /// <param name="desiredHeight">Desired image height. NOTE: The generated image is not guaranteed to have this height.</param>
         /// <returns>Generated image asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedImage ( // INCOMPLETE
+        internal static async Task<MediaAsset> FromGeneratedImage( // INCOMPLETE
             string prompt,
             int desiredWidth = 1024,
             int desiredHeight = 1024
@@ -327,7 +327,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="time">Time to extract the texture from. This is only supported for video assets.</param>
         /// <returns>Texture.</returns>
-        public async Task<Texture2D> ToTexture (float time = 0f) {
+        public async Task<Texture2D> ToTexture(float time = 0f) {
             // Check video
             if (type == MediaType.Video)
                 throw new NotImplementedException(@"`MediaAsset.ToTexture` is not yet supported for video assets");
@@ -351,7 +351,7 @@ namespace VideoKit {
         /// Create an audio clip from the media asset.
         /// </summary>
         /// <returns>Audio clip.</returns>
-        public async Task<AudioClip> ToAudioClip () { // CHECK // WAV only for now
+        public async Task<AudioClip> ToAudioClip() { // CHECK // WAV only for now
             // Check type
             if (type != MediaType.Audio)
                 throw new ArgumentException($"Cannot create audio clip from asset because asset has invalid type: {type}");
@@ -375,7 +375,7 @@ namespace VideoKit {
         /// Read sample buffers in the media asset.
         /// </summary>
         /// <returns>Sample buffers in the media asset.</returns>
-        public IEnumerable<T> Read<T> () where T : struct {
+        public IEnumerable<T> Read<T>() where T : struct {
             var type = GetMediaType<T>();
             foreach (var sampleBuffer in Read(type)) {
                 if (type == MediaType.Video)
@@ -395,7 +395,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="message">Optional message to share with the media asset.</param>
         /// <returns>Receiving app bundle ID or `null` if the user did not complete the share action.</returns>
-        public Task<string?> Share (string? message = null) {
+        public Task<string?> Share(string? message = null) {
             // Check
             if (type == MediaType.Sequence)
                 throw new InvalidOperationException(@"Sequence assets cannot be shared");
@@ -410,9 +410,9 @@ namespace VideoKit {
                 ).Throw();
             } catch (NotImplementedException) {
                 tcs.SetResult(null);
+                handle.Free();
             } catch (Exception ex) {
                 tcs.SetException(ex);
-            } finally {
                 handle.Free();
             }
             // Return
@@ -424,7 +424,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="album">Optional album to save media asset to.</param>
         /// <returns>Whether the asset was successfully saved to the camera roll.</returns>
-        public Task<bool> SaveToCameraRoll (string? album = null) {
+        public Task<bool> SaveToCameraRoll(string? album = null) {
             // Check
             if (type == MediaType.Sequence)
                 throw new InvalidOperationException(@"Sequence assets cannot be saved to the camera roll");
@@ -439,9 +439,9 @@ namespace VideoKit {
                 ).Throw();
             } catch (NotImplementedException) {
                 tcs.SetResult(false);
+                handle.Free();
             } catch (Exception ex) {
                 tcs.SetException(ex);
-            } finally {
                 handle.Free();
             }
             // Return
@@ -456,7 +456,7 @@ namespace VideoKit {
         /// </summary>
         /// <typeparam name="T">Structure to parse into.</typeparam>
         /// <returns>Parsed structure.</returns>
-        internal async Task<T> Parse<T> () {
+        internal async Task<T> Parse<T>() {
             // Check
             if (type != MediaType.Text)
                 throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
@@ -477,7 +477,7 @@ namespace VideoKit {
         /// <summary>
         /// Transcribe the audio asset by performing speech-to-text.
         /// </summary>
-        internal async Task<string> Transcribe () {
+        internal async Task<string> Transcribe() {
             // Check type
             if (type != MediaType.Audio)
                 throw new InvalidOperationException($"Cannot caption media asset because asset is not an audio asset");
@@ -491,11 +491,11 @@ namespace VideoKit {
         #region --Operations--
         private readonly IntPtr asset;
 
-        internal MediaAsset (IntPtr asset) => this.asset = asset;
+        internal MediaAsset(IntPtr asset) => this.asset = asset;
 
-        ~MediaAsset () => asset.ReleaseMediaAsset();
+        ~MediaAsset() => asset.ReleaseMediaAsset();
 
-        private IEnumerable<IntPtr> Read (MediaType type) {
+        private IEnumerable<IntPtr> Read(MediaType type) {
             asset.CreateMediaReader(type, out var reader).Throw();
             try {
                 for (;;) {
@@ -512,14 +512,14 @@ namespace VideoKit {
             }
         }
 
-        public static implicit operator IntPtr (MediaAsset asset) => asset.asset;
+        public static implicit operator IntPtr(MediaAsset asset) => asset.asset;
         #endregion
 
 
         #region --Callbacks--
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaAssetHandler))]
-        private static void OnCreateAsset (IntPtr context, IntPtr asset) {
+        private static void OnCreateAsset(IntPtr context, IntPtr asset) {
             try {
                 if (!VideoKit.IsAppDomainLoaded)
                     return;
@@ -533,7 +533,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaAssetShareHandler))]
-        private static void OnShare (IntPtr context, IntPtr receiver) {
+        private static void OnShare(IntPtr context, IntPtr receiver) {
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)
@@ -551,7 +551,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaAssetShareHandler))]
-        private static void OnSaveToCameraRoll (IntPtr context, IntPtr receiver) {
+        private static void OnSaveToCameraRoll(IntPtr context, IntPtr receiver) {
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)
@@ -572,7 +572,7 @@ namespace VideoKit {
 
         #region --Utilities--
 
-        private static async Task<string?> StreamingAssetsToAbsolutePath (string relativePath) {
+        private static async Task<string?> StreamingAssetsToAbsolutePath(string relativePath) {
             var fullPath = Path.Combine(Application.streamingAssetsPath, relativePath);
             if (Application.platform != RuntimePlatform.Android)
                 return File.Exists(fullPath) ? fullPath : null;
@@ -591,14 +591,14 @@ namespace VideoKit {
             return persistentPath;
         }
 
-        private static string GetValueExtension (Dtype type) => type switch {
+        private static string GetValueExtension(Dtype type) => type switch {
             Dtype.Image => ".png",
             Dtype.Audio => ".wav",
             Dtype.Video => ".mp4",
             _           => string.Empty,
         };
 
-        private static MediaType GetMediaType<T> () => typeof(T) switch {
+        private static MediaType GetMediaType<T>() => typeof(T) switch {
             var x when x == typeof(AudioBuffer) => MediaType.Audio,
             var x when x == typeof(PixelBuffer) => MediaType.Video,
             _                                   => MediaType.Unknown,
@@ -608,18 +608,18 @@ namespace VideoKit {
 
             private readonly IntPtr asset;
 
-            public NativeMediaSequence (IntPtr asset) => this.asset = asset;
+            public NativeMediaSequence(IntPtr asset) => this.asset = asset;
 
             public int Count => asset.GetMediaAssetSubAssetCount(out var count) == Status.Ok ? count : default;
 
-            public MediaAsset? this [int index] => asset.GetMediaAssetSubAsset(index, out var subAsset).Throw() == Status.Ok ? new MediaAsset(subAsset) : default;
+            public MediaAsset? this[int index] => asset.GetMediaAssetSubAsset(index, out var subAsset).Throw() == Status.Ok ? new MediaAsset(subAsset) : default;
     
-            IEnumerator<MediaAsset?> IEnumerable<MediaAsset?>.GetEnumerator () {
+            IEnumerator<MediaAsset?> IEnumerable<MediaAsset?>.GetEnumerator() {
                 for (var idx = 0; idx < Count; ++idx)
                     yield return this[idx];
             }
 
-            IEnumerator IEnumerable.GetEnumerator () => (this as IEnumerable<MediaAsset>).GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => (this as IEnumerable<MediaAsset>).GetEnumerator();
         }
         #endregion
     }

@@ -880,7 +880,8 @@ PlayerSettings:
   il2cppCompilerConfiguration:
     Android: 1
   il2cppCodeGeneration: {}
-  il2cppStacktraceInformation: {}
+  il2cppStacktraceInformation:
+    Android: 1
   managedStrippingLevel:
     EmbeddedLinux: 1
     GameCoreScarlett: 1

@@ -1,5 +1,6 @@
 ## 1.0.1
-*INCOMPLETE*
++ Fixed `MediaAsset.Share` method returning `Task` that never completes.
++ Fixed `MediaAsset.SaveToCameraRoll` method returning `Task` that never completes.
 
 ## 1.0.0
 + Added `MultiCameraDevice` class for streaming pixel buffers from multiple camera devices simultaneously (#140).
