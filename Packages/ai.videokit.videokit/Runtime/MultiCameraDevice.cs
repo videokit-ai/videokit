@@ -48,7 +48,7 @@ namespace VideoKit {
         /// Check whether a given camera in the multi-camera device is running.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public bool IsRunning (CameraDevice camera) => device
+        public bool IsRunning(CameraDevice camera) => device
             .GetMultiCameraDeviceIsRunning(camera, out var running)
             .Throw() == Status.Ok && running;
 
@@ -56,7 +56,7 @@ namespace VideoKit {
         /// Start running.
         /// </summary>
         /// <param name="handler">Delegate to receive preview frames.</param>
-        public void StartRunning (Action<CameraDevice, PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
+        public void StartRunning(Action<CameraDevice, PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
             sampleBuffer.GetMultiCameraPixelBufferCamera(out var rawCamera).Throw();
             var camera = cameras.First(cam => cam == rawCamera);
             var pixelBuffer = new PixelBuffer(sampleBuffer);
@@ -67,13 +67,13 @@ namespace VideoKit {
         /// Start the camera preview from a given camera in the multi-camera device.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public void StartRunning (CameraDevice camera) => device.StartRunning(camera).Throw();
+        public void StartRunning(CameraDevice camera) => device.StartRunning(camera).Throw();
 
         /// <summary>
         /// Stop the camera preview from a specific camera in the multi-camera device.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public void StopRunning (CameraDevice camera) => device.StopRunning(camera).Throw();
+        public void StopRunning(CameraDevice camera) => device.StopRunning(camera).Throw();
         #endregion
 
 
@@ -84,12 +84,12 @@ namespace VideoKit {
         /// </summary>
         /// <param name="request">Request permissions if the user has not yet been asked.</param>
         /// <returns>Camera permission status.</returns>
-        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CameraDevice.CheckPermissions(request);
+        public static Task<PermissionStatus> CheckPermissions(bool request = true) => CameraDevice.CheckPermissions(request);
 
         /// <summary>
         /// Discover available multi-camera devices.
         /// </summary>
-        public static async Task<MultiCameraDevice[]> Discover () {
+        public static async Task<MultiCameraDevice[]> Discover() {
             // Check session
             await VideoKitClient.Instance!.CheckSession();
             // Discover
@@ -108,7 +108,7 @@ namespace VideoKit {
 
         #region --Operations--
 
-        internal MultiCameraDevice (IntPtr device) : base(device) {
+        internal MultiCameraDevice(IntPtr device) : base(device) {
             device.GetMultiCameraDeviceCameraCount(out var count).Throw();
             this.cameras = Enumerable.Range(0, count)
                 .Select(idx => device.GetMultiCameraDeviceCamera(idx, out var camera).Throw() == Status.Ok ? camera : default)
@@ -117,10 +117,10 @@ namespace VideoKit {
             device.SetMultiCameraDeviceSystemPressureChangeHandler(OnSystemPressureChange, (IntPtr)weakSelf);
         }
 
-        public override string ToString () => $"MultiCameraDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
+        public override string ToString() => $"MultiCameraDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDeviceDiscoveryHandler))]
-        private static unsafe void OnDiscoverDevices (IntPtr context, IntPtr devices, int count) {
+        private static unsafe void OnDiscoverDevices(IntPtr context, IntPtr devices, int count) {
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)
@@ -142,7 +142,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.MultiCameraDeviceSystemPressureHandler))]
-        private static void OnSystemPressureChange (IntPtr context) {
+        private static void OnSystemPressureChange(IntPtr context) {
             var handle = (GCHandle)context;
             var device = handle.Target as MultiCameraDevice; // weak
             device?.onSystemPressureChange?.Invoke();

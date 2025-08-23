@@ -225,7 +225,7 @@ namespace VideoKit {
         /// <param name="timestamp">Pixel buffer timestamp.</param>
         /// <param name="metadata">Pixel buffer metadata.</param>
         /// <returns>Created pixel buffer.</returns>
-        public PixelBuffer (Texture2D texture, long timestamp = 0L) : this(
+        public PixelBuffer(Texture2D texture, long timestamp = 0L) : this(
             width: texture.width,
             height: texture.height,
             format: ToImageFormat(texture.format),
@@ -246,7 +246,7 @@ namespace VideoKit {
         /// <param name="timestamp">Pixel buffer timestamp.</param>
         /// <param name="mirrored">Whether the pixel buffer is vertically mirrored.</param>
         /// <returns>Created pixel buffer.</returns>
-        public PixelBuffer (
+        public PixelBuffer(
             int width,
             int height,
             Format format,
@@ -274,7 +274,7 @@ namespace VideoKit {
         /// <param name="timestamp">Pixel buffer timestamp.</param>
         /// <param name="mirrored">Whether the pixel buffer is vertically mirrored.</param>
         /// <returns>Created pixel buffer.</returns>
-        public unsafe PixelBuffer (
+        public unsafe PixelBuffer(
             int width,
             int height,
             Format format,
@@ -304,7 +304,7 @@ namespace VideoKit {
         /// <param name="timestamp">Pixel bufffer timestamp.</param>
         /// <param name="mirrored">Whether the pixel buffer is vertically mirrored.</param>
         /// <returns>Created pixel buffer.</returns>
-        public unsafe PixelBuffer (
+        public unsafe PixelBuffer(
             int width,
             int height,
             Format format,
@@ -329,7 +329,7 @@ namespace VideoKit {
         /// <summary>
         /// Dispose the pixel buffer and release resources.
         /// </summary>
-        public void Dispose () {
+        public void Dispose() {
             pixelBuffer.ReleaseSampleBuffer();
             dataBuffer.Dispose();
         }
@@ -342,7 +342,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="destination">Destination pixel buffer.</param>
         /// <param name="rotation">Rotation to apply when copying pixel data.</param>
-        public void CopyTo (
+        public void CopyTo(
             PixelBuffer destination,
             Rotation rotation = Rotation._0
         ) => pixelBuffer.CopyToPixelBuffer(destination, rotation).Throw();
@@ -353,12 +353,12 @@ namespace VideoKit {
         private readonly IntPtr pixelBuffer;
         private readonly NativeArray<byte> dataBuffer;
 
-        internal PixelBuffer (IntPtr pixelBuffer) {
+        internal PixelBuffer(IntPtr pixelBuffer) {
             this.pixelBuffer = pixelBuffer;
             this.dataBuffer = default;
         }
 
-        internal PixelBuffer ( // might wanna make this public
+        internal PixelBuffer( // might wanna make this public
             int width,
             int height,
             Format format,
@@ -380,19 +380,19 @@ namespace VideoKit {
             ).Throw();
         }
 
-        public static implicit operator IntPtr (PixelBuffer pixelBuffer) => pixelBuffer.pixelBuffer;
+        public static implicit operator IntPtr(PixelBuffer pixelBuffer) => pixelBuffer.pixelBuffer;
         #endregion
 
 
         #region --Utilities--
 
-        private static Format ToImageFormat (TextureFormat format) => format switch {
+        private static Format ToImageFormat(TextureFormat format) => format switch {
             TextureFormat.RGBA32    => Format.RGBA8888,
             TextureFormat.BGRA32    => Format.BGRA8888,
             _                       => throw new ArgumentException($"Cannot create pixel buffer from texture with format: {format}"),
         };
 
-        private static int GetDefaultStride (Format format, int width) => format switch {
+        private static int GetDefaultStride(Format format, int width) => format switch {
             Format.RGBA8888 => width * 4,
             Format.BGRA8888 => width * 4,
             _               => throw new ArgumentException($"Cannot infer default stride for format: {format}"),
@@ -402,19 +402,19 @@ namespace VideoKit {
 
             private readonly IntPtr pixelBuffer;
 
-            public NativePlanes (IntPtr pixelBuffer) => this.pixelBuffer = pixelBuffer;
+            public NativePlanes(IntPtr pixelBuffer) => this.pixelBuffer = pixelBuffer;
 
             int IReadOnlyCollection<Plane>.Count => pixelBuffer.GetPixelBufferPlaneCount(out var count) == Status.Ok ? count : default;
 
             Plane IReadOnlyList<Plane>.this [int index] => new(pixelBuffer, index);
     
-            IEnumerator<Plane> IEnumerable<Plane>.GetEnumerator () {
+            IEnumerator<Plane> IEnumerable<Plane>.GetEnumerator() {
                 pixelBuffer.GetPixelBufferPlaneCount(out var count);
                 for (var idx = 0; idx < count; ++idx)
                     yield return new(pixelBuffer, idx);
             }
 
-            IEnumerator IEnumerable.GetEnumerator () => (this as IEnumerable<Plane>).GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => (this as IEnumerable<Plane>).GetEnumerator();
         }
         #endregion
     }

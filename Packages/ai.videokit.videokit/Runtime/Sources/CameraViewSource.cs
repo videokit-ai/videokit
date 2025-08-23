@@ -30,7 +30,7 @@ namespace VideoKit.Sources {
         /// <param name="handler"></param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
         /// <exception cref="ArgumentException">Raised when the camera preview is not running.</exception>
-        public CameraViewSource (
+        public CameraViewSource(
             VideoKitCameraView view,
             Action<PixelBuffer> handler,
             IClock? clock = null
@@ -46,7 +46,7 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Stop the camera view source and release resources.
         /// </summary>
-        public void Dispose () => view.OnPixelBuffer -= OnPixelBuffer;
+        public void Dispose() => view.OnPixelBuffer -= OnPixelBuffer;
         #endregion
 
 
@@ -56,7 +56,7 @@ namespace VideoKit.Sources {
         private readonly VideoKitCameraView view;
         private int frameIdx;
 
-        private void OnPixelBuffer (PixelBuffer pixelBuffer) {
+        private void OnPixelBuffer(PixelBuffer pixelBuffer) {
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
             using var outputBuffer = new PixelBuffer(

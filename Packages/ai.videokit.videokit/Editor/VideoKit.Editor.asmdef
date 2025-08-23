@@ -2,7 +2,7 @@
     "name": "VideoKit.Editor",
     "references": [
         "VideoKit.Runtime",
-        "Function.Runtime"
+        "Muna.Runtime"
     ],
     "includePlatforms": [
         "Editor"

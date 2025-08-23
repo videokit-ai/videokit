@@ -37,7 +37,7 @@ namespace VideoKit.Sources {
         /// <param name="handler">Handler to receive images.</param>
         /// <param name="clock">Clock for generating image timestamps.</param>
         /// <param name="useLateUpdate">Whether to use` LateUpdate` instead of end of frame for capturing frames. See #52.</param>
-        public ScreenSource (
+        public ScreenSource(
             int width,
             int height,
             Action<PixelBuffer> handler,
@@ -58,7 +58,7 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Stop the screen source and release resources.
         /// </summary>
-        public void Dispose () {
+        public void Dispose() {
             textureSource.Dispose();
             VideoKitEvents.Instance.onLateUpdate -= OnFrame;
             VideoKitEvents.Instance.onFrame -= OnFrame;
@@ -71,7 +71,7 @@ namespace VideoKit.Sources {
         private readonly RenderTextureDescriptor descriptor;
         private int frameIdx;
 
-        private void OnFrame () {
+        private void OnFrame() {
             // Check frame index
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
@@ -100,7 +100,7 @@ namespace VideoKit.Sources {
 
         #region --Deprecated--
         [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the ScreenSource(width, height, handler, clock) constructor instead.", false)]
-        public ScreenSource (
+        public ScreenSource(
             MediaRecorder recorder,
             IClock? clock = null,
             bool useLateUpdate = false

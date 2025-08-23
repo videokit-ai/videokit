@@ -17,10 +17,10 @@ namespace VideoKit.UI {
     using UnityEngine.Serialization;
     using UnityEngine.UI;
     using Unity.Collections.LowLevel.Unsafe;
-    using Function;
+    using Muna;
     using Internal;
     using Facing = VideoKitCameraManager.Facing;
-    using Image = Function.Types.Image;
+    using Image = Muna.Image;
 
     /// <summary>
     /// VideoKit UI component for displaying the camera preview from a camera manager.
@@ -157,22 +157,22 @@ namespace VideoKit.UI {
             RuntimePlatform.IPhonePlayer
         };
 
-        private void Reset () {
+        private void Reset() {
             cameraManager = FindFirstObjectByType<VideoKitCameraManager>();
         }
 
-        private void Awake () {
+        private void Awake() {
             rawImage = GetComponent<RawImage>();
             aspectFitter = GetComponent<AspectRatioFitter>();
         }
 
-        private void OnEnable () {
+        private void OnEnable() {
             rotation = GetPreviewRotation(Screen.orientation);
             if (cameraManager != null)
                 cameraManager.OnPixelBuffer += OnCameraBuffer;
         }
 
-        private unsafe void Update () {
+        private unsafe void Update() {
             bool upload = false;
             lock (fence) {
                 if (pixelBuffer == IntPtr.Zero)
@@ -202,8 +202,8 @@ namespace VideoKit.UI {
                     pixelBuffer.CopyTo(buffer);
                     upload = true;
                 } else if (viewMode == ViewMode.HumanTexture) {
-                    var fxn = VideoKitClient.Instance!.fxn;
-                    var prediction = fxn.Predictions.Create(
+                    var muna = VideoKitClient.Instance!.muna;
+                    var prediction = muna.Predictions.Create(
                         tag: VideoKitCameraManager.HumanTextureTag,
                         inputs: new () {
                             ["image"] = new Image(
@@ -226,7 +226,7 @@ namespace VideoKit.UI {
             OnCameraFrame?.Invoke();
         }
 
-        private unsafe void OnCameraBuffer (
+        private unsafe void OnCameraBuffer(
             CameraDevice cameraDevice,
             PixelBuffer cameraBuffer
         ) {
@@ -257,12 +257,12 @@ namespace VideoKit.UI {
             OnPixelBuffer?.Invoke(pixelBuffer);
         }
 
-        private void OnDisable () {
+        private void OnDisable() {
             if (cameraManager != null)
                 cameraManager.OnPixelBuffer -= OnCameraBuffer;
         }
 
-        private void OnDestroy () {
+        private void OnDestroy() {
             pixelBuffer.Dispose();
             pixelBuffer = default;
         }
@@ -271,7 +271,7 @@ namespace VideoKit.UI {
 
         #region --Handlers--
 
-        void IPointerUpHandler.OnPointerUp (PointerEventData data) {
+        void IPointerUpHandler.OnPointerUp(PointerEventData data) {
             // Check device
             var device = this.device;
             if (device == null)
@@ -296,11 +296,11 @@ namespace VideoKit.UI {
                 device.SetExposurePoint(point.x, point.y);
         }
 
-        void IBeginDragHandler.OnBeginDrag (PointerEventData data) {
+        void IBeginDragHandler.OnBeginDrag(PointerEventData data) {
 
         }
 
-        void IDragHandler.OnDrag (PointerEventData data) {
+        void IDragHandler.OnDrag(PointerEventData data) {
 
         }
         #endregion
@@ -309,7 +309,7 @@ namespace VideoKit.UI {
         #region --Utilities--
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static PixelBuffer.Rotation GetPreviewRotation (ScreenOrientation orientation) => orientation switch {
+        private static PixelBuffer.Rotation GetPreviewRotation(ScreenOrientation orientation) => orientation switch {
             var _ when !OrientationSupport.Contains(Application.platform)   => PixelBuffer.Rotation._0,
             ScreenOrientation.LandscapeLeft                                 => PixelBuffer.Rotation._0,
             ScreenOrientation.Portrait                                      => PixelBuffer.Rotation._90,
@@ -319,7 +319,7 @@ namespace VideoKit.UI {
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static (int width, int height) GetPreviewTextureSize (
+        private static (int width, int height) GetPreviewTextureSize(
             int width,
             int height,
             PixelBuffer.Rotation rotation

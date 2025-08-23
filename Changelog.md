@@ -1,3 +1,6 @@
+## 1.0.2
++ Fixed recording being vertically inverted when using `VideoKitRecorder.VideoMode.CameraDevice` on macOS (#196).
+
 ## 1.0.1
 + Fixed `MediaAsset.Share` method returning `Task` that never completes.
 + Fixed `MediaAsset.SaveToCameraRoll` method returning `Task` that never completes.

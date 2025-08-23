@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961369732989660, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: recorder
@@ -987,7 +987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capabilities: 0
-  playOnAwake: 0
+  playOnAwake: 1
   _facing: 1
   facingRequired: 0
   resolution: 3
@@ -1008,13 +1008,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 1
+  videoMode: 4
   resolution: 7
   customResolution: {x: 1280, y: 720}
   cameras:
   - {fileID: 963194227}
   texture: {fileID: 2800000, guid: 7f3abb5550cfda844841a67861dfcff3, type: 3}
-  cameraView: {fileID: 0}
+  cameraView: {fileID: 840997207}
   _frameRate: 10
   frameSkip: 0
   watermarkMode: 0
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   configureAudioManager: 1
   audioListener: {fileID: 963194226}
   audioSource: {fileID: 1493259196}
-  recordingAction: 2
+  recordingAction: 0
   OnRecordingCompleted:
     m_PersistentCalls:
       m_Calls:
@@ -1256,7 +1256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e06a6413b46e4cc28d6f8cbe5413567, type: 3}
   m_Name: 

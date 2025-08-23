@@ -60,7 +60,7 @@ namespace VideoKit {
         /// NOTE: This requires an active VideoKit plan.
         /// </summary>
         /// <param name="handler">Delegate to receive audio buffers.</param>
-        public unsafe void StartRunning (Action<AudioBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
+        public unsafe void StartRunning(Action<AudioBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
             handler(new AudioBuffer(sampleBuffer));
         });
         #endregion
@@ -72,7 +72,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="request">Request permissions if the user has not yet been asked.</param>
         /// <returns>Current microphone permissions status.</returns>
-        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CheckPermissions(
+        public static Task<PermissionStatus> CheckPermissions(bool request = true) => CheckPermissions(
             VideoKit.PermissionType.Microphone,
             request
         );
@@ -81,7 +81,7 @@ namespace VideoKit {
         /// Discover available audio input devices.
         /// </summary>
         /// <param name="configureAudioSession">Configure the application's global audio session for audio device discovery. This is required for discovering audio devices on iOS.</param>
-        public static async Task<AudioDevice[]> Discover (bool configureAudioSession = true) {
+        public static async Task<AudioDevice[]> Discover(bool configureAudioSession = true) {
             // Check session
             await VideoKitClient.Instance!.CheckSession();
             // Configure audio session
@@ -116,12 +116,12 @@ namespace VideoKit {
             }
         }
 
-        internal AudioDevice (IntPtr device, bool strong = true) : base(device, strong: strong) { }
+        internal AudioDevice(IntPtr device, bool strong = true) : base(device, strong: strong) { }
 
-        public override string ToString () => $"AudioDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
+        public override string ToString() => $"AudioDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDeviceDiscoveryHandler))]
-        private static unsafe void OnDiscoverDevices (IntPtr context, IntPtr devices, int count) {
+        private static unsafe void OnDiscoverDevices(IntPtr context, IntPtr devices, int count) {
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)

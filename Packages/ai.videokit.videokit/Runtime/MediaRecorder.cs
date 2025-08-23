@@ -120,19 +120,19 @@ namespace VideoKit {
         /// Append a video frame to the recorder.
         /// </summary>
         /// <param name="image">Input image to append. The image MUST have a valid timestamp for formats that require one.</param>
-        public virtual void Append (PixelBuffer pixelBuffer) => recorder.AppendPixelBuffer(pixelBuffer).Throw();
+        public virtual void Append(PixelBuffer pixelBuffer) => recorder.AppendPixelBuffer(pixelBuffer).Throw();
 
         /// <summary>
         /// Append an audio frame to the recorder.
         /// </summary>
         /// <param name="audioBuffer">Input audio buffer to append. This audio buffer MUST have a valid timestamp for formats that require one.</param>
-        public virtual void Append (AudioBuffer audioBuffer) => recorder.AppendSampleBuffer(audioBuffer).Throw();
+        public virtual void Append(AudioBuffer audioBuffer) => recorder.AppendSampleBuffer(audioBuffer).Throw();
 
         /// <summary>
         /// Finish writing.
         /// </summary>
         /// <returns>Recorded media asset.</returns>
-        public virtual Task<MediaAsset> FinishWriting () {
+        public virtual Task<MediaAsset> FinishWriting() {
             var tcs = new TaskCompletionSource<MediaAsset>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
@@ -160,7 +160,7 @@ namespace VideoKit {
         /// <param name="audioBitRate">Audio bit rate in bits per second.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Created recorder.</returns>
-        public static async Task<MediaRecorder> Create (
+        public static async Task<MediaRecorder> Create(
             Format format,
             int width = 0,
             int height = 0,
@@ -264,7 +264,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="format">Recording format.</param>
         /// <returns>Whether the current device supports recording to this format.</returns>
-        public static bool IsFormatSupported (Format format) => VideoKit.IsMediaRecorderFormatSupported(format) == Status.Ok;
+        public static bool IsFormatSupported(Format format) => VideoKit.IsMediaRecorderFormatSupported(format) == Status.Ok;
         #endregion
 
 
@@ -280,7 +280,7 @@ namespace VideoKit {
 
         public static implicit operator Action<AudioBuffer> (MediaRecorder recorder) => recorder.Append;
 
-        protected static string CreatePath (string? extension = null, string? prefix = null) {
+        protected static string CreatePath(string? extension = null, string? prefix = null) {
             // Create parent directory
             var parentDirectory = !string.IsNullOrEmpty(prefix) ? Path.Combine(directory, prefix) : directory;
             Directory.CreateDirectory(parentDirectory);
@@ -297,12 +297,12 @@ namespace VideoKit {
         #region --Callbacks--
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void OnInitialize () => directory = Application.isEditor ?
+        private static void OnInitialize() => directory = Application.isEditor ?
             Directory.GetCurrentDirectory() :
             Application.persistentDataPath;
         
         [MonoPInvokeCallback(typeof(VideoKit.MediaAssetHandler))]
-        private static unsafe void OnFinishWriting (IntPtr context, IntPtr asset) {
+        private static unsafe void OnFinishWriting(IntPtr context, IntPtr asset) {
             // Check
             if (!VideoKit.IsAppDomainLoaded)
                 return;

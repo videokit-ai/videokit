@@ -1,10 +1,10 @@
 {
   "scopedRegistries": [
     {
-      "name": "Function",
+      "name": "Muna",
       "url": "https://registry.npmjs.com",
       "scopes": [
-        "ai.fxn"
+        "ai.muna"
       ]
     }
   ],

@@ -61,7 +61,7 @@ namespace VideoKit.Sources {
         /// <param name="height">Pixel buffer height.</param>
         /// <param name="handler">Handler to receive pixel buffers.</param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        public TextureSource (
+        public TextureSource(
             int width,
             int height,
             Action<PixelBuffer> handler,
@@ -81,7 +81,7 @@ namespace VideoKit.Sources {
         /// </summary>
         /// <param name="texture">Texture to readback from.</param>
         /// <param name="timestamp">Pixel buffer timestamp in nanoseconds.</param>
-        public void Append (Texture texture, long timestamp = 0L) {
+        public void Append(Texture texture, long timestamp = 0L) {
             // Check handler
             if (handler == null)
                 return;
@@ -136,7 +136,7 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Stop the media source and release resources.
         /// </summary>
-        public void Dispose () {
+        public void Dispose() {
             handler = null;
             VideoKitEvents.Instance.onFrame -= OnFrame;
             Texture2D.Destroy(readbackBuffer);
@@ -151,12 +151,12 @@ namespace VideoKit.Sources {
         private int frameIdx;
         private Texture2D? readbackBuffer;
 
-        private void OnFrame () {
+        private void OnFrame() {
             if (texture != null && frameIdx++ % (frameSkip + 1) == 0)
                 Append(texture, clock?.timestamp ?? 0L);
         }
 
-        private void Preprocess (Texture source, RenderTexture destination) {
+        private void Preprocess(Texture source, RenderTexture destination) {
             // Crop
             var cropDest = RenderTexture.GetTemporary(descriptor);
             ExtractRoI(source, cropDest);          
@@ -169,7 +169,7 @@ namespace VideoKit.Sources {
             RenderTexture.ReleaseTemporary(watermarkDest);
         }
 
-        private void ExtractRoI (
+        private void ExtractRoI(
             Texture source,
             RenderTexture destination
         ) {
@@ -196,7 +196,7 @@ namespace VideoKit.Sources {
             RenderTexture.active = prevActive;
         }
 
-        private void ApplyWatermark (
+        private void ApplyWatermark(
             Texture source,
             RenderTexture destination
         ) {
@@ -224,7 +224,7 @@ namespace VideoKit.Sources {
 
         #region --Utility--
 
-        private static Rect AspectFitRect (Texture watermark, RectInt frame) {
+        private static Rect AspectFitRect(Texture watermark, RectInt frame) {
             var frameAspect = (float)frame.width / frame.height;
             var textureAspect = (float)watermark.width / watermark.height;
             var fitToWidth = textureAspect > frameAspect;
@@ -235,7 +235,7 @@ namespace VideoKit.Sources {
             return new(frame.x + x, frame.y + y, width, height);
         }
 
-        private static Rect ToRect (RectInt rect) => new(rect.x, rect.y, rect.width, rect.height);
+        private static Rect ToRect(RectInt rect) => new(rect.x, rect.y, rect.width, rect.height);
         #endregion
     }
 }

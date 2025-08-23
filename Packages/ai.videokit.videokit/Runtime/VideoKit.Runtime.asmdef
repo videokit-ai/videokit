@@ -2,8 +2,8 @@
     "name": "VideoKit.Runtime",
     "rootNamespace": "",
     "references": [
-        "Function.Runtime",
-        "Function.Unity"
+        "Muna.Runtime",
+        "Muna.Unity"
     ],
     "includePlatforms": [
         "Android",

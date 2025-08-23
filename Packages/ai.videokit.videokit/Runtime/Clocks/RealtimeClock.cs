@@ -46,7 +46,7 @@ namespace VideoKit.Clocks {
         /// <summary>
         /// Create a realtime clock.
         /// </summary>
-        public RealtimeClock () {
+        public RealtimeClock() {
             this.startTime = CurrentTimestamp;
             this.isPaused = false;
             this.pauseTime = 0L;

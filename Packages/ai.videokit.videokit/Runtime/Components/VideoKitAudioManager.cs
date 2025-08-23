@@ -139,12 +139,12 @@ namespace VideoKit {
         /// <summary>
         /// Start streaming audio.
         /// </summary>
-        public async void StartRunning () => await StartRunningAsync();
+        public async void StartRunning() => await StartRunningAsync();
 
         /// <summary>
         /// Start streaming audio.
         /// </summary>
-        public async Task StartRunningAsync () {
+        public async Task StartRunningAsync() {
             // Check
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKit: Audio manager failed to start running because component is disabled");
@@ -171,7 +171,7 @@ namespace VideoKit {
         /// <summary>
         /// Stop streaming audio.
         /// </summary>
-        public void StopRunning () {
+        public void StopRunning() {
             // Stop
             if (running)
                 _device.StopRunning();
@@ -182,14 +182,14 @@ namespace VideoKit {
         #region --Operations--
         private AudioDevice _device;
 
-        private void Awake () {
+        private void Awake() {
             if (configureOnAwake)
                 VideoKit.ConfigureAudioSession();
         }
 
-        private void OnSampleBuffer (AudioBuffer audioBuffer) => OnAudioBuffer?.Invoke(audioBuffer);
+        private void OnSampleBuffer(AudioBuffer audioBuffer) => OnAudioBuffer?.Invoke(audioBuffer);
 
-        private void OnDestroy () {
+        private void OnDestroy() {
             if (running)
                 StopRunning();
         }

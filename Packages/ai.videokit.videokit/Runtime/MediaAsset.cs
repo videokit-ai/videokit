@@ -18,7 +18,7 @@ namespace VideoKit {
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
-    using Function.Types;
+    using Muna;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using NJsonSchema;

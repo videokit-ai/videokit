@@ -575,12 +575,12 @@ namespace VideoKit {
         /// <summary>
         /// Start recording.
         /// </summary>
-        public async void StartRecording () => await StartRecordingAsync();
+        public async void StartRecording() => await StartRecordingAsync();
 
         /// <summary>
         /// Start recording.
         /// </summary>
-        public async Task StartRecordingAsync () {
+        public async Task StartRecordingAsync() {
             // Check active
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKitRecorder cannot start recording because component is disabled");
@@ -656,7 +656,7 @@ namespace VideoKit {
         /// Pause recording.
         /// </summary>
         [Obsolete(@"Deprecated in VideoKit 0.0.20 and will be removed soon after.", false)]
-        public void PauseRecording () {
+        public void PauseRecording() {
             // Check
             if (status != Status.Recording) {
                 Debug.LogError(@"Cannot pause recording because no recording session is in progress");
@@ -678,7 +678,7 @@ namespace VideoKit {
         /// Resume recording.
         /// </summary>
         [Obsolete(@"Deprecated in VideoKit 0.0.20 and will be removed soon after.", false)]
-        public void ResumeRecording () {
+        public void ResumeRecording() {
             // Check status
             if (status != Status.Paused) {
                 Debug.LogError(@"Cannot resume recording because the recording session is not paused");
@@ -713,12 +713,12 @@ namespace VideoKit {
         /// <summary>
         /// Stop recording.
         /// </summary>
-        public async void StopRecording () => await StopRecordingAsync();
+        public async void StopRecording() => await StopRecordingAsync();
 
         /// <summary>
         /// Stop recording.
         /// </summary>
-        public async Task StopRecordingAsync () {
+        public async Task StopRecordingAsync() {
             // Check
             if (status == Status.Idle) {
                 Debug.LogWarning(@"Cannot stop recording because no recording session is in progress");
@@ -755,7 +755,7 @@ namespace VideoKit {
         /// Capture a screenshot with the current video settings.
         /// </summary>
         /// <returns>Screenshot image asset.</returns>
-        public async Task<MediaAsset> CaptureScreenshot () {
+        public async Task<MediaAsset> CaptureScreenshot() {
             var config = configuration;
             var recorder = await MediaRecorder.Create(
                 MediaFormat.JPEG,
@@ -792,24 +792,28 @@ namespace VideoKit {
         private IDisposable? videoInput;
         private IDisposable? audioInput;
 
-        private void Reset () {
+        private void Reset() {
             cameras = Camera.allCameras;
             cameraView = FindFirstObjectByType<VideoKitCameraView>();
             audioManager = FindFirstObjectByType<VideoKitAudioManager>();
             audioListener = FindFirstObjectByType<AudioListener>();
         }
 
-        private async void Awake () {
+        private async void Awake() {
             if (prepareOnAwake)
                 await PrepareEncoder();
         }
 
-        private void OnDestroy () {
+        private void OnDestroy() {
             if (status != Status.Idle)
                 StopRecording();
         }
 
-        private IDisposable? CreateVideoInput (int width, int height, Action<PixelBuffer> handler) => videoMode switch {
+        private IDisposable? CreateVideoInput(
+            int width,
+            int height,
+            Action<PixelBuffer> handler
+        ) => videoMode switch {
             VideoMode.Screen        => new ScreenSource(width, height, handler, clock) { frameSkip = frameSkip },
             VideoMode.Camera        => new CameraSource(width, height, cameras, handler, clock) { frameSkip = frameSkip },
             VideoMode.Texture       => new TextureSource(width, height, handler, clock) { texture = texture, frameSkip = frameSkip },
@@ -817,7 +821,7 @@ namespace VideoKit {
             _ => null,
         };
 
-        private IDisposable? CreateAudioInput (Action<AudioBuffer> handler) =>  audioMode switch {
+        private IDisposable? CreateAudioInput(Action<AudioBuffer> handler) =>  audioMode switch {
             AudioMode.AudioDevice   => new AudioManagerSource(audioManager!, handler, clock),
             AudioMode.AudioListener => new AudioComponentSource(audioListener!, handler, clock),
             AudioMode.AudioSource   => new AudioComponentSource(audioSource!, handler, clock),
@@ -828,7 +832,7 @@ namespace VideoKit {
 
         #region --Utility--
 
-        private RectInt CreateWatermarkRect (int width, int height) {
+        private RectInt CreateWatermarkRect(int width, int height) {
             // Check none
             if (watermarkMode == WatermarkMode.None)
                 return default;
@@ -858,7 +862,7 @@ namespace VideoKit {
             return frameRect;
         }
 
-        private static async Task PrepareEncoder () {
+        private static async Task PrepareEncoder() {
             try {
                 // Create recorder
                 var clock = new FixedClock(30);
@@ -892,7 +896,7 @@ namespace VideoKit {
             } catch { }
         }
 
-        private static TextureSource? GetTextureSource (IDisposable? videoInput) => videoInput switch {
+        private static TextureSource? GetTextureSource(IDisposable? videoInput) => videoInput switch {
             CameraSource cameraSource   => cameraSource.textureSource,
             ScreenSource screenSource   => screenSource.textureSource,
             TextureSource textureSource => textureSource,

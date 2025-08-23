@@ -239,12 +239,12 @@ namespace VideoKit {
         /// <summary>
         /// Start the camera preview.
         /// </summary>
-        public async void StartRunning () => await StartRunningAsync();
+        public async void StartRunning() => await StartRunningAsync();
 
         /// <summary>
         /// Start the camera preview.
         /// </summary>
-        public async Task StartRunningAsync () {
+        public async Task StartRunningAsync() {
             // Check
             if (!isActiveAndEnabled)
                 throw new InvalidOperationException(@"VideoKit: Camera manager failed to start running because component is disabled");
@@ -272,15 +272,15 @@ namespace VideoKit {
                     cameraDevice.exposureMode = exposureMode;
             }
             // Preload human texture predictor
-            var fxn = VideoKitClient.Instance!.fxn;
+            var muna = VideoKitClient.Instance!.muna;
             if (capabilities.HasFlag(Capabilities.HumanTexture)) {
-                try { await fxn.Predictions.Create(HumanTextureTag, new()); }
+                try { await muna.Predictions.Create(HumanTextureTag, new()); }
                 catch { // CHECK // REMOVE
                     var predictorCachePath = Path.Join(Application.persistentDataPath, @"fxn", @"predictors");
                     if (Directory.Exists(predictorCachePath))
                         Directory.Delete(predictorCachePath, recursive: true);
                 }
-                await fxn.Predictions.Create(HumanTextureTag, new());
+                await muna.Predictions.Create(HumanTextureTag, new());
             }
             // Start running
             StartRunning(_device, OnCameraBuffer);
@@ -293,7 +293,7 @@ namespace VideoKit {
         /// <summary>
         /// Stop the camera preview.
         /// </summary>
-        public void StopRunning () {
+        public void StopRunning() {
             var events = VideoKitEvents.OptionalInstance;
             if (events != null) {
                 events.onPause -= OnPause;
@@ -309,12 +309,12 @@ namespace VideoKit {
         private MediaDevice? _device;
         public const string HumanTextureTag = @"@videokit/human-texture";
 
-        private void Awake () {
+        private void Awake() {
             if (playOnAwake)
                 StartRunning();
         }
 
-        private static void StartRunning (
+        private static void StartRunning(
             MediaDevice device,
             Action<CameraDevice, PixelBuffer> handler
         ) {
@@ -326,25 +326,25 @@ namespace VideoKit {
                 throw new InvalidOperationException($"Cannot start running because media device has unsupported type: {device.GetType()}");
         }
 
-        private unsafe void OnCameraBuffer (
+        private unsafe void OnCameraBuffer(
             CameraDevice cameraDevice,
             PixelBuffer pixelBuffer
         ) => OnPixelBuffer?.Invoke(cameraDevice, pixelBuffer);
 
-        private void OnPause () => _device?.StopRunning();
+        private void OnPause() => _device?.StopRunning();
 
-        private void OnResume () {
+        private void OnResume() {
             if (_device != null)
                 StartRunning(_device, OnCameraBuffer);
         }
 
-        private void OnDestroy () => StopRunning();
+        private void OnDestroy() => StopRunning();
         #endregion
 
 
         #region --Utilties--
 
-        internal static IEnumerable<CameraDevice> EnumerateCameraDevices (MediaDevice? device) {
+        internal static IEnumerable<CameraDevice> EnumerateCameraDevices(MediaDevice? device) {
             if (device is CameraDevice cameraDevice)
                 yield return cameraDevice;
             else if (device is MultiCameraDevice multiCameraDevice)
@@ -354,20 +354,20 @@ namespace VideoKit {
                 yield break;
         }
 
-        internal static Facing GetCameraFacing (MediaDevice mediaDevice) => mediaDevice switch {
+        internal static Facing GetCameraFacing(MediaDevice mediaDevice) => mediaDevice switch {
             CameraDevice cameraDevice           => cameraDevice.frontFacing ? Facing.User : Facing.World,
             MultiCameraDevice multiCameraDevice => multiCameraDevice.cameras.Select(GetCameraFacing).Aggregate((a, b) => a | b),
             _                                   => 0,
         };
 
-        private static async Task<MediaDevice[]> GetAllDevices () {
+        private static async Task<MediaDevice[]> GetAllDevices() {
             var cameraDevices = await CameraDevice.Discover(); // MUST always come before multi-cameras
             var multiCameraDevices = await MultiCameraDevice.Discover();
             var result = cameraDevices.Cast<MediaDevice>().Concat(multiCameraDevices).ToArray();
             return result;
         }
 
-        private static MediaDevice? GetDefaultDevice (
+        private static MediaDevice? GetDefaultDevice(
             MediaDevice[]? devices,
             Facing facing,
             bool facingRequired
@@ -378,7 +378,7 @@ namespace VideoKit {
             return requestedDevice ?? fallbackDevice;
         }
 
-        private static (int width, int height) GetResolutionFrameSize (Resolution resolution) => resolution switch {
+        private static (int width, int height) GetResolutionFrameSize(Resolution resolution) => resolution switch {
             Resolution.Lowest       => (176, 144),
             Resolution._640x480     => (640, 480),
             Resolution._1280x720    => (1280, 720),

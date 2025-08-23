@@ -63,7 +63,7 @@ namespace VideoKit {
         /// <param name="channelCount">Channel count.</param>
         /// <param name="data">Audio data.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
-        public AudioBuffer (
+        public AudioBuffer(
             int sampleRate,
             int channelCount,
             float[] data,
@@ -92,7 +92,7 @@ namespace VideoKit {
         /// <param name="channelCount">Channel count.</param>
         /// <param name="data">Audio data.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
-        public unsafe AudioBuffer (
+        public unsafe AudioBuffer(
             int sampleRate,
             int channelCount,
             NativeArray<float> data,
@@ -107,7 +107,7 @@ namespace VideoKit {
         /// <param name="data">Audio data.</param>
         /// <param name="sampleCount">Total number of samples in sample buffer.</param>
         /// <param name="timestamp">Timestamp in nanoseconds.</param>
-        public unsafe AudioBuffer (
+        public unsafe AudioBuffer(
             int sampleRate,
             int channelCount,
             float* data,
@@ -125,7 +125,7 @@ namespace VideoKit {
         /// <summary>
         /// Dispose the audio buffer and release resources.
         /// </summary>
-        public void Dispose () {
+        public void Dispose() {
             audioBuffer.ReleaseSampleBuffer();
             UnsafeUtility.Free(audioData, Allocator.Persistent);
         }
@@ -136,12 +136,12 @@ namespace VideoKit {
         private readonly IntPtr audioBuffer;
         private readonly float* audioData;
 
-        internal AudioBuffer (IntPtr buffer) {
+        internal AudioBuffer(IntPtr buffer) {
             this.audioBuffer = buffer;
             this.audioData = null;
         }
 
-        public static implicit operator IntPtr (AudioBuffer audioBuffer) => audioBuffer.audioBuffer;
+        public static implicit operator IntPtr(AudioBuffer audioBuffer) => audioBuffer.audioBuffer;
         #endregion
     }
 }

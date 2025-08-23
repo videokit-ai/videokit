@@ -16,7 +16,7 @@ namespace VideoKit.Internal {
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
-    using Function;
+    using Muna;
     using Newtonsoft.Json;
     using Status = VideoKit.Status;
 
@@ -34,9 +34,9 @@ namespace VideoKit.Internal {
         public string url = URL;
 
         /// <summary>
-        /// VideoKit Function client.
+        /// VideoKit Muna client.
         /// </summary>
-        public Function fxn => _fxn ??= FunctionUnity.Create(token, url: url);
+        public Muna muna => _muna ??= MunaUnity.Create(token, url: url);
 
         /// <summary>
         /// VideoKit client for this project.
@@ -46,12 +46,12 @@ namespace VideoKit.Internal {
         /// <summary>
         /// VideoKit client version.
         /// </summary>
-        public const string Version = @"1.0.1";
+        public const string Version = @"1.0.2";
 
         /// <summary>
         /// Check the application VideoKit session status.
         /// </summary>
-        public async Task<Status> CheckSession () {  // INCOMPLETE // Try local, then fallback, then save
+        public async Task<Status> CheckSession() {  // INCOMPLETE // Try local, then fallback, then save
             try {
                 // Set
                 var session = sessionToken ?? await CreateSessionToken();
@@ -86,7 +86,7 @@ namespace VideoKit.Internal {
         #region --Operations--
         [SerializeField, HideInInspector]
         private string? token = string.Empty;
-        private Function? _fxn;
+        private Muna? _muna;
         public const string URL = @"https://www.videokit.ai/api";
         private const string BuildTokenKey = @"ai.videokit.build";
         private const string SessionTokenKey = @"ai.videokit.session";
@@ -98,13 +98,13 @@ namespace VideoKit.Internal {
             !string.IsNullOrEmpty(PlayerPrefs.GetString(SessionTokenKey))
         ) ? PlayerPrefs.GetString(SessionTokenKey) : null;
 
-        private void Awake () {
+        private void Awake() {
             // Set singleton in player
             if (!Application.isEditor && Instance == null)
                 Instance = this;
         }
 
-        internal async static Task<string> CreateToken (
+        internal async static Task<string> CreateToken(
             string platform,
             string apiKey,
             string? url = URL
@@ -138,7 +138,7 @@ namespace VideoKit.Internal {
             return responseBody[@"token"];
         }
 
-        private async Task<string?> CreateSessionToken () {
+        private async Task<string?> CreateSessionToken() {
             // Get session id
             var sessionId = new StringBuilder(2048);
             VideoKit.GetSessionIdentifier(sessionId, sessionId.Capacity);

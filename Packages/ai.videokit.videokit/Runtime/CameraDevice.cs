@@ -293,7 +293,7 @@ namespace VideoKit {
         /// Check if a given exposure mode is supported by the camera device.
         /// </summary>
         /// <param name="mode">Exposure mode.</param>
-        public bool IsExposureModeSupported (ExposureMode mode) => mode switch {
+        public bool IsExposureModeSupported(ExposureMode mode) => mode switch {
             ExposureMode.Continuous => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureContinuous),
             ExposureMode.Locked     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureLock),
             ExposureMode.Manual     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureManual),
@@ -304,7 +304,7 @@ namespace VideoKit {
         /// Check if a given focus mode is supported by the camera device.
         /// </summary>
         /// <param name="mode">Focus mode.</param>
-        public bool IsFocusModeSupported (FocusMode mode) => mode switch {
+        public bool IsFocusModeSupported(FocusMode mode) => mode switch {
             FocusMode.Continuous    => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusContinuous),
             FocusMode.Locked        => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusLock),
             _                       => false,
@@ -314,7 +314,7 @@ namespace VideoKit {
         /// Check if a given white balance mode is supported by the camera device.
         /// </summary>
         /// <param name="mode">White balance mode.</param>
-        public bool IsWhiteBalanceModeSupported (WhiteBalanceMode mode) => mode switch {
+        public bool IsWhiteBalanceModeSupported(WhiteBalanceMode mode) => mode switch {
             WhiteBalanceMode.Continuous => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceContinuous),
             WhiteBalanceMode.Locked     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceLock),
             _                           => false
@@ -324,7 +324,7 @@ namespace VideoKit {
         /// Check if a given video stabilization mode is supported by the camera device.
         /// </summary>
         /// <param name="mode">Video stabilization mode.</param>
-        public bool IsVideoStabilizationModeSupported (VideoStabilizationMode mode) => mode switch {
+        public bool IsVideoStabilizationModeSupported(VideoStabilizationMode mode) => mode switch {
             VideoStabilizationMode.Off      => true,
             VideoStabilizationMode.Standard => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.VideoStabilization),
             _                               => false
@@ -335,7 +335,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="duration">Exposure duration in seconds. MUST be in `exposureDurationRange`.</param>
         /// <param name="ISO">Sensor sensitivity ISO value. MUST be in `ISORange`.</param>
-        public void SetExposureDuration (float duration, float ISO) => device.SetCameraDeviceExposureDuration(duration, ISO).Throw();
+        public void SetExposureDuration(float duration, float ISO) => device.SetCameraDeviceExposureDuration(duration, ISO).Throw();
 
         /// <summary>
         /// Set the exposure point of interest.
@@ -343,7 +343,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetExposurePoint (float x, float y) => device.SetCameraDeviceExposurePoint(x, y).Throw();
+        public void SetExposurePoint(float x, float y) => device.SetCameraDeviceExposurePoint(x, y).Throw();
 
         /// <summary>
         /// Set the focus point of interest.
@@ -351,7 +351,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetFocusPoint (float x, float y) => device.SetCameraDeviceFocusPoint(x, y).Throw();
+        public void SetFocusPoint(float x, float y) => device.SetCameraDeviceFocusPoint(x, y).Throw();
         #endregion
 
 
@@ -360,7 +360,7 @@ namespace VideoKit {
         /// Start the camera preview.
         /// </summary>
         /// <param name="handler">Delegate to receive preview image frames. Note that this delegate is invoked on a dedicated thread.</param>
-        public void StartRunning (Action<PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
+        public void StartRunning(Action<PixelBuffer> handler) => StartRunning((IntPtr sampleBuffer) => {
             handler(new PixelBuffer(sampleBuffer));
         });
 
@@ -368,7 +368,7 @@ namespace VideoKit {
         /// Capture a photo.
         /// </summary>
         /// <param name="handler">Delegate to receive high-resolution photo. Note that this delegate is invoked on a dedicated thread.</param>
-        public void CapturePhoto (Action<PixelBuffer> handler) {
+        public void CapturePhoto(Action<PixelBuffer> handler) {
             var handle = GCHandle.Alloc(handler, GCHandleType.Normal);
             device.CapturePhoto(OnCapturePhoto, (IntPtr)handle).Throw();
         }
@@ -381,7 +381,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="request">Request permissions if the user has not yet been asked.</param>
         /// <returns>Camera permission status.</returns>
-        public static Task<PermissionStatus> CheckPermissions (bool request = true) => CheckPermissions(
+        public static Task<PermissionStatus> CheckPermissions(bool request = true) => CheckPermissions(
             VideoKit.PermissionType.Camera,
             request
         );
@@ -389,7 +389,7 @@ namespace VideoKit {
         /// <summary>
         /// Discover available camera devices.
         /// </summary>
-        public static async Task<CameraDevice[]> Discover () {
+        public static async Task<CameraDevice[]> Discover() {
             // Check session
             await VideoKitClient.Instance!.CheckSession();
             // Discover

@@ -64,9 +64,9 @@ namespace VideoKit.Internal {
 
         #region --Operations--
 
-        private void Awake () => DontDestroyOnLoad(gameObject);
+        private void Awake() => DontDestroyOnLoad(gameObject);
 
-        private IEnumerator Start () {
+        private IEnumerator Start() {
             var yielder = new WaitForEndOfFrame();
             for (;;) {
                 yield return yielder;
@@ -74,13 +74,13 @@ namespace VideoKit.Internal {
             }
         }
 
-        private void Update () => onUpdate?.Invoke();
+        private void Update() => onUpdate?.Invoke();
 
-        private void LateUpdate () => onLateUpdate?.Invoke();
+        private void LateUpdate() => onLateUpdate?.Invoke();
 
-        private void OnApplicationPause (bool paused) => (paused ? onPause : onResume)?.Invoke();
+        private void OnApplicationPause(bool paused) => (paused ? onPause : onResume)?.Invoke();
 
-        private void OnApplicationQuit () {
+        private void OnApplicationQuit() {
             onQuit?.Invoke();
             Destroy(gameObject);
             OptionalInstance = null;

@@ -22,7 +22,7 @@ namespace VideoKit.Sources {
         /// <param name="audioManager">Audio manager.</param>
         /// <param name="handler">Handler to receive audio buffers.</param>
         /// <param name="clock">Clock for generating timestamps.</param>
-        public AudioManagerSource (
+        public AudioManagerSource(
             VideoKitAudioManager audioManager,
             Action<AudioBuffer> handler,
             IClock? clock = null
@@ -33,7 +33,7 @@ namespace VideoKit.Sources {
             audioManager.OnAudioBuffer += OnAudioBuffer;
         }
 
-        public void Dispose () => audioManager.OnAudioBuffer -= OnAudioBuffer;
+        public void Dispose() => audioManager.OnAudioBuffer -= OnAudioBuffer;
         #endregion
 
 
@@ -42,7 +42,7 @@ namespace VideoKit.Sources {
         private readonly Action<AudioBuffer> handler;
         private readonly IClock? clock;
 
-        private void OnAudioBuffer (AudioBuffer srcBuffer) {
+        private void OnAudioBuffer(AudioBuffer srcBuffer) {
             using var audioBuffer = new AudioBuffer(
                 srcBuffer.sampleRate,
                 srcBuffer.channelCount,

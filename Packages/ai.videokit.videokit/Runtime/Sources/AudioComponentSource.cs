@@ -23,7 +23,7 @@ namespace VideoKit.Sources {
         /// <param name="listener">Audio listener for the current scene.</param>
         /// <param name="handler">Handler to receive audio buffers.</param>
         /// <param name="clock">Clock for generating timestamps.</param>
-        public AudioComponentSource (
+        public AudioComponentSource(
             AudioListener listener,
             Action<AudioBuffer> handler,
             IClock? clock = null
@@ -35,7 +35,7 @@ namespace VideoKit.Sources {
         /// <param name="source">Audio source to record.</param>
         /// <param name="handler">Handler to receive audio buffers.</param>
         /// <param name="clock">Clock for generating timestamps.</param>
-        public AudioComponentSource (
+        public AudioComponentSource(
             AudioSource source,
             Action<AudioBuffer> handler,
             IClock? clock = null
@@ -44,14 +44,14 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Close the media source and release resources.
         /// </summary>
-        public void Dispose () => AudioSourceAttachment.DestroyImmediate(attachment);
+        public void Dispose() => AudioSourceAttachment.DestroyImmediate(attachment);
         #endregion
 
 
         #region --Operations--
         private readonly AudioSourceAttachment attachment;
 
-        private AudioComponentSource (GameObject gameObject, Action<AudioBuffer> handler, IClock? clock) {
+        private AudioComponentSource(GameObject gameObject, Action<AudioBuffer> handler, IClock? clock) {
             var sampleRate = AudioSettings.outputSampleRate;
             attachment = gameObject.AddComponent<AudioSourceAttachment>();
             attachment.sampleBufferDelegate = (data, channels) => {
@@ -69,7 +69,7 @@ namespace VideoKit.Sources {
 
             public Action<float[], int>? sampleBufferDelegate;
 
-            private void OnAudioFilterRead (float[] data, int channels) {
+            private void OnAudioFilterRead(float[] data, int channels) {
                 sampleBufferDelegate?.Invoke(data, channels);
             }
         }

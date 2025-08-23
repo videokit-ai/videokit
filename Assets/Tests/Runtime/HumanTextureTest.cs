@@ -7,8 +7,7 @@ namespace VideoKit.Tests {
 
     using UnityEngine;
     using Internal;
-    using Function;
-    using Function.Types;
+    using Muna;
     using Newtonsoft.Json;
     using UI;
     using Stopwatch = System.Diagnostics.Stopwatch;
@@ -18,11 +17,11 @@ namespace VideoKit.Tests {
         [SerializeField] private VideoKitCameraView cameraView;
         [SerializeField] UnityEngine.UI.RawImage rawImage;
         private Texture2D humanTexture;
-        private Function fxn;
+        private Muna muna;
 
         private async void Start () {
-            fxn = VideoKitClient.Instance.fxn;
-            await fxn.Predictions.Create("@videokit/human-texture");
+            muna = VideoKitClient.Instance.muna;
+            await muna.Predictions.Create("@videokit/human-texture");
             Debug.Log("Created predictor");
         }
 
@@ -36,7 +35,7 @@ namespace VideoKit.Tests {
             //    return;
             // Predict
             var watch = Stopwatch.StartNew();
-            var prediction = fxn.Predictions.Create(
+            var prediction = muna.Predictions.Create(
                 "@videokit/human-texture",
                 inputs: new () {
                     [@"image"] = previewTexture.ToImage()

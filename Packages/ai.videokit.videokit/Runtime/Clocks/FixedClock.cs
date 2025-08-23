@@ -35,7 +35,7 @@ namespace VideoKit.Clocks {
         /// </summary>
         /// <param name="framerate">Desired framerate for clock's timestamps.</param>
         /// <param name="autoTick">Optional. If true, the clock will tick when its `Timestamp` is accessed.</param>
-        public FixedClock (float framerate, bool autoTick = true) {
+        public FixedClock(float framerate, bool autoTick = true) {
             this.interval = 1.0 / framerate;
             this.ticks = 0L;
             this.autoTick = autoTick;
@@ -45,7 +45,7 @@ namespace VideoKit.Clocks {
         /// Advance the clock by its time interval.
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void Tick () => ticks++;
+        public void Tick() => ticks++;
         #endregion
 
 

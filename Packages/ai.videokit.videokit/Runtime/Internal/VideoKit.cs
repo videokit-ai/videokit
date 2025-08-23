@@ -11,7 +11,7 @@ namespace VideoKit.Internal {
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
-    using Function.Types;
+    using Muna;
 
     public static class VideoKit {
 
@@ -70,24 +70,24 @@ namespace VideoKit.Internal {
 
 
         #region --Delegates--
-        public delegate void SampleBufferHandler (IntPtr context, IntPtr sampleBuffer);
-        public delegate void MediaAssetHandler (IntPtr context, IntPtr asset);
-        public delegate void MediaAssetShareHandler (IntPtr context, IntPtr receiver);
-        public delegate void MediaDeviceDiscoveryHandler (IntPtr context, IntPtr devices, int count);
-        public delegate void MediaDeviceDisconnectHandler (IntPtr context, IntPtr device);
-        public delegate void MediaDevicePermissionResultHandler (IntPtr context, MediaDevice.PermissionStatus result);
-        public delegate void MultiCameraDeviceSystemPressureHandler (IntPtr context);
+        public delegate void SampleBufferHandler(IntPtr context, IntPtr sampleBuffer);
+        public delegate void MediaAssetHandler(IntPtr context, IntPtr asset);
+        public delegate void MediaAssetShareHandler(IntPtr context, IntPtr receiver);
+        public delegate void MediaDeviceDiscoveryHandler(IntPtr context, IntPtr devices, int count);
+        public delegate void MediaDeviceDisconnectHandler(IntPtr context, IntPtr device);
+        public delegate void MediaDevicePermissionResultHandler(IntPtr context, MediaDevice.PermissionStatus result);
+        public delegate void MultiCameraDeviceSystemPressureHandler(IntPtr context);
         #endregion
 
 
         #region --VKTSession--
         [DllImport(Assembly, EntryPoint = @"VKTSessionGetIdentifier")]
-        public static extern Status GetSessionIdentifier (
+        public static extern Status GetSessionIdentifier(
             [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder dest,
             int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTSessionSetToken")]
-        public static extern Status SetSessionToken (
+        public static extern Status SetSessionToken(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string? token
         );
         #endregion
@@ -95,20 +95,20 @@ namespace VideoKit.Internal {
 
         #region --VKTSampleBuffer--
         [DllImport(Assembly, EntryPoint = @"VKTSampleBufferRelease")]
-        public static extern Status ReleaseSampleBuffer (this IntPtr sampleBuffer);
+        public static extern Status ReleaseSampleBuffer(this IntPtr sampleBuffer);
         [DllImport(Assembly, EntryPoint = @"VKTSampleBufferGetTimestamp")]
-        public static extern Status GetSampleBufferTimestamp (
+        public static extern Status GetSampleBufferTimestamp(
             this IntPtr audioBuffer,
             out long timestamp
         );
         [DllImport(Assembly, EntryPoint = @"VKTSampleBufferGetCurrentTimestamp")]
-        public static extern Status GetCurrentTimestamp (out long timestamp);
+        public static extern Status GetCurrentTimestamp(out long timestamp);
         #endregion
 
 
         #region --VKTAudioBuffer--
         [DllImport(Assembly, EntryPoint = @"VKTAudioBufferCreate")]
-        public static unsafe extern Status CreateAudioBuffer (
+        public static unsafe extern Status CreateAudioBuffer(
             int sampleRate,
             int channelCount,
             float* data,
@@ -117,22 +117,22 @@ namespace VideoKit.Internal {
             out IntPtr audioBuffer
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioBufferGetData")]
-        public static unsafe extern Status GetAudioBufferData (
+        public static unsafe extern Status GetAudioBufferData(
             this IntPtr audioBuffer,
             out float* data
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioBufferGetSampleCount")]
-        public static extern Status GetAudioBufferSampleCount (
+        public static extern Status GetAudioBufferSampleCount(
             this IntPtr audioBuffer,
             out int sampleCount
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioBufferGetSampleRate")]
-        public static extern Status GetAudioBufferSampleRate (
+        public static extern Status GetAudioBufferSampleRate(
             this IntPtr audioBuffer,
             out int sampleRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioBufferGetChannelCount")]
-        public static extern Status GetAudioBufferChannelCount (
+        public static extern Status GetAudioBufferChannelCount(
             this IntPtr audioBuffer,
             out int channelCount
         );
@@ -141,7 +141,7 @@ namespace VideoKit.Internal {
 
         #region --VKTPixelBuffer--
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCreate")]
-        public static unsafe extern Status CreatePixelBuffer (
+        public static unsafe extern Status CreatePixelBuffer(
             int width,
             int height,
             PixelBuffer.Format format,
@@ -152,7 +152,7 @@ namespace VideoKit.Internal {
             out IntPtr pixelBuffer
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCreatePlanar")]
-        public static extern Status CreatePlanarPixelBuffer (
+        public static extern Status CreatePlanarPixelBuffer(
             int width,
             int height,
             PixelBuffer.Format format,
@@ -167,90 +167,89 @@ namespace VideoKit.Internal {
             out IntPtr pixelBuffer
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetData")]
-        public static unsafe extern Status GetPixelBufferData (
+        public static unsafe extern Status GetPixelBufferData(
             this IntPtr pixelBuffer,
             out byte* data
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetDataSize")]
-        public static extern Status GetPixelBufferDataSize (
+        public static extern Status GetPixelBufferDataSize(
             this IntPtr pixelBuffer,
             out int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetFormat")]
-        public static extern Status GetPixelBufferFormat (
+        public static extern Status GetPixelBufferFormat(
             this IntPtr pixelBuffer,
             out PixelBuffer.Format format
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetWidth")]
-        public static extern Status GetPixelBufferWidth (
+        public static extern Status GetPixelBufferWidth(
             this IntPtr pixelBuffer,
             out int width
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetHeight")]
-        public static extern Status GetPixelBufferHeight
-        (
+        public static extern Status GetPixelBufferHeight(
             this IntPtr pixelBuffer,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetRowStride")]
-        public static extern Status GetPixelBufferRowStride (
+        public static extern Status GetPixelBufferRowStride(
             this IntPtr pixelBuffer,
             out int rowStride
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferIsVerticallyMirrored")]
-        public static extern Status GetPixelBufferIsVerticallyMirrored (
+        public static extern Status GetPixelBufferIsVerticallyMirrored(
             this IntPtr pixelBuffer,
             [MarshalAs(UnmanagedType.I1)] out bool mirrored
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneCount")]
-        public static extern Status GetPixelBufferPlaneCount (
+        public static extern Status GetPixelBufferPlaneCount(
             this IntPtr pixelBuffer,
             out int planeCount
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneData")]
-        public static unsafe extern Status GetPixelBufferPlaneData (
+        public static unsafe extern Status GetPixelBufferPlaneData(
             this IntPtr pixelBuffer,
             int planeIdx,
             out byte* planeData
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneDataSize")]
-        public static extern Status GetPixelBufferPlaneDataSize (
+        public static extern Status GetPixelBufferPlaneDataSize(
             this IntPtr pixelBuffer,
             int planeIdx,
             out int dataSize
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneWidth")]
-        public static extern Status GetPixelBufferPlaneWidth (
+        public static extern Status GetPixelBufferPlaneWidth(
             this IntPtr pixelBuffer,
             int planeIdx,
             out int width
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneHeight")]
-        public static extern Status GetPixelBufferPlaneHeight (
+        public static extern Status GetPixelBufferPlaneHeight(
             this IntPtr pixelBuffer,
             int planeIdx,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlanePixelStride")]
-        public static extern Status GetPixelBufferPlanePixelStride (
+        public static extern Status GetPixelBufferPlanePixelStride(
             this IntPtr pixelBuffer,
             int planeIdx,
             out int pixelStride
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferGetPlaneRowStride")]
-        public static extern Status GetPixelBufferPlaneRowStride (
+        public static extern Status GetPixelBufferPlaneRowStride(
             this IntPtr pixelBuffer,
             int planeIdx,
             out int rowStride
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCopyMetadata")]
-        public static extern Status CopyPixelBufferMetadata (
+        public static extern Status CopyPixelBufferMetadata(
             this IntPtr pixelBuffer,
             [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder dest,
             int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTPixelBufferCopyTo")]
-        public static extern Status CopyToPixelBuffer (
+        public static extern Status CopyToPixelBuffer(
             this IntPtr source,
             IntPtr destination,
             PixelBuffer.Rotation rotation
@@ -260,47 +259,47 @@ namespace VideoKit.Internal {
         
         #region --VKTMediaAsset--
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetCreate")]
-        public static extern Status CreateMediaAsset (
+        public static extern Status CreateMediaAsset(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             MediaAssetHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetCreateFromCameraRoll")]
-        public static extern Status CreateMediaAssetFromCameraRoll (
+        public static extern Status CreateMediaAssetFromCameraRoll(
             MediaAsset.MediaType type,
             MediaAssetHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetRelease")]
-        public static extern Status ReleaseMediaAsset (this IntPtr asset);
+        public static extern Status ReleaseMediaAsset(this IntPtr asset);
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetPath")]
-        public static extern Status GetMediaAssetPath (
+        public static extern Status GetMediaAssetPath(
             this IntPtr asset,
             [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder path,
             int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetMediaType")]
-        public static extern Status GetMediaAssetMediaType (
+        public static extern Status GetMediaAssetMediaType(
             this IntPtr asset,
             out MediaAsset.MediaType type
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetWidth")]
-        public static extern Status GetMediaAssetWidth (
+        public static extern Status GetMediaAssetWidth(
             this IntPtr asset,
             out int width
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetHeight")]
-        public static extern Status GetMediaAssetHeight (
+        public static extern Status GetMediaAssetHeight(
             this IntPtr asset,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetFrameRate")]
-        public static extern Status GetMediaAssetFrameRate (
+        public static extern Status GetMediaAssetFrameRate(
             this IntPtr asset,
             out float frameRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetGetSampleRate")]
-        public static extern Status GetMediaAssetSampleRate (
+        public static extern Status GetMediaAssetSampleRate(
             this IntPtr asset,
             out int sampleRate
         );
@@ -326,14 +325,14 @@ namespace VideoKit.Internal {
             out IntPtr subAsset
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetShare")]
-        public static extern Status ShareMediaAsset (
+        public static extern Status ShareMediaAsset(
             this IntPtr asset,
             [MarshalAs(UnmanagedType.LPUTF8Str)] string? message,
             MediaAssetShareHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaAssetSaveToCameraRoll")]
-        public static extern Status SaveMediaAssetToCameraRoll (
+        public static extern Status SaveMediaAssetToCameraRoll(
             this IntPtr asset,
             [MarshalAs(UnmanagedType.LPUTF8Str)] string? album,
             MediaAssetShareHandler handler,
@@ -344,15 +343,15 @@ namespace VideoKit.Internal {
 
         #region --VKTMediaReader--
         [DllImport(Assembly, EntryPoint = @"VKTMediaReaderCreate")]
-        public static extern Status CreateMediaReader (
+        public static extern Status CreateMediaReader(
             this IntPtr asset,
             MediaAsset.MediaType type,
             out IntPtr reader
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaReaderRelease")]
-        public static extern Status ReleaseMediaReader (this IntPtr reader);
+        public static extern Status ReleaseMediaReader(this IntPtr reader);
         [DllImport(Assembly, EntryPoint = @"VKTMediaReaderReadNextSampleBuffer")]
-        public static extern Status ReadNextSampleBuffer (
+        public static extern Status ReadNextSampleBuffer(
             this IntPtr reader,
             out IntPtr sampleBuffer
         );
@@ -361,61 +360,61 @@ namespace VideoKit.Internal {
 
         #region --VKTRecorder--
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderIsFormatSupported")]
-        public static extern Status IsMediaRecorderFormatSupported (MediaRecorder.Format format);
+        public static extern Status IsMediaRecorderFormatSupported(MediaRecorder.Format format);
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderGetFormat")]
-        public static extern Status GetMediaRecorderFormat (
+        public static extern Status GetMediaRecorderFormat(
             this IntPtr recorder,
             out MediaRecorder.Format format
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderGetWidth")]
-        public static extern Status GetMediaRecorderWidth (
+        public static extern Status GetMediaRecorderWidth(
             this IntPtr recorder,
             out int width
         );
 
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderGetHeight")]
-        public static extern Status GetMediaRecorderHeight (
+        public static extern Status GetMediaRecorderHeight(
             this IntPtr recorder,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderGetSampleRate")]
-        public static extern Status GetMediaRecorderSampleRate (
+        public static extern Status GetMediaRecorderSampleRate(
             this IntPtr recorder,
             out int sampleRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderGetChannelCount")]
-        public static extern Status GetMediaRecorderChannelCount (
+        public static extern Status GetMediaRecorderChannelCount(
             this IntPtr recorder,
             out int channelCount
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCanAppendPixelBuffer")]
-        public static extern unsafe Status CanAppendPixelBuffer (
+        public static extern unsafe Status CanAppendPixelBuffer(
             this IntPtr recorder,
             out bool result
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderAppendPixelBuffer")]
-        public static extern unsafe Status AppendPixelBuffer (
+        public static extern unsafe Status AppendPixelBuffer(
             this IntPtr recorder,
             IntPtr pixelBuffer
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCanAppendAudioBuffer")]
-        public static extern unsafe Status CanAppendAudioBuffer (
+        public static extern unsafe Status CanAppendAudioBuffer(
             this IntPtr recorder,
             out bool result
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderAppendAudioBuffer")]
-        public static extern unsafe Status AppendSampleBuffer (
+        public static extern unsafe Status AppendSampleBuffer(
             this IntPtr recorder,
             IntPtr audioBuffer
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderFinishWriting")]
-        public static extern Status FinishWriting (
+        public static extern Status FinishWriting(
             this IntPtr recorder,
             MediaAssetHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateMP4")]
-        public static extern Status CreateMP4Recorder (
+        public static extern Status CreateMP4Recorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -428,7 +427,7 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateHEVC")]
-        public static extern Status CreateHEVCRecorder (
+        public static extern Status CreateHEVCRecorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -441,7 +440,7 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateGIF")]
-        public static extern Status CreateGIFRecorder (
+        public static extern Status CreateGIFRecorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -449,14 +448,14 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateWAV")]
-        public static extern Status CreateWAVRecorder (
+        public static extern Status CreateWAVRecorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int sampleRate,
             int channelCount,
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateWEBM")]
-        public static extern Status CreateWEBMRecorder (
+        public static extern Status CreateWEBMRecorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -469,7 +468,7 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateJPEG")]
-        public static extern Status CreateJPEGRecorder (
+        public static extern Status CreateJPEGRecorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -477,7 +476,7 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateAV1")]
-        public static extern Status CreateAV1Recorder (
+        public static extern Status CreateAV1Recorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -490,7 +489,7 @@ namespace VideoKit.Internal {
             out IntPtr recorder
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaRecorderCreateProRes4444")]
-        public static extern Status CreateProRes4444Recorder (
+        public static extern Status CreateProRes4444Recorder(
             [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
             int width,
             int height,
@@ -504,45 +503,45 @@ namespace VideoKit.Internal {
 
         #region --VKTMediaDevice--
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceRelease")]
-        public static extern Status ReleaseMediaDevice (this IntPtr device);
+        public static extern Status ReleaseMediaDevice(this IntPtr device);
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceGetUniqueID")]
-        public static extern Status GetMediaDeviceUniqueID (
+        public static extern Status GetMediaDeviceUniqueID(
             this IntPtr device,
             [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder dest,
             int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceGetName")]
-        public static extern Status GetMediaDeviceName (
+        public static extern Status GetMediaDeviceName(
             this IntPtr device,
             [MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder dest,
             int size
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceGetFlags")]
-        public static extern Status GetMediaDeviceFlags (
+        public static extern Status GetMediaDeviceFlags(
             this IntPtr device,
             out MediaDeviceFlags flags
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceIsRunning")]
-        public static extern Status GetMediaDeviceIsRunning (
+        public static extern Status GetMediaDeviceIsRunning(
             this IntPtr device,
             [MarshalAs(UnmanagedType.I1)] out bool running
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceStartRunning")]
-        public static extern Status StartRunning (
+        public static extern Status StartRunning(
             this IntPtr device,
             SampleBufferHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceStopRunning")]
-        public static extern Status StopRunning (this IntPtr device);
+        public static extern Status StopRunning(this IntPtr device);
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceSetDisconnectHandler")]
-        public static extern Status SetDisconnectHandler (
+        public static extern Status SetDisconnectHandler(
             this IntPtr device,
             MediaDeviceDisconnectHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMediaDeviceCheckPermissions")]
-        public static extern Status CheckPermissions (
+        public static extern Status CheckPermissions(
             PermissionType type,
             bool request,
             MediaDevicePermissionResultHandler handler,
@@ -553,37 +552,37 @@ namespace VideoKit.Internal {
 
         #region --VKTAudioDevice--
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceDiscoverDevices")]
-        public static extern Status DiscoverAudioDevices (
+        public static extern Status DiscoverAudioDevices(
             MediaDeviceDiscoveryHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceGetEchoCancellation")]
-        public static extern Status GetAudioDeviceEchoCancellation (
+        public static extern Status GetAudioDeviceEchoCancellation(
             this IntPtr audioDevice,
             [MarshalAs(UnmanagedType.I1)] out bool echoCancellation
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceSetEchoCancellation")]
-        public static extern Status SetAudioDeviceEchoCancellation (
+        public static extern Status SetAudioDeviceEchoCancellation(
             this IntPtr audioDevice,
             [MarshalAs(UnmanagedType.I1)] bool mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceGetSampleRate")]
-        public static extern Status GetAudioDeviceSampleRate (
+        public static extern Status GetAudioDeviceSampleRate(
             this IntPtr audioDevice,
             out int sampleRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceSetSampleRate")]
-        public static extern Status SetAudioDeviceSampleRate (
+        public static extern Status SetAudioDeviceSampleRate(
             this IntPtr audioDevice,
             int sampleRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceGetChannelCount")]
-        public static extern Status GetAudioDeviceChannelCount (
+        public static extern Status GetAudioDeviceChannelCount(
             this IntPtr audioDevice,
             out int channelCount
         );
         [DllImport(Assembly, EntryPoint = @"VKTAudioDeviceSetChannelCount")]
-        public static extern Status SetAudioDeviceChannelCount (
+        public static extern Status SetAudioDeviceChannelCount(
             this IntPtr audioDevice,
             int sampleRate
         );
@@ -592,184 +591,184 @@ namespace VideoKit.Internal {
 
         #region --VKTCameraDevice--
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceDiscoverDevices")]
-        public static extern Status DiscoverCameraDevices (
+        public static extern Status DiscoverCameraDevices(
             MediaDeviceDiscoveryHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetFieldOfView")]
-        public static extern Status GetCameraDeviceFieldOfView (
+        public static extern Status GetCameraDeviceFieldOfView(
             this IntPtr camera,
             out float x,
             out float y
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetExposureBiasRange")]
-        public static extern Status GetCameraDeviceExposureBiasRange (
+        public static extern Status GetCameraDeviceExposureBiasRange(
             this IntPtr camera,
             out float min,
             out float max
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetExposureDurationRange")]
-        public static extern Status GetCameraDeviceExposureDurationRange (
+        public static extern Status GetCameraDeviceExposureDurationRange(
             this IntPtr camera,
             out float min,
             out float max
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetISORange")]
-        public static extern Status GetCameraDeviceISORange (
+        public static extern Status GetCameraDeviceISORange(
             this IntPtr device,
             out float min,
             out float max
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetZoomRange")]
-        public static extern Status GetCameraDeviceZoomRange (
+        public static extern Status GetCameraDeviceZoomRange(
             this IntPtr camera,
             out float min,
             out float max
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetPreviewResolution")]
-        public static extern Status GetCameraDevicePreviewResolution (
+        public static extern Status GetCameraDevicePreviewResolution(
             this IntPtr camera,
             out int width,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetPreviewResolution")]
-        public static extern Status SetCameraDevicePreviewResolution (
+        public static extern Status SetCameraDevicePreviewResolution(
             this IntPtr camera,
             int width,
             int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetPhotoResolution")]
-        public static extern Status GetCameraDevicePhotoResolution (
+        public static extern Status GetCameraDevicePhotoResolution(
             this IntPtr camera,
             out int width,
             out int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetPhotoResolution")]
-        public static extern Status SetCameraDevicePhotoResolution (
+        public static extern Status SetCameraDevicePhotoResolution(
             this IntPtr camera,
             int width,
             int height
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetFrameRate")]
-        public static extern Status GetCameraDeviceFrameRate (
+        public static extern Status GetCameraDeviceFrameRate(
             this IntPtr camera,
             out float frameRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetFrameRate")]
-        public static extern Status SetCameraDeviceFrameRate (
+        public static extern Status SetCameraDeviceFrameRate(
             this IntPtr camera,
             float frameRate
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetExposureMode")]
-        public static extern Status GetCameraDeviceExposureMode (
+        public static extern Status GetCameraDeviceExposureMode(
             this IntPtr camera,
             out CameraDevice.ExposureMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetExposureMode")]
-        public static extern Status SetCameraDeviceExposureMode (
+        public static extern Status SetCameraDeviceExposureMode(
             this IntPtr camera,
             CameraDevice.ExposureMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetExposureBias")]
-        public static extern Status GetCameraDeviceExposureBias (
+        public static extern Status GetCameraDeviceExposureBias(
             this IntPtr camera,
             out float bias
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetExposureBias")]
-        public static extern Status SetCameraDeviceExposureBias (
+        public static extern Status SetCameraDeviceExposureBias(
             this IntPtr camera,
             float bias
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetExposureDuration")]
-        public static extern Status GetCameraDeviceExposureDuration (
+        public static extern Status GetCameraDeviceExposureDuration(
             this IntPtr camera,
             out float duration
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetISO")]
-        public static extern Status GetCameraDeviceISO (
+        public static extern Status GetCameraDeviceISO(
             this IntPtr camera,
             out float ISO
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetExposureDuration")]
-        public static extern Status SetCameraDeviceExposureDuration (
+        public static extern Status SetCameraDeviceExposureDuration(
             this IntPtr camera,
             float duration,
             float ISO
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetExposurePoint")]
-        public static extern Status SetCameraDeviceExposurePoint (
+        public static extern Status SetCameraDeviceExposurePoint(
             this IntPtr camera,
             float x,
             float y
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetFlashMode")]
-        public static extern Status GetCameraDeviceFlashMode (
+        public static extern Status GetCameraDeviceFlashMode(
             this IntPtr camera,
             out CameraDevice.FlashMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetFlashMode")]
-        public static extern Status SetCameraDeviceFlashMode (
+        public static extern Status SetCameraDeviceFlashMode(
             this IntPtr camera,
             CameraDevice.FlashMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetFocusMode")]
-        public static extern Status GetCameraDeviceFocusMode (
+        public static extern Status GetCameraDeviceFocusMode(
             this IntPtr camera,
             out CameraDevice.FocusMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetFocusMode")]
-        public static extern Status SetCameraDeviceFocusMode (
+        public static extern Status SetCameraDeviceFocusMode(
             this IntPtr camera,
             CameraDevice.FocusMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetFocusPoint")]
-        public static extern Status SetCameraDeviceFocusPoint (
+        public static extern Status SetCameraDeviceFocusPoint(
             this IntPtr camera,
             float x,
             float y
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetTorchMode")]
-        public static extern Status GetCameraDeviceTorchMode (
+        public static extern Status GetCameraDeviceTorchMode(
             this IntPtr camera,
             out CameraDevice.TorchMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetTorchMode")]
-        public static extern Status SetCameraDeviceTorchMode (
+        public static extern Status SetCameraDeviceTorchMode(
             this IntPtr camera,
             CameraDevice.TorchMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetWhiteBalanceMode")]
-        public static extern Status GetCameraDeviceWhiteBalanceMode (
+        public static extern Status GetCameraDeviceWhiteBalanceMode(
             this IntPtr camera,
             out CameraDevice.WhiteBalanceMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetWhiteBalanceMode")]
-        public static extern Status SetCameraDeviceWhiteBalanceMode (
+        public static extern Status SetCameraDeviceWhiteBalanceMode(
             this IntPtr camera,
             CameraDevice.WhiteBalanceMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetVideoStabilizationMode")]
-        public static extern Status GetCameraDeviceVideoStabilizationMode (
+        public static extern Status GetCameraDeviceVideoStabilizationMode(
             this IntPtr camera,
             out CameraDevice.VideoStabilizationMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetVideoStabilizationMode")]
-        public static extern Status SetCameraDeviceVideoStabilizationMode (
+        public static extern Status SetCameraDeviceVideoStabilizationMode(
             this IntPtr camera,
             CameraDevice.VideoStabilizationMode mode
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceGetZoomRatio")]
-        public static extern Status GetCameraDeviceZoomRatio (
+        public static extern Status GetCameraDeviceZoomRatio(
             this IntPtr camera,
             out float zoom
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceSetZoomRatio")]
-        public static extern Status SetCameraDeviceZoomRatio (
+        public static extern Status SetCameraDeviceZoomRatio(
             this IntPtr camera,
             float ratio
         );
         [DllImport(Assembly, EntryPoint = @"VKTCameraDeviceCapturePhoto")]
-        public static extern Status CapturePhoto (
+        public static extern Status CapturePhoto(
             this IntPtr camera,
             SampleBufferHandler handler,
             IntPtr context
@@ -779,55 +778,55 @@ namespace VideoKit.Internal {
 
         #region --VKTMultiCameraDevice--
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceDiscoverDevices")]
-        public static extern Status DiscoverMultiCameraDevices (
+        public static extern Status DiscoverMultiCameraDevices(
             MediaDeviceDiscoveryHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraDeviceCount")]
-        public static extern Status GetMultiCameraDeviceCameraCount (
+        public static extern Status GetMultiCameraDeviceCameraCount(
             this IntPtr device,
             out int count
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetCameraDevice")]
-        public static extern Status GetMultiCameraDeviceCamera (
+        public static extern Status GetMultiCameraDeviceCamera(
             this IntPtr device,
             int index,
             out IntPtr camera
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceIsCameraDeviceRunning")]
-        public static extern Status GetMultiCameraDeviceIsRunning (
+        public static extern Status GetMultiCameraDeviceIsRunning(
             this IntPtr device,
             IntPtr camera,
             out bool running
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStartCameraDevice")]
-        public static extern Status StartRunning (
+        public static extern Status StartRunning(
             this IntPtr device,
             IntPtr camera
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceStopCameraDevice")]
-        public static extern Status StopRunning (
+        public static extern Status StopRunning(
             this IntPtr device,
             IntPtr camera
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetHardwareCost")]
-        public static extern Status GetMultiCameraDeviceHardwareCost (
+        public static extern Status GetMultiCameraDeviceHardwareCost(
             this IntPtr device,
             out float cost
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceGetSystemPressureCost")]
-        public static extern Status GetMultiCameraDeviceSystemPressureCost (
+        public static extern Status GetMultiCameraDeviceSystemPressureCost(
             this IntPtr device,
             out float cost
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraDeviceSetSystemPressureChangeHandler")]
-        public static extern Status SetMultiCameraDeviceSystemPressureChangeHandler (
+        public static extern Status SetMultiCameraDeviceSystemPressureChangeHandler(
             this IntPtr device,
             MultiCameraDeviceSystemPressureHandler handler,
             IntPtr context
         );
         [DllImport(Assembly, EntryPoint = @"VKTMultiCameraPixelBufferGetCameraDevice")]
-        public static extern Status GetMultiCameraPixelBufferCamera (
+        public static extern Status GetMultiCameraPixelBufferCamera(
             this IntPtr pixelBuffer,
             out IntPtr camera
         );
@@ -836,16 +835,16 @@ namespace VideoKit.Internal {
 
         #region --VKTVersion--
         [DllImport(Assembly, EntryPoint = @"VKTGetVersion")]
-        public static extern IntPtr GetVersion ();
+        public static extern IntPtr GetVersion();
         #endregion
 
 
         #region --iOS--
         #if (UNITY_IOS || UNITY_VISIONOS) && !UNITY_EDITOR
         [DllImport(Assembly, EntryPoint = @"VKTConfigureAudioSession")]
-        public static extern void ConfigureAudioSession ();
+        public static extern void ConfigureAudioSession();
         #else
-        public static void ConfigureAudioSession () { }
+        public static void ConfigureAudioSession() { }
         #endif
         #endregion
 
@@ -868,7 +867,7 @@ namespace VideoKit.Internal {
             }
         }
 
-        public static Status Throw (this Status status) => status switch {
+        public static Status Throw(this Status status) => status switch {
             Status.Ok               => status,
             Status.InvalidArgument  => throw new ArgumentException(),
             Status.InvalidOperation => throw new InvalidOperationException(),
@@ -878,7 +877,7 @@ namespace VideoKit.Internal {
             _                       => throw new InvalidOperationException(),
         };
 
-        public static async Task<Prediction> Throw (this Task<Prediction> task) {
+        public static async Task<Prediction> Throw(this Task<Prediction> task) {
             var prediction = await task;
             if (!string.IsNullOrEmpty(prediction.error))
                 throw new InvalidOperationException(prediction.error);

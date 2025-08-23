@@ -42,7 +42,7 @@ namespace VideoKit.Sources {
         /// <param name="cameras">Game camera to capture pixel buffers from.</param>
         /// <param name="handler">Handler to receive pixel buffers.</param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        public CameraSource (
+        public CameraSource(
             int width,
             int height,
             Camera camera,
@@ -58,7 +58,7 @@ namespace VideoKit.Sources {
         /// <param name="cameras">Game cameras to capture pixel buffers from.</param>
         /// <param name="handler">Handler to receive pixel buffers.</param>
         /// <param name="clock">Clock for generating pixel buffer timestamps.</param>
-        public CameraSource (
+        public CameraSource(
             int width,
             int height,
             Camera[] cameras,
@@ -79,7 +79,7 @@ namespace VideoKit.Sources {
         /// <summary>
         /// Stop the media source and release resources.
         /// </summary>
-        public void Dispose () {
+        public void Dispose() {
             VideoKitEvents.Instance.onFrame -= OnFrame;
             textureSource.Dispose();
         }
@@ -91,7 +91,7 @@ namespace VideoKit.Sources {
         private readonly RenderTextureDescriptor descriptor;
         private int frameIdx;
 
-        private void OnFrame () {
+        private void OnFrame() {
             // Check frame index
             if (frameIdx++ % (frameSkip + 1) != 0)
                 return;
@@ -104,6 +104,8 @@ namespace VideoKit.Sources {
             // Render cameras
             for (var i = 0; i < cameras.Length; i++) {
                 var camera = cameras[i];
+                if (!camera)
+                    continue;
                 var prevTarget = camera.targetTexture;
                 camera.targetTexture = frameBuffer;
                 camera.Render();
@@ -119,13 +121,13 @@ namespace VideoKit.Sources {
 
         #region --Deprecated--
         [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the CameraSource(width, height, cameras, handler, clock) constructor instead.", false)]
-        public CameraSource (
+        public CameraSource(
             MediaRecorder recorder,
             params Camera[] cameras
         ) : this(recorder.width, recorder.height, cameras, recorder.Append) { }
 
         [Obsolete(@"Deprecated in VideoKit 0.0.23. Use the CameraSource(width, height, cameras, handler, clock) constructor instead.", false)]
-        public CameraSource (
+        public CameraSource(
             MediaRecorder recorder,
             IClock? clock,
             params Camera[] cameras

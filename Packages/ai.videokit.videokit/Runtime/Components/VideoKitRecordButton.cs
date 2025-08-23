@@ -59,16 +59,16 @@ namespace VideoKit.UI {
         private bool touch;
         private const float TapDelay = 0.2f;
 
-        private void Awake () => button = GetComponent<Image>();
+        private void Awake() => button = GetComponent<Image>();
 
-        private void Start () => Zero();
+        private void Start() => Zero();
 
-        private void Zero () {
+        private void Zero() {
             button.fillAmount = 1.0f;
             countdown.fillAmount = 0.0f;
         }
 
-        private IEnumerator Countdown () {
+        private IEnumerator Countdown() {
             touch = true;
             // Wait for false touch
             yield return new WaitForSeconds(TapDelay);
@@ -92,9 +92,9 @@ namespace VideoKit.UI {
             OnEndHold?.Invoke();
         }
 
-        void IPointerDownHandler.OnPointerDown (PointerEventData eventData) => StartCoroutine(Countdown());
+        void IPointerDownHandler.OnPointerDown(PointerEventData eventData) => StartCoroutine(Countdown());
 
-        void IPointerUpHandler.OnPointerUp (PointerEventData eventData) => touch = false;
+        void IPointerUpHandler.OnPointerUp(PointerEventData eventData) => touch = false;
         #endregion
     }
 }

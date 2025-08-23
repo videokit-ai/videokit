@@ -102,7 +102,7 @@ namespace VideoKit {
         /// <summary>
         /// Stop running.
         /// </summary>
-        public virtual void StopRunning () {
+        public virtual void StopRunning() {
             if (running)
                 device.StopRunning().Throw();
             if (streamHandle != default)
@@ -118,7 +118,7 @@ namespace VideoKit {
         private readonly bool strong;
         private GCHandle streamHandle;
 
-        internal MediaDevice (IntPtr device, bool strong = true) {
+        internal MediaDevice(IntPtr device, bool strong = true) {
             this.device = device;
             this.strong = strong;
             this.weakSelf = GCHandle.Alloc(this, GCHandleType.Weak);
@@ -134,13 +134,13 @@ namespace VideoKit {
             device.SetDisconnectHandler(OnDeviceDisconnect, (IntPtr)weakSelf);
         }
 
-        ~MediaDevice () {
+        ~MediaDevice() {
             if (strong)
                 device.ReleaseMediaDevice();
             weakSelf.Free();
         }
 
-        protected virtual void StartRunning (Action<IntPtr> handler) {
+        protected virtual void StartRunning(Action<IntPtr> handler) {
             streamHandle = GCHandle.Alloc(handler, GCHandleType.Normal);
             try {
                 device.StartRunning(OnSampleBuffer, (IntPtr)streamHandle).Throw();
@@ -151,7 +151,7 @@ namespace VideoKit {
             }
         }
 
-        protected static Task<PermissionStatus> CheckPermissions (PermissionType type, bool request) {
+        protected static Task<PermissionStatus> CheckPermissions(PermissionType type, bool request) {
             var tcs = new TaskCompletionSource<PermissionStatus>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
@@ -163,14 +163,14 @@ namespace VideoKit {
             return tcs.Task;
         }
 
-        public static implicit operator IntPtr (MediaDevice device) => device.device;
+        public static implicit operator IntPtr(MediaDevice device) => device.device;
         #endregion
 
 
         #region --Callbacks--
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDeviceDisconnectHandler))]
-        private static void OnDeviceDisconnect (IntPtr context, IntPtr _) {
+        private static void OnDeviceDisconnect(IntPtr context, IntPtr _) {
             // Check
             if (!VideoKit.IsAppDomainLoaded)
                 return;
@@ -185,7 +185,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDevicePermissionResultHandler))]
-        private static void OnPermissionResult (IntPtr context, PermissionStatus status) {
+        private static void OnPermissionResult(IntPtr context, PermissionStatus status) {
             // Check
             if (!VideoKit.IsAppDomainLoaded)
                 return;
@@ -204,7 +204,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.SampleBufferHandler))]
-        private static void OnSampleBuffer (IntPtr context, IntPtr sampleBuffer) {
+        private static void OnSampleBuffer(IntPtr context, IntPtr sampleBuffer) {
             // Check
             if (!VideoKit.IsAppDomainLoaded)
                 return;
