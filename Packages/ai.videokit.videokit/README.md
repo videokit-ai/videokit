@@ -26,9 +26,9 @@ Add the following items to your Unity project's `Packages/manifest.json`:
       "scopes": ["ai.videokit"]
     },
     {
-      "name": "Function",
+      "name": "Muna",
       "url": "https://registry.npmjs.com",
-      "scopes": ["ai.fxn"]
+      "scopes": ["ai.muna"]
     }
   ],
   "dependencies": {
@@ -119,7 +119,7 @@ struct Command { // Define this however you want
     public int age;
 }
 
-async void ParseCommand () {
+async void ParseCommand() {
     var prompt = "My name is Jake and I'm thirteen years old.";
     var asset = await MediaAsset.FromText(prompt);
     var command = await asset.To<Command>();
