@@ -1,4 +1,5 @@
 ## 1.0.2
++ Added support for 16KB page sizes on Android.
 + Fixed recording being vertically inverted when using `VideoKitRecorder.VideoMode.CameraDevice` on macOS (#196).
 
 ## 1.0.1
