@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 1493259191}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnTap.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnEndHold.m_PersistentCalls.m_Calls.Array.size
@@ -166,7 +166,7 @@ PrefabInstance:
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnTap.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1493259207}
+      objectReference: {fileID: 1493259211}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnEndHold.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
@@ -185,7 +185,7 @@ PrefabInstance:
       objectReference: {fileID: 1493259191}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnTap.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleCamera
+      value: SwitchCamera
       objectReference: {fileID: 0}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnBeginHold.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -241,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnTap.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: VideoKit.Tests.CameraDeviceStartStopTest, VideoKit.Tests.Runtime
+      value: VideoKit.Tests.VideoKitCameraManagerSwitchCameraTest, VideoKit.Tests.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 114316963683169970, guid: d88712a49642b4b49b8322acc70b918b, type: 3}
       propertyPath: OnEndHold.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -935,6 +935,7 @@ GameObject:
   - component: {fileID: 1493259203}
   - component: {fileID: 1493259207}
   - component: {fileID: 1493259208}
+  - component: {fileID: 1493259211}
   - component: {fileID: 1493259196}
   m_Layer: 0
   m_Name: Tests
@@ -988,7 +989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capabilities: 0
   playOnAwake: 1
-  _facing: 1
+  _facing: 2
   facingRequired: 0
   resolution: 3
   frameRate: 120
@@ -1001,14 +1002,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0fffa95ffc0b4c7a87ce2d4c7fd1873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 4
+  videoMode: 1
   resolution: 7
   customResolution: {x: 1280, y: 720}
   cameras:
@@ -1338,6 +1339,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 2800000, guid: 9720ae62abb8a4085baab643c5e4c591, type: 3}
+--- !u!114 &1493259211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b58c2da2fc1a44c8955f3d12a395493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraManager: {fileID: 1493259190}
 --- !u!1 &1553569355
 GameObject:
   m_ObjectHideFlags: 0

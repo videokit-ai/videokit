@@ -192,13 +192,7 @@ namespace VideoKit.UI {
                         false
                     );
                 if (viewMode == ViewMode.CameraTexture) {
-                    using var buffer = new PixelBuffer(
-                        texture.width,
-                        texture.height,
-                        PixelBuffer.Format.RGBA8888,
-                        texture.GetRawTextureData<byte>(),
-                        mirrored: false
-                    );
+                    using var buffer = new PixelBuffer(texture);
                     pixelBuffer.CopyTo(buffer);
                     upload = true;
                 } else if (viewMode == ViewMode.HumanTexture) {
@@ -230,6 +224,9 @@ namespace VideoKit.UI {
             CameraDevice cameraDevice,
             PixelBuffer cameraBuffer
         ) {
+
+            Debug.Log($"Camera front {cameraDevice.frontFacing} mirrored: {cameraBuffer.verticallyMirrored}");
+
             if ((VideoKitCameraManager.GetCameraFacing(cameraDevice) & facing) == 0)
                 return;
             var (width, height) = GetPreviewTextureSize(

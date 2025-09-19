@@ -223,15 +223,19 @@ namespace VideoKit {
         /// </summary>
         /// <param name="texture">Input texture.</param>
         /// <param name="timestamp">Pixel buffer timestamp.</param>
-        /// <param name="metadata">Pixel buffer metadata.</param>
+        /// <param name="mirrored">Whether the pixel buffer is vertically mirrored.</param>
         /// <returns>Created pixel buffer.</returns>
-        public PixelBuffer(Texture2D texture, long timestamp = 0L) : this(
+        public PixelBuffer(
+            Texture2D texture,
+            long timestamp = 0L,
+            bool mirrored = false
+        ) : this(
             width: texture.width,
             height: texture.height,
             format: ToImageFormat(texture.format),
             data: texture.GetRawTextureData<byte>(),
             timestamp: timestamp,
-            mirrored: false
+            mirrored: mirrored
         ) { }
 
         /// <summary>
