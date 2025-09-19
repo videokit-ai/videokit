@@ -1,5 +1,6 @@
 ## 1.0.3
-*INCOMPLETE*
++ Fixed `MediaRecorder.FinishWriting` method causing segmentation fault crashes on Android.
++ Fixed the front camera preview being upside-down on iOS.
 
 ## 1.0.2
 + Added support for 16KB page sizes on Android (#197).
