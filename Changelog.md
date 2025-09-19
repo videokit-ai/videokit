@@ -1,3 +1,6 @@
+## 1.0.4
++ Added `MediaAsset.FromGeneratedSpeech` method to perform text-to-speech locally.
+
 ## 1.0.3
 + Fixed `MediaRecorder.FinishWriting` method causing segmentation fault crashes on Android.
 + Fixed the front camera preview being upside-down on iOS.

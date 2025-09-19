@@ -296,7 +296,7 @@ namespace VideoKit {
         /// <param name="prompt">Text to synthesize speech from.</param>
         /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
         /// <returns>Generated audio asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
+        public static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
             string prompt,
             NarrationVoice voice = 0
         ) {
