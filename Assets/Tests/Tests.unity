@@ -989,10 +989,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capabilities: 0
   playOnAwake: 1
-  _facing: 2
+  _facing: 1
   facingRequired: 0
   resolution: 3
-  frameRate: 120
+  frameRate: 30
   focusMode: 0
   exposureMode: 0
 --- !u!114 &1493259191
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493259187}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b58c2da2fc1a44c8955f3d12a395493, type: 3}
   m_Name: 

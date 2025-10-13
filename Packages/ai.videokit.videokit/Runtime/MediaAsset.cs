@@ -12,9 +12,11 @@ namespace VideoKit {
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Runtime.Serialization;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
@@ -24,6 +26,8 @@ namespace VideoKit {
     using NJsonSchema;
     using NJsonSchema.Generation;
     using Internal;
+    using static Muna.Beta.OpenAI.SpeechService;
+    using BinaryData = Muna.Beta.OpenAI.BinaryData;
     using Status = Internal.VideoKit.Status;
 
     /// <summary>
@@ -73,11 +77,6 @@ namespace VideoKit {
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum NarrationVoice : int {
-            /// <summary>
-            /// Default narration voice.
-            /// </summary>
-            [EnumMember(Value = @"default")]
-            Default = 0,
             /// <summary>
             /// Male 1 narration voice.
             /// </summary>
@@ -296,11 +295,24 @@ namespace VideoKit {
         /// <param name="prompt">Text to synthesize speech from.</param>
         /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
         /// <returns>Generated audio asset.</returns>
-        public static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
+        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
             string prompt,
-            NarrationVoice voice = 0
+            NarrationVoice voice,
+            float speed = 1f
         ) {
-            return default;
+            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
+            var tag = SpeechPredictorMap[voice];
+            var speech = await openai.Audio.Speech.Create(
+                model: tag,
+                input: prompt,
+                voice: GetEnumValueString(voice)!,
+                speed: speed,
+                responseFormat: ResponseFormat.PCM,
+                acceleration: Acceleration.Auto
+            );
+            var clip = ToAudioClip(speech);
+            var asset = await FromAudioClip(clip);
+            return asset;
         }
 
         /// <summary>
@@ -490,6 +502,9 @@ namespace VideoKit {
 
         #region --Operations--
         private readonly IntPtr asset;
+        private static readonly Dictionary<NarrationVoice, string> SpeechPredictorMap = new() { // INCOMPLETE
+            
+        };
 
         internal MediaAsset(IntPtr asset) => this.asset = asset;
 
@@ -601,8 +616,45 @@ namespace VideoKit {
         private static MediaType GetMediaType<T>() => typeof(T) switch {
             var x when x == typeof(AudioBuffer) => MediaType.Audio,
             var x when x == typeof(PixelBuffer) => MediaType.Video,
-            _                                   => MediaType.Unknown,
+            _ => MediaType.Unknown,
         };
+
+        private static string? GetEnumValueString (Enum value) {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            var attribute = fieldInfo?
+                .GetCustomAttributes(typeof(EnumMemberAttribute), false)?
+                .FirstOrDefault() as EnumMemberAttribute;
+            return (attribute?.IsValueSetExplicitly ?? false) ? attribute.Value : null;
+        }
+        
+        private static unsafe AudioClip ToAudioClip(BinaryData data) {
+            // Match sample rate and channel count
+            var rateMatch = Regex.Match(data.MediaType, @"rate=(\d+)");
+            var channelsMatch = Regex.Match(data.MediaType, @"channels=(\d+)");
+            if (!rateMatch.Success || !channelsMatch.Success)
+                throw new ArgumentException($"Failed to extract audio format from speech binary data because media type is invalid: '{data.MediaType}'");
+            // Parse
+            if (!int.TryParse(rateMatch.Groups[1].Value, out var sampleRate))
+                throw new ArgumentException($"Failed to parse sample rate from speech binary data because it is invalid: '{rateMatch.Value}'");
+            if (!int.TryParse(channelsMatch.Groups[1].Value, out var channelCount))
+                throw new ArgumentException($"Failed to parse channel count from speech binary data because it is invalid: '{channelsMatch.Value}'");
+            // Create clip
+            var sampleCount = data.Length / sizeof(float);
+            var frameCount = sampleCount / channelCount;
+            var clip = AudioClip.Create(
+                "audio",
+                lengthSamples: frameCount,
+                channels: channelCount,
+                frequency: sampleRate,
+                stream: false
+            );
+            // Copy data
+            var samples = new float[sampleCount];
+            Buffer.BlockCopy(data.ToArray(), 0, samples, 0, data.Length);
+            clip.SetData(samples, 0);
+            // Return
+            return clip;
+        }
 
         private readonly struct NativeMediaSequence : IReadOnlyList<MediaAsset?> {
 

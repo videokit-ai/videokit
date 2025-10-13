@@ -1,5 +1,5 @@
 ## 1.0.4
-+ Added `MediaAsset.FromGeneratedSpeech` method to perform text-to-speech locally.
++ Fixed human texture feature violating 16KB page size requirement on Android (#201).
 
 ## 1.0.3
 + Fixed `MediaRecorder.FinishWriting` method causing segmentation fault crashes on Android.

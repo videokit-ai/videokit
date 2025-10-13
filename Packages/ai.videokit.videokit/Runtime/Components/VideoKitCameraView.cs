@@ -224,9 +224,6 @@ namespace VideoKit.UI {
             CameraDevice cameraDevice,
             PixelBuffer cameraBuffer
         ) {
-
-            Debug.Log($"Camera front {cameraDevice.frontFacing} mirrored: {cameraBuffer.verticallyMirrored}");
-
             if ((VideoKitCameraManager.GetCameraFacing(cameraDevice) & facing) == 0)
                 return;
             var (width, height) = GetPreviewTextureSize(

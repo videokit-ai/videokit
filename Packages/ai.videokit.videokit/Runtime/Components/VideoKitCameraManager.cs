@@ -307,7 +307,7 @@ namespace VideoKit {
         #region --Operations--
         private MediaDevice[]? devices;
         private MediaDevice? _device;
-        public const string HumanTextureTag = @"@videokit/human-texture";
+        public const string HumanTextureTag = @"@videokit/human-texture-2";
 
         private void Awake() {
             if (playOnAwake)
