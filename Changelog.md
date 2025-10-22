@@ -1,5 +1,6 @@
 ## 1.0.4
 + Fixed human texture feature violating 16KB page size requirement on Android (#201).
++ Fixed dexing errors when building for Android in Unity 2022 (#200).
 
 ## 1.0.3
 + Fixed `MediaRecorder.FinishWriting` method causing segmentation fault crashes on Android.
