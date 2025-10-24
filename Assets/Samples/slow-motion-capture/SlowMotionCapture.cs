@@ -19,7 +19,7 @@ namespace VideoKit.Samples {
         private RealtimeClock clock;
         private NativeArray<byte> pixelData;
 
-        public async void StartRecording () {
+        public async void StartRecording() {
             // Get camera device
             if (cameraManager.device is not CameraDevice cameraDevice) {
                 Debug.LogError(@"Slow motion capture sample requires a camera device, not a multi-camera device");
@@ -42,7 +42,7 @@ namespace VideoKit.Samples {
             cameraManager.OnPixelBuffer += OnPixelBuffer;
         }
 
-        public async void StopRecording () {
+        public async void StopRecording() {
             // Stop listening for pixel buffers
             cameraManager.OnPixelBuffer -= OnPixelBuffer;
             // Stop recording
@@ -51,7 +51,10 @@ namespace VideoKit.Samples {
             await asset.SaveToCameraRoll();
         }
 
-        private void OnPixelBuffer (CameraDevice cameraDevice, PixelBuffer cameraBuffer) {
+        private void OnPixelBuffer(
+            CameraDevice cameraDevice,
+            PixelBuffer cameraBuffer
+        ) {
             // Convert to `RGBA8888`
             using var recorderBuffer = new PixelBuffer(
                 recorder.width,

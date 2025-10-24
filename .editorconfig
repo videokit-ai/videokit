@@ -1,4 +1,4 @@
 [*.cs]
 # Prevent opening braces on new lines
 csharp_new_line_before_open_brace = none
-csharp_space_between_method_declaration_name_and_open_parenthesis = true
+csharp_space_between_method_declaration_name_and_open_parenthesis = false
