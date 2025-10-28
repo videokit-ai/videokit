@@ -1,5 +1,6 @@
 ## 1.0.5
 + Fixed `MediaRecorder` dropping frames when recorder cannot consume them fast enough on iOS (#208).
++ Fixed `MediaAsset.Read<T>` hanging after all sample buffers have been read on Android.
 
 ## 1.0.4
 + Fixed human texture feature violating 16KB page size requirement on Android (#201).

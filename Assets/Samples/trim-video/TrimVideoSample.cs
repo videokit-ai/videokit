@@ -25,7 +25,10 @@ namespace VideoKit.Samples {
         public RawImage rawImage;
         public AspectRatioFitter aspectFitter;
 
-        private async void Start () {
+        private async void Start() {
+
+            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+
             // Load video
             var asset = await MediaAsset.FromStreamingAssets(videoPath);
             // Calculate start and end times in nanoseconds
@@ -44,7 +47,16 @@ namespace VideoKit.Samples {
                 length: asset.width * asset.height * 4,
                 allocator: Allocator.Persistent
             );
+
+
+            int frameCount = 0;
+
             foreach (var pixelBuffer in asset.Read<PixelBuffer>()) {
+
+                ++frameCount;
+
+                Debug.Log($"Received pixel buffer with timestamp {pixelBuffer.timestamp}");
+
                 // Check start time
                 if (pixelBuffer.timestamp < startTimeNs)
                     continue;
@@ -65,8 +77,13 @@ namespace VideoKit.Samples {
                 pixelBuffer.CopyTo(rgbaBuffer);
                 // Append to the recorder
                 recorder.Append(rgbaBuffer);
+
+                Debug.Log($"Appended pixel buffer with timestamp {pixelBuffer.timestamp}");
             }
             // Finish writing
+
+            Debug.Log($"Finishing writing {frameCount} frames");
+
             var trimmedAsset = await recorder.FinishWriting();
             // Playback the trimmed video
             await Awaitable.MainThreadAsync();

@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   videoPath: piano.mp4
-  trimStart: 5
+  trimStart: 0
   trimDuration: 10
   videoPlayer: {fileID: 399379901}
   rawImage: {fileID: 1452785148}
