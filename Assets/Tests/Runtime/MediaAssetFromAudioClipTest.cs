@@ -12,7 +12,7 @@ namespace VideoKit.Tests {
 
         [SerializeField] private AudioClip clip;
 
-        private async void Start () {
+        private async void Start() {
             var asset = await MediaAsset.FromAudioClip(clip);
             Debug.Log($"Created media asset at path: {asset.path}");
         }

@@ -14,8 +14,7 @@ namespace VideoKit.Tests {
 
         [SerializeField] private Texture2D texture;
 
-        private async void Start () {
-
+        private async void Start() {
             var recorder = await MediaRecorder.Create(MediaRecorder.Format.MP4, texture.width, texture.height, 30);
             var clock = new FixedClock(30);
             var pixelData = new byte[texture.width * texture.height * 4];
@@ -33,12 +32,6 @@ namespace VideoKit.Tests {
             }
             await recorder.FinishWriting();
             Debug.Log("Finished recording");
-        }
-
-        private static void CopyData (Texture2D texture, byte[] buffer) {
-            var data = texture.GetPixels32();
-            var byteSize = data.Length * 4;
-            Buffer.BlockCopy(data, 0, buffer, 0, byteSize);
         }
     }
 }

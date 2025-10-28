@@ -9,8 +9,8 @@ namespace VideoKit.Tests {
 
     internal sealed class VideoRecordingHandler : MonoBehaviour {
 
-        public void OnRecordingCompleted (MediaAsset asset) {
+        public void OnRecordingCompleted(MediaAsset asset) {
             Debug.Log(asset.path);
-        } 
+        }
     }
 }

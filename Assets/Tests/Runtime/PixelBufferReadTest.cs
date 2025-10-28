@@ -15,7 +15,7 @@ namespace VideoKit.Tests {
         [SerializeField] private RawImage rawImage;
         [SerializeField] private AspectRatioFitter aspectFitter;
 
-        private async void Start () {
+        private async void Start() {
             // Load asset
             var asset = await MediaAsset.FromStreamingAssets(@"rain.mp4");
             Debug.Log($"{asset.width}x{asset.height} @{asset.frameRate}Hz {asset.duration}s");

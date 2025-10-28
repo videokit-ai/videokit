@@ -19,13 +19,13 @@ namespace VideoKit.Tests {
         private Texture2D humanTexture;
         private Muna muna;
 
-        private async void Start () {
+        private async void Start() {
             muna = VideoKitClient.Instance.muna;
             await muna.Predictions.Create("@videokit/human-texture");
             Debug.Log("Created predictor");
         }
 
-        private void Update () {
+        private void Update() {
             // Check
             var previewTexture = cameraView.texture;
             if (previewTexture == null)

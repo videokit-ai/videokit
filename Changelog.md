@@ -1,5 +1,7 @@
 ## 1.0.6
-*INCOMPLETE*
++ Improved video recording performance on Android.
++ Fixed sporadic crash when finishing video recording on Android (#204).
++ Fixed rare crash on app start caused by exception in `JNI_OnLoad` function on Android.
 
 ## 1.0.5
 + Fixed significant performance drop when recording MP4 videos on Android (#203).

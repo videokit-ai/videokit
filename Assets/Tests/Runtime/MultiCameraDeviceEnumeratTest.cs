@@ -11,7 +11,7 @@ namespace VideoKit.Tests {
 
     internal sealed class MultiCameraDeviceEnumerateTest : MonoBehaviour {
 
-        private async void Start () {
+        private async void Start() {
             await MultiCameraDevice.CheckPermissions();
             var multiCameraDevices = await MultiCameraDevice.Discover();
             foreach (var device in multiCameraDevices)

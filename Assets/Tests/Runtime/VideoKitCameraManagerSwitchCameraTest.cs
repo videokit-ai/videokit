@@ -11,7 +11,7 @@ namespace VideoKit.Tests {
 
         [SerializeField] private VideoKitCameraManager cameraManager;
 
-        public void SwitchCamera () {
+        public void SwitchCamera() {
             var newFacing = cameraManager.facing switch {
                 VideoKitCameraManager.Facing.User => VideoKitCameraManager.Facing.World,
                 _ => VideoKitCameraManager.Facing.User

@@ -11,7 +11,7 @@ namespace VideoKit.Tests {
 
     internal sealed class AudioDeviceEnumerateTest : MonoBehaviour {
 
-        private async void Start () {
+        private async void Start() {
             await AudioDevice.CheckPermissions();
             var audioDevices = await AudioDevice.Discover();
             foreach (var device in audioDevices)

@@ -24,7 +24,7 @@ namespace VideoKit.Tests {
             public Direction direction;
         }
 
-        private async void Start () {
+        private async void Start() {
             var asset = await MediaAsset.FromText(@"My name is Yusuf and I'm heading East");
             var command = await asset.Parse<Command>();
             Debug.Log(JsonConvert.SerializeObject(command, Formatting.Indented));

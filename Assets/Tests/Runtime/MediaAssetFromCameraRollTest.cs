@@ -12,7 +12,7 @@ namespace VideoKit.Tests {
 
         [SerializeField] private RawImage rawImage;
 
-        private async void Start () {
+        private async void Start() {
             var asset = await MediaAsset.FromCameraRoll(MediaAsset.MediaType.Image);
             if (asset != null)
                 rawImage.texture = await asset.ToTexture();

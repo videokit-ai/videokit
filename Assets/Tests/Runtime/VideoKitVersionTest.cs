@@ -11,7 +11,7 @@ namespace VideoKit.Tests {
 
     internal sealed class VideoKitVersionTest : MonoBehaviour {
 
-        private void Start () {
+        private void Start() {
             var version = Marshal.PtrToStringUTF8(VideoKit.GetVersion());
             Debug.Log($"VideoKit {version}");
         }

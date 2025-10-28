@@ -13,7 +13,7 @@ namespace VideoKit.Tests {
         [SerializeField]
         private VideoKitCameraManager cameraManager;
 
-        public void ToggleCamera () {
+        public void ToggleCamera() {
             if (!cameraManager.running)
                 cameraManager.StartRunning();
             else
