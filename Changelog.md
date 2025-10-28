@@ -1,4 +1,5 @@
 ## 1.0.5
++ Fixed significant performance drop when recording MP4 videos on Android (#203).
 + Fixed `MediaRecorder` dropping frames when recorder cannot consume them fast enough on iOS (#208).
 + Fixed `MediaAsset.Read<T>` hanging after all sample buffers have been read on Android.
 
