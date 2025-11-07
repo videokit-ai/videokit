@@ -1,5 +1,6 @@
 ## 1.0.6
 + Improved video recording performance on Android.
++ Fixed crash when `MediaRecorder.FinishWriting` is called without appending any frames on Android (#210).
 + Fixed sporadic crash when finishing video recording on Android (#204).
 + Fixed rare crash on app start caused by exception in `JNI_OnLoad` function on Android.
 
