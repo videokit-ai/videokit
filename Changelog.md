@@ -1,3 +1,6 @@
+## 1.0.7
+*INCOMPLETE*
+
 ## 1.0.6
 + Improved video recording performance on Android.
 + Fixed crash when `MediaRecorder.FinishWriting` is called without appending any frames on Android (#210).
