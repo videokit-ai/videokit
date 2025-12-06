@@ -500,6 +500,255 @@ namespace VideoKit {
         #endregion
 
 
+        #region --Editing--
+        /// <summary>
+        /// Concatenate a set of media assets.
+        /// </summary>
+        /// <param name="assets">Media assets to concatenate.</param>
+        /// <returns>Concatenated media asset.</returns>
+        public static Task<MediaAsset> Concatenate(params MediaAsset[] assets) => Concatenate(
+            MediaRecorder.Format.MP4,
+            assets
+        );
+
+        /// <summary>
+        /// Concatenate a set of media assets.
+        /// </summary>
+        /// <param name="format">Destination format for concatenated media asset.</param>
+        /// <param name="assets">Media assets to concatenate.</param>
+        /// <returns>Concatenated media asset.</returns>
+        public static async Task<MediaAsset> Concatenate(
+            MediaRecorder.Format format,
+            params MediaAsset[] assets
+        ) {
+            // Check
+            if (assets.Length == 0)
+                throw new ArgumentException(@"Concatenate requires at least one media asset");
+            // Check all videos
+            if (assets.Any(asset => asset.type != MediaType.Video))
+                throw new NotImplementedException(@"Concatenate only supports video assets");
+            // Check resolution
+            var width = assets[0].width;
+            var height = assets[0].height;
+            if (assets.Any(asset => asset.width != width || asset.height != height))
+                throw new ArgumentException(@"Concatenate requires that all videos have the same resolution");
+            // Check no audio
+            if (assets.Any(asset => asset.sampleRate > 0 && asset.channelCount > 0))
+                throw new NotImplementedException(@"Concatenate only supports videos without audio");
+            // Create destination recorder
+            var frameRate = assets[0].frameRate;
+            var recorder = await MediaRecorder.Create(
+                format: format,
+                width: width,
+                height: height,
+                frameRate: frameRate,
+                sampleRate: 0,
+                channelCount: 0
+            );
+            // Append frames
+            var data = new byte[width * height * 4];
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var dataPtr = handle.AddrOfPinnedObject();
+            var timebase = 0L;
+            try {
+                foreach (var asset in assets) {
+                    var lastTimestamp = 0L;
+                    foreach (var srcBuffer in asset.Read<PixelBuffer>()) {
+                        using var dstBuffer = Wrap(
+                            dataPtr,
+                            width,
+                            height,
+                            timebase + srcBuffer.timestamp
+                        );
+                        srcBuffer.CopyTo(dstBuffer);
+                        recorder.Append(dstBuffer);
+                        lastTimestamp = dstBuffer.timestamp;
+                    }
+                    timebase = lastTimestamp + (long)(1e+9f / frameRate);
+                }
+            } finally {
+                handle.Free();
+            }
+            // Finish
+            return await recorder.FinishWriting();
+            // Helper
+            static unsafe PixelBuffer Wrap(IntPtr handle, int width, int height, long timestamp) => new(
+                width: width,
+                height: height,
+                format: PixelBuffer.Format.RGBA8888,
+                data: (byte*)handle,
+                timestamp: timestamp
+            );
+        }
+
+        /// <summary>
+        /// Trim a media asset from the start.
+        /// </summary>
+        /// <param name="asset">Media asset.</param>
+        /// <param name="duration">Duration in seconds.</param>
+        /// <returns>Trimmed media asset.</returns>
+        public static Task<MediaAsset> TrimStart(
+            MediaAsset asset,
+            float duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4
+        ) => TrimStart(
+            asset,
+            duration: TimeSpan.FromSeconds(duration), 
+            format: format
+        );
+
+        /// <summary>
+        /// Trim a media asset from the start.
+        /// </summary>
+        /// <param name="asset">Media asset.</param>
+        /// <param name="duration">Duration.</param>
+        /// <returns>Trimmed media asset.</returns>
+        public static async Task<MediaAsset> TrimStart(
+            MediaAsset asset,
+            TimeSpan duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4
+        ) {
+            // Check video
+            if (asset.type != MediaType.Video)
+                throw new NotImplementedException(@"Trimming media assets is only supported for videos");
+            // Check audio
+            if (asset.sampleRate > 0 && asset.channelCount > 0)
+                throw new NotImplementedException(@"Trimming videos with audio is not yet supported");
+            // Check asset duration
+            if (asset.duration < duration.TotalSeconds)
+                return asset;
+            // Create recorder
+            var width = asset.width;
+            var height = asset.height;
+            var recorder = await MediaRecorder.Create(
+                format: format,
+                width: width,
+                height: height,
+                frameRate: asset.frameRate,
+                sampleRate: 0,
+                channelCount: 0
+            );
+            // Copy
+            var data = new byte[width * height * 4];
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var dataPtr = handle.AddrOfPinnedObject();
+            try {
+                foreach (var srcBuffer in asset.Read<PixelBuffer>()) {
+                    var timestamp = srcBuffer.timestamp;
+                    if (timestamp > duration.TotalMilliseconds * 1e+6f)
+                        break;
+                    using var dstBuffer = Wrap(
+                        dataPtr,
+                        width,
+                        height,
+                        srcBuffer.timestamp
+                    );
+                    srcBuffer.CopyTo(dstBuffer);
+                    recorder.Append(dstBuffer);
+                }
+            } finally {
+                handle.Free();
+            }
+            // Finish
+            return await recorder.FinishWriting();
+            // Helper
+            static unsafe PixelBuffer Wrap(IntPtr handle, int width, int height, long timestamp) => new(
+                width: width,
+                height: height,
+                format: PixelBuffer.Format.RGBA8888,
+                data: (byte*)handle,
+                timestamp: timestamp
+            );
+        }
+
+        /// <summary>
+        /// Trim a media asset from the end.
+        /// </summary>
+        /// <param name="asset">Media asset.</param>
+        /// <param name="duration">Duration in seconds.</param>
+        /// <returns>Trimmed media asset.</returns>
+        public static Task<MediaAsset> TrimEnd(
+            MediaAsset asset,
+            float duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4
+        ) => TrimEnd(
+            asset: asset,
+            duration: TimeSpan.FromSeconds(duration),
+            format: format
+        );
+
+        /// <summary>
+        /// Trim a media asset from the end.
+        /// </summary>
+        /// <param name="asset">Media asset.</param>
+        /// <param name="duration">Duration in seconds.</param>
+        /// <returns>Trimmed media asset.</returns>
+        public static async Task<MediaAsset> TrimEnd(
+            MediaAsset asset,
+            TimeSpan duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4
+        ) {
+            // Check video
+            if (asset.type != MediaType.Video)
+                throw new NotImplementedException(@"Trimming media assets is only supported for videos");
+            // Check audio
+            if (asset.sampleRate > 0 && asset.channelCount > 0)
+                throw new NotImplementedException(@"Trimming videos with audio is not yet supported");
+            // Check asset duration
+            if (asset.duration < duration.TotalSeconds)
+                return asset;
+            // Create recorder
+            var width = asset.width;
+            var height = asset.height;
+            var recorder = await MediaRecorder.Create(
+                format: format,
+                width: width,
+                height: height,
+                frameRate: asset.frameRate,
+                sampleRate: 0,
+                channelCount: 0
+            );
+            // Copy
+            var data = new byte[width * height * 4];
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var dataPtr = handle.AddrOfPinnedObject();
+            var durationNs = (long)(duration.TotalMilliseconds * 1e+6f);
+            var assetDurationNs = (long)(asset.duration * 1e+9f);
+            var startTimeNs = assetDurationNs - durationNs;
+            long? timebaseNs = null;
+            try {
+                foreach (var srcBuffer in asset.Read<PixelBuffer>()) {
+                    var timestamp = srcBuffer.timestamp;
+                    if (timestamp < startTimeNs)
+                        continue;
+                    if (timebaseNs == null)
+                        timebaseNs = timestamp;
+                    using var dstBuffer = Wrap(
+                        dataPtr,
+                        width,
+                        height,
+                        timestamp - timebaseNs.Value
+                    );
+                    srcBuffer.CopyTo(dstBuffer);
+                    recorder.Append(dstBuffer);
+                }
+            } finally {
+                handle.Free();
+            }
+            // Finish
+            return await recorder.FinishWriting();
+            // Helper
+            static unsafe PixelBuffer Wrap(IntPtr handle, int width, int height, long timestamp) => new(
+                width: width,
+                height: height,
+                format: PixelBuffer.Format.RGBA8888,
+                data: (byte*)handle,
+                timestamp: timestamp
+            );
+        }
+        #endregion
+
+
         #region --Operations--
         private readonly IntPtr asset;
         private static readonly Dictionary<NarrationVoice, string> SpeechPredictorMap = new() { // INCOMPLETE
@@ -606,20 +855,13 @@ namespace VideoKit {
             return persistentPath;
         }
 
-        private static string GetValueExtension(Dtype type) => type switch {
-            Dtype.Image => ".png",
-            Dtype.Audio => ".wav",
-            Dtype.Video => ".mp4",
-            _           => string.Empty,
-        };
-
         private static MediaType GetMediaType<T>() => typeof(T) switch {
             var x when x == typeof(AudioBuffer) => MediaType.Audio,
             var x when x == typeof(PixelBuffer) => MediaType.Video,
             _ => MediaType.Unknown,
         };
 
-        private static string? GetEnumValueString (Enum value) {
+        private static string? GetEnumValueString(Enum value) {
             var fieldInfo = value.GetType().GetField(value.ToString());
             var attribute = fieldInfo?
                 .GetCustomAttributes(typeof(EnumMemberAttribute), false)?

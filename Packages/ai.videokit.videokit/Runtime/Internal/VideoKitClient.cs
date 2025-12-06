@@ -74,7 +74,7 @@ namespace VideoKit.Internal {
         /// </summary>
         /// <param name="buildToken">VideoKit auth token.</param>
         /// <param name="url">VideoKit API URL.</param>
-        public static VideoKitClient Create (string? token, string? url = null) {
+        public static VideoKitClient Create(string? token, string? url = null) {
             var client = CreateInstance<VideoKitClient>();
             client.token = token;
             client.url = !string.IsNullOrEmpty(url) ? url : client.url;

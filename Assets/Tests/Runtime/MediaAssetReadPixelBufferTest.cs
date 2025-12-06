@@ -9,7 +9,7 @@ namespace VideoKit.Tests {
     using UnityEngine;
     using UnityEngine.UI;
 
-    internal sealed class PixelBufferReadTest : MonoBehaviour {
+    internal sealed class MediaAssetReadPixelBufferTest : MonoBehaviour {
 
         [Header(@"UI")]
         [SerializeField] private RawImage rawImage;

@@ -1,5 +1,7 @@
 ## 1.0.7
-*INCOMPLETE*
++ Added `MediaAsset.Concatenate` static method to concatenate several videos into one.
++ Added `MediaAsset.TrimFromStart` static method to trim a video to a given duration.
++ Added `MediaAsset.TrimFromEnd` static method to trim a video from the end.
 
 ## 1.0.6
 + Improved video recording performance on Android.
