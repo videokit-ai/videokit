@@ -294,12 +294,15 @@ namespace VideoKit {
         /// Stop the camera preview.
         /// </summary>
         public void StopRunning() {
+            // Stop listening for events
             var events = VideoKitEvents.OptionalInstance;
             if (events != null) {
                 events.onPause -= OnPause;
                 events.onResume -= OnResume;
             }
-            _device?.StopRunning();
+            // Stop running
+            if (running)
+                _device?.StopRunning();
         }
         #endregion
 

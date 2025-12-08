@@ -9,6 +9,8 @@ namespace VideoKit.Tests {
 
     internal sealed class MediaAssetConcatenateTest : MonoBehaviour { // INCOMPLETE
 
-        
+        private async void Start() {
+            
+        }
     }
 }

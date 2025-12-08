@@ -11,7 +11,7 @@ namespace VideoKit.Editor {
     internal static class VideoKitSettingsProvider {
         
         [SettingsProvider]
-        public static SettingsProvider CreateProvider () => new SettingsProvider(@"Project/VideoKit", SettingsScope.Project) {
+        public static SettingsProvider CreateProvider() => new SettingsProvider(@"Project/VideoKit", SettingsScope.Project) {
             label = @"VideoKit",
             guiHandler = searchContext => {
                 var settings = VideoKitProjectSettings.instance;

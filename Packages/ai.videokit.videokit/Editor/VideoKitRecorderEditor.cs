@@ -17,7 +17,7 @@ namespace VideoKit.Editor {
 
         private readonly Dictionary<string, SerializedProperty> properties = new();
 
-        private void OnEnable () {
+        private void OnEnable() {
             var propertyNames = new [] {
                 @"format", @"recordingAction", @"prepareOnAwake", @"videoMode", @"audioMode", @"resolution", @"customResolution",
                 @"cameras", @"texture", @"cameraView", @"_frameRate", @"frameSkip", @"watermarkMode", @"_watermark",
@@ -32,7 +32,7 @@ namespace VideoKit.Editor {
             }
         }
 
-        public override void OnInspectorGUI () {
+        public override void OnInspectorGUI() {
             serializedObject.Update();
             // Format
             EditorGUILayout.PropertyField(properties[@"format"]);

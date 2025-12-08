@@ -17,12 +17,12 @@ public class ReplayBuffer : MonoBehaviour {
     private readonly Queue<Buffer> queue = new();
     private readonly object fence = new(); // used for synchronization
 
-    private void Start () {
+    private void Start() {
         // Listen for new pixel buffers
         cameraManager.OnPixelBuffer += OnPixelBuffer;
     }
 
-    private void OnPixelBuffer (CameraDevice cameraDevice, PixelBuffer pixelBuffer) {
+    private void OnPixelBuffer(CameraDevice cameraDevice, PixelBuffer pixelBuffer) {
         // Dequeue older pixel buffers
         var maxQueueSize = Mathf.FloorToInt(capacityInSeconds * cameraDevice.frameRate);
         lock (queue)
@@ -50,7 +50,7 @@ public class ReplayBuffer : MonoBehaviour {
     /// <summary>
     /// Flush the queue to an MP4 video file.
     /// </summary>
-    public async void CaptureReplay () {
+    public async void CaptureReplay() {
         // Get buffers in queue and clear queue
         Debug.Log($"Flushing recording queue");
         Queue<Buffer> queue;

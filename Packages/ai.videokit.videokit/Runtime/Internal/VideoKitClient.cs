@@ -36,7 +36,7 @@ namespace VideoKit.Internal {
         /// <summary>
         /// VideoKit Muna client.
         /// </summary>
-        public Muna muna => _muna ??= MunaUnity.Create(token, url: url);
+        public Muna muna => _muna ??= MunaUnity.Create(authToken, url: url);
 
         /// <summary>
         /// VideoKit client for this project.
@@ -51,18 +51,20 @@ namespace VideoKit.Internal {
         /// <summary>
         /// Check the application VideoKit session status.
         /// </summary>
-        public async Task<Status> CheckSession() {  // INCOMPLETE // Try local, then fallback, then save
+        public async Task<Status> CheckSession() {
             try {
-                // Set
-                var session = sessionToken ?? await CreateSessionToken();
-                var result = VideoKit.SetSessionToken(session);
-                // Cache
-                if (result == Status.Ok) {
-                    PlayerPrefs.SetString(BuildTokenKey, token);
-                    PlayerPrefs.SetString(SessionTokenKey, session);
+                // Check if initialized
+                if (VideoKit.SetSessionToken(sessionToken) == Status.Ok)
+                    return Status.Ok;
+                // Create token
+                var token = await CreateSessionToken();
+                var status = VideoKit.SetSessionToken(token);
+                if (status == Status.Ok) {
+                    sessionToken = token;
+                    PlayerPrefs.SetString(SessionTokenKey, token);
                 }
                 // Return
-                return result;
+                return status;
             } catch (Exception ex) {
                 Debug.LogWarning($"VideoKit: Failed to check session with error: {ex.Message}");
                 return Status.InvalidOperation;
@@ -72,11 +74,11 @@ namespace VideoKit.Internal {
         /// <summary>
         /// Create a VideoKit client.
         /// </summary>
-        /// <param name="buildToken">VideoKit auth token.</param>
+        /// <param name="token">VideoKit auth token.</param>
         /// <param name="url">VideoKit API URL.</param>
         public static VideoKitClient Create(string? token, string? url = null) {
             var client = CreateInstance<VideoKitClient>();
-            client.token = token;
+            client.authToken = token;
             client.url = !string.IsNullOrEmpty(url) ? url : client.url;
             return client;
         }
@@ -85,26 +87,27 @@ namespace VideoKit.Internal {
 
         #region --Operations--
         [SerializeField, HideInInspector]
-        private string? token = string.Empty;
+        private string? authToken = string.Empty;
         private Muna? _muna;
+        private string? sessionToken;
         public const string URL = @"https://www.videokit.ai/api";
-        private const string BuildTokenKey = @"ai.videokit.build";
         private const string SessionTokenKey = @"ai.videokit.session";
 
-        private string? sessionToken => (
-            !Application.isEditor &&
-            PlayerPrefs.HasKey(BuildTokenKey) &&
-            PlayerPrefs.GetString(BuildTokenKey) == token &&
-            !string.IsNullOrEmpty(PlayerPrefs.GetString(SessionTokenKey))
-        ) ? PlayerPrefs.GetString(SessionTokenKey) : null;
-
         private void Awake() {
+            // Check editor
+            if (Application.isEditor)
+                return;
             // Set singleton in player
-            if (!Application.isEditor && Instance == null)
-                Instance = this;
+            Instance = Instance ? Instance : this;
+            // Set session token
+            sessionToken = (
+                PlayerPrefs.HasKey(sessionToken) ?
+                PlayerPrefs.GetString(sessionToken) :
+                null
+            );
         }
 
-        internal async static Task<string> CreateToken(
+        internal async static Task<string> CreateAuthToken(
             string platform,
             string apiKey,
             string? url = URL
@@ -144,7 +147,7 @@ namespace VideoKit.Internal {
             VideoKit.GetSessionIdentifier(sessionId, sessionId.Capacity);
             // Create payload
             var payload = new Dictionary<string, object?> {
-                [@"buildToken"] = token,
+                [@"buildToken"] = authToken,
                 [@"sessionId"] = sessionId.ToString(),
             };
             var payloadStr = JsonConvert.SerializeObject(payload);

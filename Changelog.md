@@ -1,7 +1,10 @@
 ## 1.0.7
++ Added `ReplayBuffer` class for recording the last several seconds of a video stream (#214).
 + Added `MediaAsset.Concatenate` static method to concatenate several videos into one.
 + Added `MediaAsset.TrimFromStart` static method to trim a video to a given duration.
 + Added `MediaAsset.TrimFromEnd` static method to trim a video from the end.
++ Added support creating media recorders in background threads with `MediaRecorder.Create` static method (#215).
++ Fixed audio device recording not being suspended when app is suspended (#212).
 
 ## 1.0.6
 + Improved video recording performance on Android.

@@ -27,11 +27,11 @@ namespace VideoKit.Editor.Build {
             url: VideoKitClient.URL
         );
 
-        private VideoKitClient CreateClient (BuildReport report) {
+        private VideoKitClient CreateClient(BuildReport report) {
             try {
                 var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
                 var accessKey = VideoKitProjectSettings.instance.accessKey;
-                var token = Task.Run(() => VideoKitClient.CreateToken(platform, accessKey)).Result;
+                var token = Task.Run(() => VideoKitClient.CreateAuthToken(platform, accessKey)).Result;
                 return VideoKitClient.Create(token: token);
             } catch (Exception ex) {
                 Debug.LogWarning($"VideoKit: {ex.Message}");
@@ -39,7 +39,7 @@ namespace VideoKit.Editor.Build {
             }
         }
 
-        private void FailureListener () {
+        private void FailureListener() {
             if (BuildPipeline.isBuildingPlayer)
                 return;
             ClearSettings();
@@ -48,7 +48,7 @@ namespace VideoKit.Editor.Build {
 
         int IOrderedCallback.callbackOrder => -1;
 
-        void IPreprocessBuildWithReport.OnPreprocessBuild (BuildReport report) {
+        void IPreprocessBuildWithReport.OnPreprocessBuild(BuildReport report) {
             if (report.summary.platform == BuildTarget.Android)
                 SetAndroidXImportSettings();
             var client = CreateClient(report);
@@ -57,7 +57,7 @@ namespace VideoKit.Editor.Build {
             EmbedClient(client);
         }
 
-        void IPostprocessBuildWithReport.OnPostprocessBuild (BuildReport report) {
+        void IPostprocessBuildWithReport.OnPostprocessBuild(BuildReport report) {
             if (
                 report.summary.platform == BuildTarget.iOS ||
                 report.summary.platform == BuildTarget.VisionOS

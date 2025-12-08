@@ -166,12 +166,22 @@ namespace VideoKit {
             _device.echoCancellation = echoCancellation; // devices can say they don't support AEC even when they do
             // Start running
             _device.StartRunning(OnSampleBuffer);
+            // Listen for events
+            var events = VideoKitEvents.Instance;
+            events.onPause += OnPause;
+            events.onResume += OnResume;
         }
 
         /// <summary>
         /// Stop streaming audio.
         /// </summary>
         public void StopRunning() {
+            // Stop listening for events
+            var events = VideoKitEvents.OptionalInstance;
+            if (events != null) {
+                events.onPause -= OnPause;
+                events.onResume -= OnResume;
+            }
             // Stop
             if (running)
                 _device.StopRunning();
@@ -189,10 +199,14 @@ namespace VideoKit {
 
         private void OnSampleBuffer(AudioBuffer audioBuffer) => OnAudioBuffer?.Invoke(audioBuffer);
 
-        private void OnDestroy() {
-            if (running)
-                StopRunning();
+        private void OnPause() => _device?.StopRunning();
+
+        private void OnResume() {
+            if (_device != null)
+                _device.StartRunning(OnSampleBuffer);
         }
+
+        private void OnDestroy() => StopRunning();
         #endregion
     }
 }

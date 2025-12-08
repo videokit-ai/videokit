@@ -582,28 +582,28 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Trim a media asset from the start.
+        /// Take a sub-range of a media asset.
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
-        /// <returns>Trimmed media asset.</returns>
-        public static Task<MediaAsset> TrimStart(
+        /// <returns>Result media asset.</returns>
+        public static Task<MediaAsset> Take(
             MediaAsset asset,
             float duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4
-        ) => TrimStart(
+        ) => Take(
             asset,
             duration: TimeSpan.FromSeconds(duration), 
             format: format
         );
 
         /// <summary>
-        /// Trim a media asset from the start.
+        /// Take a sub-range of a media asset.
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration.</param>
-        /// <returns>Trimmed media asset.</returns>
-        public static async Task<MediaAsset> TrimStart(
+        /// <returns>Result media asset.</returns>
+        public static async Task<MediaAsset> Take(
             MediaAsset asset,
             TimeSpan duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4
@@ -662,28 +662,28 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Trim a media asset from the end.
+        /// Take a sub-range of a media asset from the end.
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
-        /// <returns>Trimmed media asset.</returns>
-        public static Task<MediaAsset> TrimEnd(
+        /// <returns>Result media asset.</returns>
+        public static Task<MediaAsset> TakeLast(
             MediaAsset asset,
             float duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4
-        ) => TrimEnd(
+        ) => TakeLast(
             asset: asset,
             duration: TimeSpan.FromSeconds(duration),
             format: format
         );
 
         /// <summary>
-        /// Trim a media asset from the end.
+        /// Take a sub-range of a media asset.
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
-        /// <returns>Trimmed media asset.</returns>
-        public static async Task<MediaAsset> TrimEnd(
+        /// <returns>Result media asset.</returns>
+        public static async Task<MediaAsset> TakeLast(
             MediaAsset asset,
             TimeSpan duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4

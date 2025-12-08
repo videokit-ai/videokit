@@ -25,7 +25,7 @@ namespace VideoKit.Editor {
         public bool embedAndroidX = true;
         public string photoLibraryUsageDescription = @"Allow this app access the camera roll.";
 
-        public void Save () => Save(false);
+        public void Save() => Save(false);
         #endregion
 
 
@@ -38,11 +38,11 @@ namespace VideoKit.Editor {
         };
 
         [InitializeOnEnterPlayMode]
-        private static void OnEnterPlaymodeInEditor (EnterPlayModeOptions options) {            
+        private static void OnEnterPlaymodeInEditor(EnterPlayModeOptions options) {            
             try {
                 var platform = PlatformToName.GetValueOrDefault(Application.platform);
                 var accessKey = instance.accessKey;
-                var token = Task.Run(() => VideoKitClient.CreateToken(platform, accessKey)).Result;
+                var token = Task.Run(() => VideoKitClient.CreateAuthToken(platform, accessKey)).Result;
                 VideoKitClient.Instance = VideoKitClient.Create(token);
             } catch (Exception ex) {
                 VideoKitClient.Instance = VideoKitClient.Create(null);
