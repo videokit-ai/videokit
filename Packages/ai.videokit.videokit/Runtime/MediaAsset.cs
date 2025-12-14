@@ -507,19 +507,21 @@ namespace VideoKit {
         /// <param name="assets">Media assets to concatenate.</param>
         /// <returns>Concatenated media asset.</returns>
         public static Task<MediaAsset> Concatenate(params MediaAsset[] assets) => Concatenate(
-            MediaRecorder.Format.MP4,
-            assets
+            assets,
+            format: MediaRecorder.Format.MP4
         );
 
         /// <summary>
         /// Concatenate a set of media assets.
         /// </summary>
-        /// <param name="format">Destination format for concatenated media asset.</param>
         /// <param name="assets">Media assets to concatenate.</param>
+        /// <param name="format">Destination format for concatenated media asset.</param>
+        /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Concatenated media asset.</returns>
         public static async Task<MediaAsset> Concatenate(
+            MediaAsset[] assets,
             MediaRecorder.Format format,
-            params MediaAsset[] assets
+            string? prefix = null
         ) {
             // Check
             if (assets.Length == 0)
@@ -543,7 +545,8 @@ namespace VideoKit {
                 height: height,
                 frameRate: frameRate,
                 sampleRate: 0,
-                channelCount: 0
+                channelCount: 0,
+                prefix: prefix
             );
             // Append frames
             var data = new byte[width * height * 4];
@@ -586,15 +589,19 @@ namespace VideoKit {
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
+        /// <param name="format">Destination format for result media asset.</param>
+        /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
         public static Task<MediaAsset> Take(
             MediaAsset asset,
             float duration,
-            MediaRecorder.Format format = MediaRecorder.Format.MP4
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
         ) => Take(
             asset,
             duration: TimeSpan.FromSeconds(duration), 
-            format: format
+            format: format,
+            prefix: prefix
         );
 
         /// <summary>
@@ -602,11 +609,14 @@ namespace VideoKit {
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration.</param>
+        /// <param name="format">Destination format for result media asset.</param>
+        /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
         public static async Task<MediaAsset> Take(
             MediaAsset asset,
             TimeSpan duration,
-            MediaRecorder.Format format = MediaRecorder.Format.MP4
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
         ) {
             // Check video
             if (asset.type != MediaType.Video)
@@ -626,7 +636,8 @@ namespace VideoKit {
                 height: height,
                 frameRate: asset.frameRate,
                 sampleRate: 0,
-                channelCount: 0
+                channelCount: 0,
+                prefix: prefix
             );
             // Copy
             var data = new byte[width * height * 4];
@@ -666,15 +677,19 @@ namespace VideoKit {
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
+        /// <param name="format">Destination format for result media asset.</param>
+        /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
         public static Task<MediaAsset> TakeLast(
             MediaAsset asset,
             float duration,
-            MediaRecorder.Format format = MediaRecorder.Format.MP4
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
         ) => TakeLast(
             asset: asset,
             duration: TimeSpan.FromSeconds(duration),
-            format: format
+            format: format,
+            prefix: prefix
         );
 
         /// <summary>
@@ -682,11 +697,14 @@ namespace VideoKit {
         /// </summary>
         /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
+        /// <param name="format">Destination format for result media asset.</param>
+        /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
         public static async Task<MediaAsset> TakeLast(
             MediaAsset asset,
             TimeSpan duration,
-            MediaRecorder.Format format = MediaRecorder.Format.MP4
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
         ) {
             // Check video
             if (asset.type != MediaType.Video)
@@ -706,7 +724,8 @@ namespace VideoKit {
                 height: height,
                 frameRate: asset.frameRate,
                 sampleRate: 0,
-                channelCount: 0
+                channelCount: 0,
+                prefix: prefix
             );
             // Copy
             var data = new byte[width * height * 4];

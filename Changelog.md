@@ -1,3 +1,9 @@
+## 1.0.8
++ Added support for specifying recording location `prefix` in `MediaAsset.Concatenate` static method.
++ Added support for specifying recording location `prefix` in `MediaAsset.Take` static method.
++ Added support for specifying recording location `prefix` in `MediaAsset.TakeLast` static method.
++ Fixed recording `format` and location `prefix` not being respected in `ReplayBuffer` class.
+
 ## 1.0.7
 + Added `ReplayBuffer` class for recording the last several seconds of a video stream (#214).
 + Added `MediaAsset.Concatenate` static method to concatenate several videos into one.
