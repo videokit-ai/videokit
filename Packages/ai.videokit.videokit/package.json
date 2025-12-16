@@ -1,6 +1,6 @@
 {
     "name": "ai.videokit.videokit",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "displayName": "VideoKit",
     "description": "The cross-platform media solution for Unity Engine.",
     "unity": "2022.3",

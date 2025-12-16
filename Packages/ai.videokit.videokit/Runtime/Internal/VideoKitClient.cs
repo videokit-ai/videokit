@@ -46,7 +46,7 @@ namespace VideoKit.Internal {
         /// <summary>
         /// VideoKit client version.
         /// </summary>
-        public const string Version = @"1.0.7";
+        public const string Version = @"1.0.8";
 
         /// <summary>
         /// Check the application VideoKit session status.
