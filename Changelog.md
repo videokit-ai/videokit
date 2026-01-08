@@ -1,3 +1,6 @@
+## 1.0.9
++ Fixed `MediaAsset.duration` reporting incorrect values on Android.
+
 ## 1.0.8
 + Added support for specifying recording location `prefix` in `MediaAsset.Concatenate` static method.
 + Added support for specifying recording location `prefix` in `MediaAsset.Take` static method.

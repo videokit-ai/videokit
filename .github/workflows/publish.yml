@@ -5,15 +5,19 @@ on:
     types: [published]
   workflow_dispatch:
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   npm:
     runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
     - uses: actions/setup-node@v2
       with:
         registry-url: "https://registry.npmjs.org"
+
     - run: npm publish --access public
       working-directory: Packages/ai.videokit.videokit
