@@ -1,11 +1,11 @@
 {
     "name": "ai.videokit.videokit",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "displayName": "VideoKit",
     "description": "The cross-platform media solution for Unity Engine.",
     "unity": "2022.3",
     "dependencies": {
-        "ai.muna.muna": "0.0.45"
+        "ai.muna.muna": "0.0.49"
     },
     "keywords": [
         "unity3d",

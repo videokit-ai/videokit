@@ -1,3 +1,6 @@
+## 1.0.10
++ Minor changes.
+
 ## 1.0.9
 + Fixed `MediaAsset.duration` reporting incorrect values on Android.
 
