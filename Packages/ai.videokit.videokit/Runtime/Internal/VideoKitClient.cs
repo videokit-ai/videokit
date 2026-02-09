@@ -46,7 +46,7 @@ namespace VideoKit.Internal {
         /// <summary>
         /// VideoKit client version.
         /// </summary>
-        public const string Version = @"1.0.10";
+        public const string Version = @"1.0.11";
 
         /// <summary>
         /// Check the application VideoKit session status.
@@ -101,8 +101,8 @@ namespace VideoKit.Internal {
             Instance = Instance ? Instance : this;
             // Set session token
             sessionToken = (
-                PlayerPrefs.HasKey(sessionToken) ?
-                PlayerPrefs.GetString(sessionToken) :
+                PlayerPrefs.HasKey(SessionTokenKey) ?
+                PlayerPrefs.GetString(SessionTokenKey) :
                 null
             );
         }

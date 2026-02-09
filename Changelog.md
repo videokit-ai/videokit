@@ -1,3 +1,6 @@
+## 1.0.11
++ Fixed slow camera startup times due to incorrect session caching (#217).
+
 ## 1.0.10
 + Minor changes.
 
