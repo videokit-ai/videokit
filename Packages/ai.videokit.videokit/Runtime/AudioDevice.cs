@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -103,18 +103,13 @@ namespace VideoKit {
 
         #region --Operations--
 
-        private int priority { // #24
-            get {
-                var order = 0;
-                if (!defaultForMediaType)
-                    order += 1;
-                if (location == Location.External)
-                    order += 10;
-                if (location == Location.Unknown)
-                    order += 100;
-                return order;
-            }
-        }
+        private int priority => location switch {
+            var _ when defaultForMediaType  => -1000,
+            Location.External               => -1,
+            Location.Internal               => 0,
+            Location.Unknown                => 1,
+            _                               => 2
+        };
 
         internal AudioDevice(IntPtr device, bool strong = true) : base(device, strong: strong) { }
 

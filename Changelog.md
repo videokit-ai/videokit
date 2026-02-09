@@ -1,5 +1,6 @@
 ## 1.0.11
 + Fixed slow camera startup times due to incorrect session caching (#217).
++ Fixed external microphones not being picked up as default in `AudioDevice.Discover` method (#213).
 
 ## 1.0.10
 + Minor changes.
