@@ -1,6 +1,13 @@
 ## 1.0.11
++ Added `MediaAsset.ToText` method to read contents of a text asset.
++ Fixed rare crash when app is closed on iOS with a camera device running.
 + Fixed slow camera startup times due to incorrect session caching (#217).
++ Fixed camera failing to stream when Unity is unloaded and reloaded as a library (#221).
 + Fixed external microphones not being picked up as default in `AudioDevice.Discover` method (#213).
++ Fixed sporadic crash when exiting play mode after using `VideoKitRecorder.CaptureScreenshot` method (#206).
++ Refactored `MediaAsset.Concatenate` factory method to `MediaAsset.FromConcatenatingAssets`.
++ Refactored `MediaAsset.Take` factory method to instance method.
++ Refactored `MediaAsset.TakeLast` factory method to instance method.
 
 ## 1.0.10
 + Minor changes.

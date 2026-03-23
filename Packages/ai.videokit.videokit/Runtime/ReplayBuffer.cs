@@ -95,15 +95,14 @@ namespace VideoKit {
             // Concatenate the previous chunk to the final one if the final one is not long enough
             var chunk = await chunkTask;
             if (result.duration < duration && chunk != null)
-                result = await MediaAsset.Concatenate(
+                result = await MediaAsset.FromConcatenatingAssets(
                     new[] { chunk, result },
                     format: format,
                     prefix: prefix
                 );
             // Trim the result if longer than duration
             if (result.duration > duration)
-                result = await MediaAsset.TakeLast(
-                    result,
+                result = await result.TakeLast(
                     duration: duration,
                     format: format,
                     prefix: prefix

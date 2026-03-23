@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -84,49 +84,49 @@ namespace VideoKit {
         /// <summary>
         /// Recorder format.
         /// </summary>
-        public virtual Format format => recorder.GetMediaRecorderFormat(out var format).Throw() == Status.Ok ? format : default;
+        public virtual Format format => handle.GetMediaRecorderFormat(out var format).Throw() == Status.Ok ? format : default;
 
         /// <summary>
         /// Recorder video width.
         /// </summary>
-        public virtual int width => recorder.GetMediaRecorderWidth(out var width).Throw() == Status.Ok ? width : default;
+        public virtual int width => handle.GetMediaRecorderWidth(out var width).Throw() == Status.Ok ? width : default;
 
         /// <summary>
         /// Recorder video height.
         /// </summary>
-        public virtual int height => recorder.GetMediaRecorderHeight(out var height).Throw() == Status.Ok ? height : default;
+        public virtual int height => handle.GetMediaRecorderHeight(out var height).Throw() == Status.Ok ? height : default;
 
         /// <summary>
         /// Recorder audio sample rate.
         /// </summary>
-        public virtual int sampleRate => recorder.GetMediaRecorderSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
+        public virtual int sampleRate => handle.GetMediaRecorderSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
 
         /// <summary>
         /// Recorder audio channel count.
         /// </summary>
-        public virtual int channelCount => recorder.GetMediaRecorderChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
+        public virtual int channelCount => handle.GetMediaRecorderChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
 
         /// <summary>
         /// Whether the recorder supports appending pixel buffers.
         /// </summary>
-        public virtual bool canAppendPixelBuffer => recorder.CanAppendPixelBuffer(out var result).Throw() == Status.Ok && result;
+        public virtual bool canAppendPixelBuffer => handle.CanAppendPixelBuffer(out var result).Throw() == Status.Ok && result;
 
         /// <summary>
         /// Whether the recorder supports appendind audio buffers.
         /// </summary>
-        public virtual bool canAppendAudioBuffer => recorder.CanAppendAudioBuffer(out var result).Throw() == Status.Ok && result;
+        public virtual bool canAppendAudioBuffer => handle.CanAppendAudioBuffer(out var result).Throw() == Status.Ok && result;
 
         /// <summary>
         /// Append a video frame to the recorder.
         /// </summary>
         /// <param name="image">Input image to append. The image MUST have a valid timestamp for formats that require one.</param>
-        public virtual void Append(PixelBuffer pixelBuffer) => recorder.AppendPixelBuffer(pixelBuffer).Throw();
+        public virtual void Append(PixelBuffer pixelBuffer) => handle.AppendPixelBuffer(pixelBuffer).Throw();
 
         /// <summary>
         /// Append an audio frame to the recorder.
         /// </summary>
         /// <param name="audioBuffer">Input audio buffer to append. This audio buffer MUST have a valid timestamp for formats that require one.</param>
-        public virtual void Append(AudioBuffer audioBuffer) => recorder.AppendSampleBuffer(audioBuffer).Throw();
+        public virtual void Append(AudioBuffer audioBuffer) => handle.AppendSampleBuffer(audioBuffer).Throw();
 
         /// <summary>
         /// Finish writing.
@@ -136,7 +136,7 @@ namespace VideoKit {
             var tcs = new TaskCompletionSource<MediaAsset>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
             try {
-                recorder.FinishWriting(OnFinishWriting, (IntPtr)handle).Throw();
+                this.handle.FinishWriting(OnFinishWriting, (IntPtr)handle).Throw();
             } catch (Exception ex) {
                 handle.Free();
                 tcs.SetException(ex);
@@ -269,12 +269,12 @@ namespace VideoKit {
 
 
         #region --Operations--
-        private readonly IntPtr recorder;
+        private readonly IntPtr handle;
         private static string directory = string.Empty;
 
-        protected MediaRecorder (IntPtr recorder) => this.recorder = recorder;
+        protected MediaRecorder (IntPtr handle) => this.handle = handle;
 
-        public static implicit operator IntPtr (MediaRecorder recorder) => recorder.recorder;
+        public static implicit operator IntPtr (MediaRecorder recorder) => recorder.handle;
 
         public static implicit operator Action<PixelBuffer> (MediaRecorder recorder) => recorder.Append;
 

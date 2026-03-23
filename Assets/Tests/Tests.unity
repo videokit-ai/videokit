@@ -924,9 +924,10 @@ GameObject:
   - component: {fileID: 1493259193}
   - component: {fileID: 1493259199}
   - component: {fileID: 1493259206}
+  - component: {fileID: 1493259209}
   - component: {fileID: 1493259205}
   - component: {fileID: 1493259197}
-  - component: {fileID: 1493259209}
+  - component: {fileID: 1493259217}
   - component: {fileID: 1493259192}
   - component: {fileID: 1493259215}
   - component: {fileID: 1493259214}
@@ -993,11 +994,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capabilities: 0
-  playOnAwake: 1
+  playOnAwake: 0
   _facing: 1
   facingRequired: 0
   resolution: 3
-  frameRate: 30
+  frameRate: 120
   focusMode: 0
   exposureMode: 0
 --- !u!114 &1493259191
@@ -1014,7 +1015,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   format: 0
   prepareOnAwake: 1
-  videoMode: 1
+  videoMode: 4
   resolution: 7
   customResolution: {x: 1280, y: 720}
   cameras:
@@ -1417,6 +1418,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92efd98eafccc4913a58a5ef43ce914c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1493259217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493259187}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3123e7ac05f4e30ad5d07c9df79852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: 3c9477cc3cf3642a48b5c1b41bb90f75, type: 3}
 --- !u!1 &1553569355
 GameObject:
   m_ObjectHideFlags: 0

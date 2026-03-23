@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Editor.Build {
@@ -21,7 +21,10 @@ namespace VideoKit.Editor.Build {
         #region --Operations--
         private const string CachePath = @"Assets/__VIDEOKIT_DELETE_THIS__";
 
-        [Muna.Muna.Embed(VideoKitCameraManager.HumanTextureTag)]
+        [Muna.Muna.Embed(
+            VideoKitCameraManager.HumanTextureTag,
+            MediaAsset.TranscribeTag
+        )]
         private static Muna.Muna muna => new(
             accessKey: VideoKitProjectSettings.instance.accessKey,
             url: VideoKitClient.URL

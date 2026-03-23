@@ -1,6 +1,6 @@
 /*
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -24,10 +24,10 @@ namespace VideoKit {
         /// Audio data.
         /// This is always linear PCM audio interleaved by channel.
         /// </summary>
-        public unsafe readonly NativeArray<float> data {
+        public readonly NativeArray<float> data {
             get {
-                audioBuffer.GetAudioBufferData(out var data).Throw();
-                audioBuffer.GetAudioBufferSampleCount(out var sampleCount).Throw();
+                handle.GetAudioBufferData(out var data).Throw();
+                handle.GetAudioBufferSampleCount(out var sampleCount).Throw();
                 var nativeArray = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<float>(
                     data,
                     sampleCount,
@@ -43,17 +43,17 @@ namespace VideoKit {
         /// <summary>
         /// Sample rate.
         /// </summary>
-        public readonly int sampleRate => audioBuffer.GetAudioBufferSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : 0;
+        public readonly int sampleRate => handle.GetAudioBufferSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : 0;
 
         /// <summary>
         /// Channel count.
         /// </summary>
-        public readonly int channelCount => audioBuffer.GetAudioBufferChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : 0;
+        public readonly int channelCount => handle.GetAudioBufferChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : 0;
 
         /// <summary>
         /// Timestamp in nanoseconds.
         /// </summary>
-        public readonly long timestamp => audioBuffer.GetSampleBufferTimestamp(out var timestamp).Throw() == Status.Ok ? timestamp : 0L;
+        public readonly long timestamp => handle.GetSampleBufferTimestamp(out var timestamp).Throw() == Status.Ok ? timestamp : 0L;
 
         /// <summary>
         /// Create an audio buffer from a linear PCM sample buffer.
@@ -81,7 +81,7 @@ namespace VideoKit {
                 audioData,
                 data.Length,
                 timestamp,
-                out audioBuffer
+                out handle
             ).Throw();
         }
 
@@ -126,22 +126,22 @@ namespace VideoKit {
         /// Dispose the audio buffer and release resources.
         /// </summary>
         public void Dispose() {
-            audioBuffer.ReleaseSampleBuffer();
+            handle.ReleaseSampleBuffer();
             UnsafeUtility.Free(audioData, Allocator.Persistent);
         }
         #endregion
 
 
         #region --Operations--
-        private readonly IntPtr audioBuffer;
+        private readonly IntPtr handle;
         private readonly float* audioData;
 
         internal AudioBuffer(IntPtr buffer) {
-            this.audioBuffer = buffer;
+            this.handle = buffer;
             this.audioData = null;
         }
 
-        public static implicit operator IntPtr(AudioBuffer audioBuffer) => audioBuffer.audioBuffer;
+        public static implicit operator IntPtr(AudioBuffer audioBuffer) => audioBuffer.handle;
         #endregion
     }
 }

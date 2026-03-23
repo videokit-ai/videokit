@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -129,7 +129,7 @@ namespace VideoKit {
         public string? path {
             get {
                 var sb = new StringBuilder(2048);
-                var status = asset.GetMediaAssetPath(sb, sb.Capacity);
+                var status = handle.GetMediaAssetPath(sb, sb.Capacity);
                 return status == Status.Ok ? sb.ToString() : null;
             }
         }
@@ -137,37 +137,37 @@ namespace VideoKit {
         /// <summary>
         /// Asset media type.
         /// </summary>
-        public MediaType type => asset.GetMediaAssetMediaType(out var type).Throw() == Status.Ok ? type : default;
+        public MediaType type => handle.GetMediaAssetMediaType(out var type).Throw() == Status.Ok ? type : default;
 
         /// <summary>
         /// Image or video width.
         /// </summary>
-        public int width => asset.GetMediaAssetWidth(out var width) == Status.Ok ? width : default;
+        public int width => handle.GetMediaAssetWidth(out var width) == Status.Ok ? width : default;
 
         /// <summary>
         /// Image or video height.
         /// </summary>
-        public int height => asset.GetMediaAssetHeight(out var height) == Status.Ok ? height : default;
+        public int height => handle.GetMediaAssetHeight(out var height) == Status.Ok ? height : default;
 
         /// <summary>
         /// Video frame rate.
         /// </summary>
-        public float frameRate => asset.GetMediaAssetFrameRate(out var frameRate) == Status.Ok ? frameRate : default;
+        public float frameRate => handle.GetMediaAssetFrameRate(out var frameRate) == Status.Ok ? frameRate : default;
 
         /// <summary>
         /// Audio sample rate.
         /// </summary>
-        public int sampleRate => asset.GetMediaAssetSampleRate(out var sampleRate) == Status.Ok ? sampleRate : default;
+        public int sampleRate => handle.GetMediaAssetSampleRate(out var sampleRate) == Status.Ok ? sampleRate : default;
 
         /// <summary>
         /// Audio channel count.
         /// </summary>
-        public int channelCount => asset.GetMediaAssetChannelCount(out var channelCount) == Status.Ok ? channelCount : default;
+        public int channelCount => handle.GetMediaAssetChannelCount(out var channelCount) == Status.Ok ? channelCount : default;
 
         /// <summary>
         /// Video or audio duration in seconds.
         /// </summary>
-        public float duration => asset.GetMediaAssetDuration(out var duration) == Status.Ok ? duration : default;
+        public float duration => handle.GetMediaAssetDuration(out var duration) == Status.Ok ? duration : default;
 
         /// <summary>
         /// Media assets contained within this asset.
@@ -290,235 +290,23 @@ namespace VideoKit {
         }
 
         /// <summary>
-        /// Create a media asset by performing text-to-speech on the provided text prompt.
-        /// </summary>
-        /// <param name="prompt">Text to synthesize speech from.</param>
-        /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
-        /// <returns>Generated audio asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
-            string prompt,
-            NarrationVoice voice,
-            float speed = 1f
-        ) {
-            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
-            var tag = SpeechPredictorMap[voice];
-            var speech = await openai.Audio.Speech.Create(
-                model: tag,
-                input: prompt,
-                voice: GetEnumValueString(voice)!,
-                speed: speed,
-                responseFormat: ResponseFormat.PCM,
-                acceleration: Acceleration.Auto
-            );
-            var clip = ToAudioClip(speech);
-            var asset = await FromAudioClip(clip);
-            return asset;
-        }
-
-        /// <summary>
-        /// Create a media asset by performing text-to-image on the provided text prompt.
-        /// </summary>
-        /// <param name="prompt">Text prompt to use to generate the image.</param>
-        /// <param name="desiredWidth">Desired image width. NOTE: The generated image is not guaranteed to have this width.</param>
-        /// <param name="desiredHeight">Desired image height. NOTE: The generated image is not guaranteed to have this height.</param>
-        /// <returns>Generated image asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedImage( // INCOMPLETE
-            string prompt,
-            int desiredWidth = 1024,
-            int desiredHeight = 1024
-        ) {
-            return default;
-        }
-        #endregion
-
-
-        #region --Converters--
-        /// <summary>
-        /// Create a texture from the media asset.
-        /// This can only be used on image and video assets.
-        /// </summary>
-        /// <param name="time">Time to extract the texture from. This is only supported for video assets.</param>
-        /// <returns>Texture.</returns>
-        public async Task<Texture2D> ToTexture(float time = 0f) {
-            // Check video
-            if (type == MediaType.Video)
-                throw new NotImplementedException(@"`MediaAsset.ToTexture` is not yet supported for video assets");
-            // Check type
-            if (type != MediaType.Image)
-                throw new ArgumentException(@"`MediaAsset.ToTexture` can only be used on image assets");
-            // Load data
-            var uri = path![0] == '/' ? $"file://{path}" : path;
-            using var request = UnityWebRequestTexture.GetTexture(uri);
-            request.SendWebRequest();
-            while (!request.isDone)
-                await Task.Yield();
-            // Check
-            if (request.result != UnityWebRequest.Result.Success)
-                throw new InvalidOperationException($"Image asset could not be loaded with error: {request.error}");
-            // Return
-            return DownloadHandlerTexture.GetContent(request);
-        }
-
-        /// <summary>
-        /// Create an audio clip from the media asset.
-        /// </summary>
-        /// <returns>Audio clip.</returns>
-        public async Task<AudioClip> ToAudioClip() { // CHECK // WAV only for now
-            // Check type
-            if (type != MediaType.Audio)
-                throw new ArgumentException($"Cannot create audio clip from asset because asset has invalid type: {type}");
-            // Load data
-            var uri = path![0] == '/' ? $"file://{path}" : path;
-            using var request = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.WAV);
-            request.SendWebRequest();
-            while (!request.isDone)
-                await Task.Yield();
-            // Check
-            if (request.result != UnityWebRequest.Result.Success)
-                throw new InvalidOperationException($"Audio clip could not be loaded with error: {request.error}");
-            // Return
-            return DownloadHandlerAudioClip.GetContent(request);
-        }
-        #endregion
-
-
-        #region --Reading--
-        /// <summary>
-        /// Read sample buffers in the media asset.
-        /// </summary>
-        /// <returns>Sample buffers in the media asset.</returns>
-        public IEnumerable<T> Read<T>() where T : struct {
-            var type = GetMediaType<T>();
-            foreach (var sampleBuffer in Read(type)) {
-                if (type == MediaType.Video)
-                    yield return (T)(object)new PixelBuffer(sampleBuffer); // sexy code is worth boxing overhead :p
-                else if (type == MediaType.Audio)
-                    yield return (T)(object)new AudioBuffer(sampleBuffer);
-                else
-                    break;
-            }
-        }
-        #endregion
-
-
-        #region --Sharing--
-        /// <summary>
-        /// Share the media asset using the native sharing UI.
-        /// </summary>
-        /// <param name="message">Optional message to share with the media asset.</param>
-        /// <returns>Receiving app bundle ID or `null` if the user did not complete the share action.</returns>
-        public Task<string?> Share(string? message = null) {
-            // Check
-            if (type == MediaType.Sequence)
-                throw new InvalidOperationException(@"Sequence assets cannot be shared");
-            // Share
-            var tcs = new TaskCompletionSource<string?>();
-            var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
-            try {
-                asset.ShareMediaAsset(
-                    message,
-                    OnShare,
-                    (IntPtr)handle
-                ).Throw();
-            } catch (NotImplementedException) {
-                tcs.SetResult(null);
-                handle.Free();
-            } catch (Exception ex) {
-                tcs.SetException(ex);
-                handle.Free();
-            }
-            // Return
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// Save the media asset to the camera roll.
-        /// </summary>
-        /// <param name="album">Optional album to save media asset to.</param>
-        /// <returns>Whether the asset was successfully saved to the camera roll.</returns>
-        public Task<bool> SaveToCameraRoll(string? album = null) {
-            // Check
-            if (type == MediaType.Sequence)
-                throw new InvalidOperationException(@"Sequence assets cannot be saved to the camera roll");
-            // Save
-            var tcs = new TaskCompletionSource<bool>();
-            var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
-            try {
-                asset.SaveMediaAssetToCameraRoll(
-                    album,
-                    OnSaveToCameraRoll,
-                    (IntPtr)handle
-                ).Throw();
-            } catch (NotImplementedException) {
-                tcs.SetResult(false);
-                handle.Free();
-            } catch (Exception ex) {
-                tcs.SetException(ex);
-                handle.Free();
-            }
-            // Return
-            return tcs.Task;
-        }
-        #endregion
-
-
-        #region --AI--
-        /// <summary>
-        /// Parse the text asset into a structure.
-        /// </summary>
-        /// <typeparam name="T">Structure to parse into.</typeparam>
-        /// <returns>Parsed structure.</returns>
-        internal async Task<T> Parse<T>() {
-            // Check
-            if (type != MediaType.Text)
-                throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
-            // Generate schema
-            var settings = new JsonSchemaGeneratorSettings {
-                GenerateAbstractSchemas = false,
-                GenerateExamples = false,
-                UseXmlDocumentation = false,
-                ResolveExternalXmlDocumentation = false,
-                FlattenInheritanceHierarchy = false,
-            };
-            var schema = JsonSchema.FromType<T>(settings);
-            // Parse
-            
-            return default;
-        }
-
-        /// <summary>
-        /// Transcribe the audio asset by performing speech-to-text.
-        /// </summary>
-        internal async Task<string> Transcribe() {
-            // Check type
-            if (type != MediaType.Audio)
-                throw new InvalidOperationException($"Cannot caption media asset because asset is not an audio asset");
-            // Transcribe
-            
-            return default;
-        }
-        #endregion
-
-
-        #region --Editing--
-        /// <summary>
-        /// Concatenate a set of media assets.
+        /// Create a media asset by concatenating a set of media assets.
         /// </summary>
         /// <param name="assets">Media assets to concatenate.</param>
         /// <returns>Concatenated media asset.</returns>
-        public static Task<MediaAsset> Concatenate(params MediaAsset[] assets) => Concatenate(
+        public static Task<MediaAsset> FromConcatenatingAssets(params MediaAsset[] assets) => FromConcatenatingAssets(
             assets,
             format: MediaRecorder.Format.MP4
         );
 
         /// <summary>
-        /// Concatenate a set of media assets.
+        /// Create a media asset by concatenating a set of media assets.
         /// </summary>
         /// <param name="assets">Media assets to concatenate.</param>
         /// <param name="format">Destination format for concatenated media asset.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Concatenated media asset.</returns>
-        public static async Task<MediaAsset> Concatenate(
+        public static async Task<MediaAsset> FromConcatenatingAssets(
             MediaAsset[] assets,
             MediaRecorder.Format format,
             string? prefix = null
@@ -585,20 +373,192 @@ namespace VideoKit {
         }
 
         /// <summary>
+        /// Create a media asset by performing text-to-speech on the provided text prompt.
+        /// </summary>
+        /// <param name="prompt">Text to synthesize speech from.</param>
+        /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
+        /// <returns>Generated audio asset.</returns>
+        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
+            string prompt,
+            NarrationVoice voice,
+            float speed = 1f
+        ) {
+            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
+            var tag = SpeechPredictorMap[voice];
+            var speech = await openai.Audio.Speech.Create(
+                model: tag,
+                input: prompt,
+                voice: GetEnumValueString(voice)!,
+                speed: speed,
+                responseFormat: ResponseFormat.PCM,
+                acceleration: Acceleration.Auto
+            );
+            var clip = ToAudioClip(speech);
+            var asset = await FromAudioClip(clip);
+            return asset;
+        }
+
+        /// <summary>
+        /// Create a media asset by transcribing on the provided audio clip.
+        /// </summary>
+        /// <param name="audio">Audio clip to transcribe.</param>
+        /// <returns>Transcribed text asset.</returns>
+        public static async Task<MediaAsset> FromGeneratedTranscription(AudioClip audio) { // DEPLOY
+            var audioAsset = await FromAudioClip(audio, MediaRecorder.Format.WAV);
+            var transcriptionAsset = await FromGeneratedTranscription(audioAsset.path);
+            return transcriptionAsset;
+        }
+
+        /// <summary>
+        /// Create a media asset by transcribing on the provided audio clip.
+        /// </summary>
+        /// <param name="path">Path to audio file.</param>
+        /// <returns>Transcribed text asset.</returns>
+        public static async Task<MediaAsset> FromGeneratedTranscription(string path) { // DEPLOY
+            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
+            using var stream = File.OpenRead(path);
+            var transcription = await openai.Audio.Transcriptions.Create(
+                model: TranscribeTag,
+                file: stream
+            );
+            var asset = await FromText(transcription.Text);
+            return asset;
+        }
+
+        /// <summary>
+        /// Create a media asset by performing text-to-image on the provided text prompt.
+        /// </summary>
+        /// <param name="prompt">Text prompt to use to generate the image.</param>
+        /// <param name="width">Desired image width. NOTE: The generated image is not guaranteed to have this width.</param>
+        /// <param name="height">Desired image height. NOTE: The generated image is not guaranteed to have this height.</param>
+        /// <returns>Generated image asset.</returns>
+        internal static async Task<MediaAsset> FromGeneratedImage( // INCOMPLETE
+            string prompt,
+            int width = 1024,
+            int height = 1024
+        ) {
+            return default;
+        }
+        #endregion
+
+
+        #region --Converters--
+        /// <summary>
+        /// Read text from the media asset.
+        /// This can only be used on text assets.
+        /// </summary>
+        public string ToText() {
+            // Check type
+            if (type != MediaType.Text)
+                throw new ArgumentException(@"`MediaAsset.ToText` can only be used on text assets");
+            // Check path
+            if (string.IsNullOrEmpty(path))
+                throw new InvalidOperationException("Text asset does not have a valid file path");
+            // Read text
+            return File.ReadAllText(path);
+        }
+
+        /// <summary>
+        /// Create a texture from the media asset.
+        /// This can only be used on image and video assets.
+        /// </summary>
+        /// <param name="time">Time to extract the texture from. This is only supported for video assets.</param>
+        /// <returns>Texture.</returns>
+        public async Task<Texture2D> ToTexture(float time = 0f) {
+            // Check video
+            if (type == MediaType.Video)
+                throw new NotImplementedException(@"`MediaAsset.ToTexture` is not yet supported for video assets");
+            // Check type
+            if (type != MediaType.Image)
+                throw new ArgumentException(@"`MediaAsset.ToTexture` can only be used on image assets");
+            // Load data
+            var uri = path![0] == '/' ? $"file://{path}" : path;
+            using var request = UnityWebRequestTexture.GetTexture(uri);
+            request.SendWebRequest();
+            while (!request.isDone)
+                await Task.Yield();
+            // Check
+            if (request.result != UnityWebRequest.Result.Success)
+                throw new InvalidOperationException($"Image asset could not be loaded with error: {request.error}");
+            // Return
+            return DownloadHandlerTexture.GetContent(request);
+        }
+
+        /// <summary>
+        /// Create an audio clip from the media asset.
+        /// </summary>
+        /// <returns>Audio clip.</returns>
+        public async Task<AudioClip> ToAudioClip() { // CHECK // WAV only for now
+            // Check type
+            if (type != MediaType.Audio)
+                throw new ArgumentException($"Cannot create audio clip from asset because asset has invalid type: {type}");
+            // Load data
+            var uri = path![0] == '/' ? $"file://{path}" : path;
+            using var request = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.WAV);
+            request.SendWebRequest();
+            while (!request.isDone)
+                await Task.Yield();
+            // Check
+            if (request.result != UnityWebRequest.Result.Success)
+                throw new InvalidOperationException($"Audio clip could not be loaded with error: {request.error}");
+            // Return
+            return DownloadHandlerAudioClip.GetContent(request);
+        }
+        #endregion
+
+
+        #region --Reading--
+        /// <summary>
+        /// Read sample buffers in the media asset.
+        /// </summary>
+        /// <returns>Sample buffers in the media asset.</returns>
+        public IEnumerable<T> Read<T>() where T : struct {
+            var type = GetMediaType<T>();
+            foreach (var sampleBuffer in Read(type)) {
+                if (type == MediaType.Video)
+                    yield return (T)(object)new PixelBuffer(sampleBuffer); // sexy code is worth boxing overhead :p
+                else if (type == MediaType.Audio)
+                    yield return (T)(object)new AudioBuffer(sampleBuffer);
+                else
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Parse the text asset into a structure.
+        /// </summary>
+        /// <typeparam name="T">Structure to parse into.</typeparam>
+        /// <returns>Parsed structure.</returns>
+        internal async Task<T> Parse<T>() {
+            // Check
+            if (type != MediaType.Text)
+                throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
+            // Generate schema
+            var settings = new JsonSchemaGeneratorSettings {
+                GenerateAbstractSchemas = false,
+                GenerateExamples = false,
+                UseXmlDocumentation = false,
+                ResolveExternalXmlDocumentation = false,
+                FlattenInheritanceHierarchy = false,
+            };
+            var schema = JsonSchema.FromType<T>(settings);
+            // Parse
+            
+            return default;
+        }
+
+        /// <summary>
         /// Take a sub-range of a media asset.
         /// </summary>
-        /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
         /// <param name="format">Destination format for result media asset.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
-        public static Task<MediaAsset> Take(
-            MediaAsset asset,
+        public Task<MediaAsset> Take(
             float duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4,
             string? prefix = null
         ) => Take(
-            asset,
             duration: TimeSpan.FromSeconds(duration), 
             format: format,
             prefix: prefix
@@ -607,34 +567,30 @@ namespace VideoKit {
         /// <summary>
         /// Take a sub-range of a media asset.
         /// </summary>
-        /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration.</param>
         /// <param name="format">Destination format for result media asset.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
-        public static async Task<MediaAsset> Take(
-            MediaAsset asset,
+        public async Task<MediaAsset> Take(
             TimeSpan duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4,
             string? prefix = null
         ) {
             // Check video
-            if (asset.type != MediaType.Video)
+            if (type != MediaType.Video)
                 throw new NotImplementedException(@"Trimming media assets is only supported for videos");
             // Check audio
-            if (asset.sampleRate > 0 && asset.channelCount > 0)
+            if (sampleRate > 0 && channelCount > 0)
                 throw new NotImplementedException(@"Trimming videos with audio is not yet supported");
             // Check asset duration
-            if (asset.duration < duration.TotalSeconds)
-                return asset;
+            if (this.duration < duration.TotalSeconds)
+                return this;
             // Create recorder
-            var width = asset.width;
-            var height = asset.height;
             var recorder = await MediaRecorder.Create(
                 format: format,
                 width: width,
                 height: height,
-                frameRate: asset.frameRate,
+                frameRate: frameRate,
                 sampleRate: 0,
                 channelCount: 0,
                 prefix: prefix
@@ -644,7 +600,7 @@ namespace VideoKit {
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             var dataPtr = handle.AddrOfPinnedObject();
             try {
-                foreach (var srcBuffer in asset.Read<PixelBuffer>()) {
+                foreach (var srcBuffer in Read<PixelBuffer>()) {
                     var timestamp = srcBuffer.timestamp;
                     if (timestamp > duration.TotalMilliseconds * 1e+6f)
                         break;
@@ -675,18 +631,15 @@ namespace VideoKit {
         /// <summary>
         /// Take a sub-range of a media asset from the end.
         /// </summary>
-        /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
         /// <param name="format">Destination format for result media asset.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
-        public static Task<MediaAsset> TakeLast(
-            MediaAsset asset,
+        public Task<MediaAsset> TakeLast(
             float duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4,
             string? prefix = null
         ) => TakeLast(
-            asset: asset,
             duration: TimeSpan.FromSeconds(duration),
             format: format,
             prefix: prefix
@@ -695,34 +648,30 @@ namespace VideoKit {
         /// <summary>
         /// Take a sub-range of a media asset.
         /// </summary>
-        /// <param name="asset">Media asset.</param>
         /// <param name="duration">Duration in seconds.</param>
         /// <param name="format">Destination format for result media asset.</param>
         /// <param name="prefix">Subdirectory name to save recordings. This will be created if it does not exist.</param>
         /// <returns>Result media asset.</returns>
-        public static async Task<MediaAsset> TakeLast(
-            MediaAsset asset,
+        public async Task<MediaAsset> TakeLast(
             TimeSpan duration,
             MediaRecorder.Format format = MediaRecorder.Format.MP4,
             string? prefix = null
         ) {
             // Check video
-            if (asset.type != MediaType.Video)
+            if (type != MediaType.Video)
                 throw new NotImplementedException(@"Trimming media assets is only supported for videos");
             // Check audio
-            if (asset.sampleRate > 0 && asset.channelCount > 0)
+            if (sampleRate > 0 && channelCount > 0)
                 throw new NotImplementedException(@"Trimming videos with audio is not yet supported");
             // Check asset duration
-            if (asset.duration < duration.TotalSeconds)
-                return asset;
+            if (this.duration < duration.TotalSeconds)
+                return this;
             // Create recorder
-            var width = asset.width;
-            var height = asset.height;
             var recorder = await MediaRecorder.Create(
                 format: format,
                 width: width,
                 height: height,
-                frameRate: asset.frameRate,
+                frameRate: frameRate,
                 sampleRate: 0,
                 channelCount: 0,
                 prefix: prefix
@@ -732,11 +681,11 @@ namespace VideoKit {
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             var dataPtr = handle.AddrOfPinnedObject();
             var durationNs = (long)(duration.TotalMilliseconds * 1e+6f);
-            var assetDurationNs = (long)(asset.duration * 1e+9f);
+            var assetDurationNs = (long)(this.duration * 1e+9f);
             var startTimeNs = assetDurationNs - durationNs;
             long? timebaseNs = null;
             try {
-                foreach (var srcBuffer in asset.Read<PixelBuffer>()) {
+                foreach (var srcBuffer in Read<PixelBuffer>()) {
                     var timestamp = srcBuffer.timestamp;
                     if (timestamp < startTimeNs)
                         continue;
@@ -768,18 +717,87 @@ namespace VideoKit {
         #endregion
 
 
+        #region --Sharing--
+        /// <summary>
+        /// Share the media asset using the native sharing UI.
+        /// </summary>
+        /// <param name="message">Optional message to share with the media asset.</param>
+        /// <returns>Receiving app bundle ID or `null` if the user did not complete the share action.</returns>
+        public Task<string?> Share(string? message = null) {
+            // Check
+            if (type == MediaType.Sequence)
+                throw new InvalidOperationException(@"Sequence assets cannot be shared");
+            // Share
+            var tcs = new TaskCompletionSource<string?>();
+            var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
+            try {
+                this.handle.ShareMediaAsset(
+                    message,
+                    OnShare,
+                    (IntPtr)handle
+                ).Throw();
+            } catch (NotImplementedException) {
+                tcs.SetResult(null);
+                handle.Free();
+            } catch (Exception ex) {
+                tcs.SetException(ex);
+                handle.Free();
+            }
+            // Return
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// Save the media asset to the camera roll.
+        /// </summary>
+        /// <param name="album">Optional album to save media asset to.</param>
+        /// <returns>Whether the asset was successfully saved to the camera roll.</returns>
+        public Task<bool> SaveToCameraRoll(string? album = null) {
+            // Check
+            if (type == MediaType.Sequence)
+                throw new InvalidOperationException(@"Sequence assets cannot be saved to the camera roll");
+            // Save
+            var tcs = new TaskCompletionSource<bool>();
+            var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);
+            try {
+                this.handle.SaveMediaAssetToCameraRoll(
+                    album,
+                    OnSaveToCameraRoll,
+                    (IntPtr)handle
+                ).Throw();
+            } catch (NotImplementedException) {
+                tcs.SetResult(false);
+                handle.Free();
+            } catch (Exception ex) {
+                tcs.SetException(ex);
+                handle.Free();
+            }
+            // Return
+            return tcs.Task;
+        }
+        #endregion
+
+
         #region --Operations--
-        private readonly IntPtr asset;
+        private readonly IntPtr handle;
+        private readonly MediaAsset? parent;
         private static readonly Dictionary<NarrationVoice, string> SpeechPredictorMap = new() { // INCOMPLETE
             
         };
+        internal const string TranscribeTag = @"@videokit/transcribe-v1";
 
-        internal MediaAsset(IntPtr asset) => this.asset = asset;
+        internal MediaAsset(IntPtr handle, MediaAsset? parent = null) {
+            this.handle = handle;
+            this.parent = parent;
+        }
 
-        ~MediaAsset() => asset.ReleaseMediaAsset();
+        ~MediaAsset() {
+            if (parent == null)
+                handle.ReleaseMediaAsset();
+        }
 
         private IEnumerable<IntPtr> Read(MediaType type) {
-            asset.CreateMediaReader(type, out var reader).Throw();
+            handle.CreateMediaReader(type, out var reader).Throw();
             try {
                 for (;;) {
                     var status = reader.ReadNextSampleBuffer(out var sampleBuffer);
@@ -795,7 +813,7 @@ namespace VideoKit {
             }
         }
 
-        public static implicit operator IntPtr(MediaAsset asset) => asset.asset;
+        public static implicit operator IntPtr(MediaAsset asset) => asset.handle;
         #endregion
 
 
@@ -919,13 +937,24 @@ namespace VideoKit {
 
         private readonly struct NativeMediaSequence : IReadOnlyList<MediaAsset?> {
 
-            private readonly IntPtr asset;
+            private readonly MediaAsset asset;
 
-            public NativeMediaSequence(IntPtr asset) => this.asset = asset;
+            public NativeMediaSequence(MediaAsset asset) => this.asset = asset;
 
-            public int Count => asset.GetMediaAssetSubAssetCount(out var count) == Status.Ok ? count : default;
+            public int Count {
+                get {
+                    if (asset.handle.GetMediaAssetSubAssetCount(out var count) == Status.Ok)
+                        return count;
+                    return default;
+                }
+            }
 
-            public MediaAsset? this[int index] => asset.GetMediaAssetSubAsset(index, out var subAsset).Throw() == Status.Ok ? new MediaAsset(subAsset) : default;
+            public MediaAsset? this[int index] {
+                get {
+                    asset.handle.GetMediaAssetSubAsset(index, out var subAsset).Throw();
+                    return new MediaAsset(subAsset, parent: asset);
+                }
+            }
     
             IEnumerator<MediaAsset?> IEnumerable<MediaAsset?>.GetEnumerator() {
                 for (var idx = 0; idx < Count; ++idx)
@@ -934,6 +963,46 @@ namespace VideoKit {
 
             IEnumerator IEnumerable.GetEnumerator() => (this as IEnumerable<MediaAsset>).GetEnumerator();
         }
+        #endregion
+
+
+        #region --Deprecated--
+        [Obsolete(@"Deprecated in VideoKit 1.0.11. Use `MediaAsset.FromConcatenatingAssets` static method instead.")]
+        public static Task<MediaAsset> Concatenate(params MediaAsset[] assets) => FromConcatenatingAssets(
+            assets,
+            format: MediaRecorder.Format.MP4
+        );
+        
+        [Obsolete(@"Deprecated in VideoKit 1.0.11. Use `MediaAsset.FromConcatenatingAssets` static method instead.")]
+        public static Task<MediaAsset> Concatenate(
+            MediaAsset[] assets,
+            MediaRecorder.Format format,
+            string? prefix = null
+        ) => FromConcatenatingAssets(assets, format: format, prefix: prefix);
+
+        [Obsolete(@"Deprecated in VideoKit 1.0.11. Use `MediaAsset.Take` instance method instead.")]
+        public static Task<MediaAsset> Take(
+            MediaAsset asset,
+            float duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
+        ) => asset.Take(duration, format: format, prefix: prefix);
+
+        [Obsolete(@"Deprecated in VideoKit 1.0.11. Use `MediaAsset.Take` instance method instead.")]
+        public static Task<MediaAsset> Take(
+            MediaAsset asset,
+            TimeSpan duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
+        ) => asset.Take(duration, format: format, prefix: prefix);
+
+        [Obsolete(@"Deprecated in VideoKit 1.0.11. Use `MediaAsset.TakeLast` instance method instead.")]
+        public static Task<MediaAsset> TakeLast(
+            MediaAsset asset,
+            float duration,
+            MediaRecorder.Format format = MediaRecorder.Format.MP4,
+            string? prefix = null
+        ) => asset.TakeLast(duration, format: format, prefix: prefix);
         #endregion
     }
 }
