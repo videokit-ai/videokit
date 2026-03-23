@@ -1,3 +1,6 @@
+## 1.0.12
+*INCOMPLETE*
+
 ## 1.0.11
 + Added `MediaAsset.FromGeneratedTranscription` method to transcribe an audio clip or audio file.
 + Added `MediaAsset.ToText` method to read contents of a text asset.
