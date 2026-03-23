@@ -26,30 +26,30 @@ namespace VideoKit {
         /// <summary>
         /// Whether acoustic echo cancellation is supported.
         /// </summary>
-        public bool echoCancellationSupported => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.EchoCancellation) : default;
+        public bool echoCancellationSupported => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.EchoCancellation) : default;
 
         /// <summary>
         /// Enable or disable acoustic echo cancellation (AEC).
         /// </summary>
         public bool echoCancellation {
-            get => device.GetAudioDeviceEchoCancellation(out var echoCancellation) == Status.Ok ? echoCancellation : default;
-            set => device.SetAudioDeviceEchoCancellation(value);
+            get => handle.GetAudioDeviceEchoCancellation(out var echoCancellation) == Status.Ok ? echoCancellation : default;
+            set => handle.SetAudioDeviceEchoCancellation(value);
         }
 
         /// <summary>
         /// Audio sample rate.
         /// </summary>
         public int sampleRate {
-            get => device.GetAudioDeviceSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
-            set => device.SetAudioDeviceSampleRate(value).Throw();
+            get => handle.GetAudioDeviceSampleRate(out var sampleRate).Throw() == Status.Ok ? sampleRate : default;
+            set => handle.SetAudioDeviceSampleRate(value).Throw();
         }
 
         /// <summary>
         /// Audio channel count.
         /// </summary>
         public int channelCount {
-            get => device.GetAudioDeviceChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
-            set => device.SetAudioDeviceChannelCount(value).Throw();
+            get => handle.GetAudioDeviceChannelCount(out var channelCount).Throw() == Status.Ok ? channelCount : default;
+            set => handle.SetAudioDeviceChannelCount(value).Throw();
         }
         #endregion
 

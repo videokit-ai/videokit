@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -36,7 +36,7 @@ namespace VideoKit.Internal {
         /// <summary>
         /// VideoKit Muna client.
         /// </summary>
-        public Muna muna => _muna ??= MunaUnity.Create(authToken, url: url);
+        public Muna muna => _muna ??= MunaUnity.Create(authToken, url: $"{url}/muna");
 
         /// <summary>
         /// VideoKit client for this project.

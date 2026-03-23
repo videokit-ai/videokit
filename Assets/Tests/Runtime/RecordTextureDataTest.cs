@@ -1,11 +1,10 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 namespace VideoKit.Tests {
 
-    using System;
     using System.Threading.Tasks;
     using UnityEngine;
     using VideoKit.Clocks;
@@ -15,7 +14,12 @@ namespace VideoKit.Tests {
         [SerializeField] private Texture2D texture;
 
         private async void Start() {
-            var recorder = await MediaRecorder.Create(MediaRecorder.Format.MP4, texture.width, texture.height, 30);
+            var recorder = await MediaRecorder.Create(
+                format: MediaRecorder.Format.MP4,
+                width: texture.width,
+                height: texture.height,
+                frameRate: 30
+            );
             var clock = new FixedClock(30);
             var pixelData = new byte[texture.width * texture.height * 4];
             Debug.Log("Started recording");

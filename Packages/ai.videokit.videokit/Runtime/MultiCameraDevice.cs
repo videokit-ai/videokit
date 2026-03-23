@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -31,12 +31,12 @@ namespace VideoKit {
         /// <summary>
         /// Get the multi-camera device normalized hardware cost in range [0.0, 1.0].
         /// </summary>
-        public float? hardwareCost => device.GetMultiCameraDeviceHardwareCost(out var cost) == Status.Ok ? cost : default;
+        public float? hardwareCost => handle.GetMultiCameraDeviceHardwareCost(out var cost) == Status.Ok ? cost : default;
 
         /// <summary>
         /// Get the multi-camera device normalized system pressure cost in range [0.0, 1.0].
         /// </summary>
-        public float? systemPressureCost => device.GetMultiCameraDeviceSystemPressureCost(out var cost) == Status.Ok ? cost : default;
+        public float? systemPressureCost => handle.GetMultiCameraDeviceSystemPressureCost(out var cost) == Status.Ok ? cost : default;
 
         /// <summary>
         /// Event raised when the system pressure level changes.
@@ -48,7 +48,7 @@ namespace VideoKit {
         /// Check whether a given camera in the multi-camera device is running.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public bool IsRunning(CameraDevice camera) => device
+        public bool IsRunning(CameraDevice camera) => handle
             .GetMultiCameraDeviceIsRunning(camera, out var running)
             .Throw() == Status.Ok && running;
 
@@ -67,13 +67,13 @@ namespace VideoKit {
         /// Start the camera preview from a given camera in the multi-camera device.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public void StartRunning(CameraDevice camera) => device.StartRunning(camera).Throw();
+        public void StartRunning(CameraDevice camera) => handle.StartRunning(camera).Throw();
 
         /// <summary>
         /// Stop the camera preview from a specific camera in the multi-camera device.
         /// </summary>
         /// <param name="camera">Camera device. MUST be a member of this multi-camera device.</param>
-        public void StopRunning(CameraDevice camera) => device.StopRunning(camera).Throw();
+        public void StopRunning(CameraDevice camera) => handle.StopRunning(camera).Throw();
         #endregion
 
 

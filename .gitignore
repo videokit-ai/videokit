@@ -24,6 +24,7 @@ UserSettings/VideoKit.asset
 
 # Recordings
 recordings/
+/*.mp4
 
 # Misc
 .DS_Store

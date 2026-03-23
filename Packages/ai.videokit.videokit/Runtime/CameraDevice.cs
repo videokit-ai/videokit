@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -122,91 +122,91 @@ namespace VideoKit {
         /// Whether this camera is front facing.
         /// </summary>
         public bool frontFacing => 
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.FrontFacing);
 
         /// <summary>
         /// Whether setting the flash mode for photo capture is supported.
         /// </summary>
         public bool flashSupported =>
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.Flash);
 
         /// <summary>
         /// Whether setting the torch level is supported.
         /// </summary>
         public bool torchSupported =>
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.Torch);
 
         /// <summary>
         /// Whether setting the exposure point is supported.
         /// </summary>
         public bool exposurePointSupported =>
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.ExposurePoint);
 
         /// <summary>
         /// Whether setting the focus point is supported.
         /// </summary>
         public bool focusPointSupported =>
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.FocusPoint);
 
         /// <summary>
         /// Whether depth streaming is supported.
         /// </summary>
         public bool depthStreamingSupported =>
-            device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
+            handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok &&
             flags.HasFlag(MediaDeviceFlags.Depth);
 
         /// <summary>
         /// Field of view in degrees.
         /// </summary>
-        public (float width, float height) fieldOfView => device.GetCameraDeviceFieldOfView(out var x, out var y) == Status.Ok ? (x, y) : default;
+        public (float width, float height) fieldOfView => handle.GetCameraDeviceFieldOfView(out var x, out var y) == Status.Ok ? (x, y) : default;
 
         /// <summary>
         /// Exposure bias range in EV.
         /// </summary>
-        public (float min, float max) exposureBiasRange => device.GetCameraDeviceExposureBiasRange(out var min, out var max) == Status.Ok ? (min, max) : default;
+        public (float min, float max) exposureBiasRange => handle.GetCameraDeviceExposureBiasRange(out var min, out var max) == Status.Ok ? (min, max) : default;
 
         /// <summary>
         /// Exposure duration range in seconds.
         /// </summary>
-        public (float min, float max) exposureDurationRange => device.GetCameraDeviceExposureDurationRange(out var min, out var max) == Status.Ok ? (min, max) : default;
+        public (float min, float max) exposureDurationRange => handle.GetCameraDeviceExposureDurationRange(out var min, out var max) == Status.Ok ? (min, max) : default;
 
         /// <summary>
         /// Sensor sensitivity range.
         /// </summary>
-        public (float min, float max) ISORange => device.GetCameraDeviceISORange(out var min, out var max) == Status.Ok ? (min, max) : default;
+        public (float min, float max) ISORange => handle.GetCameraDeviceISORange(out var min, out var max) == Status.Ok ? (min, max) : default;
 
         /// <summary>
         /// Zoom ratio range.
         /// </summary>
-        public (float min, float max) zoomRange => device.GetCameraDeviceZoomRange(out var min, out var max) == Status.Ok ? (min, max) : (1f, 1f);
+        public (float min, float max) zoomRange => handle.GetCameraDeviceZoomRange(out var min, out var max) == Status.Ok ? (min, max) : (1f, 1f);
 
         /// <summary>
         /// Get or set the preview resolution.
         /// </summary>
         public (int width, int height) previewResolution {
-            get => device.GetCameraDevicePreviewResolution(out var w, out var h).Throw() == Status.Ok ? (w, h) : default;
-            set => device.SetCameraDevicePreviewResolution(value.width, value.height);
+            get => handle.GetCameraDevicePreviewResolution(out var w, out var h).Throw() == Status.Ok ? (w, h) : default;
+            set => handle.SetCameraDevicePreviewResolution(value.width, value.height);
         }
 
         /// <summary>
         /// Get or set the photo resolution.
         /// </summary>
         public (int width, int height) photoResolution {
-            get => device.GetCameraDevicePhotoResolution(out var w, out var h) == Status.Ok ? (w, h) : default;
-            set => device.SetCameraDevicePhotoResolution(value.width, value.height); // don't throw
+            get => handle.GetCameraDevicePhotoResolution(out var w, out var h) == Status.Ok ? (w, h) : default;
+            set => handle.SetCameraDevicePhotoResolution(value.width, value.height); // don't throw
         }
 
         /// <summary>
         /// Get or set the preview framerate.
         /// </summary>
         public float frameRate {
-            get => device.GetCameraDeviceFrameRate(out var frameRate) == Status.Ok ? frameRate : default;
-            set => device.SetCameraDeviceFrameRate(value);
+            get => handle.GetCameraDeviceFrameRate(out var frameRate) == Status.Ok ? frameRate : default;
+            set => handle.SetCameraDeviceFrameRate(value);
         }
 
         /// <summary>
@@ -214,8 +214,8 @@ namespace VideoKit {
         /// If the requested exposure mode is not supported, the camera device will ignore.
         /// </summary>
         public ExposureMode exposureMode {
-            get => device.GetCameraDeviceExposureMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceExposureMode(value).Throw();
+            get => handle.GetCameraDeviceExposureMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceExposureMode(value).Throw();
         }
 
         /// <summary>
@@ -223,58 +223,58 @@ namespace VideoKit {
         /// This value must be in the range returned by `exposureRange`.
         /// </summary>
         public float exposureBias {
-            get => device.GetCameraDeviceExposureBias(out var bias) == Status.Ok ? bias : default;
-            set => device.SetCameraDeviceExposureBias(value).Throw();
+            get => handle.GetCameraDeviceExposureBias(out var bias) == Status.Ok ? bias : default;
+            set => handle.SetCameraDeviceExposureBias(value).Throw();
         }
 
         /// <summary>
         /// Get or set the current exposure duration in seconds.
         /// </summary>
-        public float exposureDuration => device.GetCameraDeviceExposureDuration(out var duration) == Status.Ok ? duration : default;
+        public float exposureDuration => handle.GetCameraDeviceExposureDuration(out var duration) == Status.Ok ? duration : default;
 
         /// <summary>
         /// Get or set the current exposure sensitivity.
         /// </summary>
-        public float ISO => device.GetCameraDeviceISO(out var ISO) == Status.Ok ? ISO : default;
+        public float ISO => handle.GetCameraDeviceISO(out var ISO) == Status.Ok ? ISO : default;
 
         /// <summary>
         /// Get or set the photo flash mode.
         /// </summary>
         public FlashMode flashMode {
-            get => device.GetCameraDeviceFlashMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceFlashMode(value).Throw();
+            get => handle.GetCameraDeviceFlashMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceFlashMode(value).Throw();
         }
 
         /// <summary>
         /// Get or set the focus mode.
         /// </summary>
         public FocusMode focusMode {
-            get => device.GetCameraDeviceFocusMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceFocusMode(value).Throw();
+            get => handle.GetCameraDeviceFocusMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceFocusMode(value).Throw();
         }
 
         /// <summary>
         /// Get or set the torch mode.
         /// </summary>
         public TorchMode torchMode {
-            get => device.GetCameraDeviceTorchMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceTorchMode(value).Throw();
+            get => handle.GetCameraDeviceTorchMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceTorchMode(value).Throw();
         }
 
         /// <summary>
         /// Get or set the white balance mode.
         /// </summary>
         public WhiteBalanceMode whiteBalanceMode {
-            get => device.GetCameraDeviceWhiteBalanceMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceWhiteBalanceMode(value).Throw();
+            get => handle.GetCameraDeviceWhiteBalanceMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceWhiteBalanceMode(value).Throw();
         }
 
         /// <summary>
         /// Get or set the video stabilization mode.
         /// </summary>
         public VideoStabilizationMode videoStabilizationMode {
-            get => device.GetCameraDeviceVideoStabilizationMode(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceVideoStabilizationMode(value).Throw();
+            get => handle.GetCameraDeviceVideoStabilizationMode(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceVideoStabilizationMode(value).Throw();
         }
 
         /// <summary>
@@ -282,8 +282,8 @@ namespace VideoKit {
         /// This value must be in the range returned by `zoomRange`.
         /// </summary>
         public float zoomRatio {
-            get => device.GetCameraDeviceZoomRatio(out var mode) == Status.Ok ? mode : default;
-            set => device.SetCameraDeviceZoomRatio(value).Throw();
+            get => handle.GetCameraDeviceZoomRatio(out var mode) == Status.Ok ? mode : default;
+            set => handle.SetCameraDeviceZoomRatio(value).Throw();
         }
         #endregion
 
@@ -294,9 +294,9 @@ namespace VideoKit {
         /// </summary>
         /// <param name="mode">Exposure mode.</param>
         public bool IsExposureModeSupported(ExposureMode mode) => mode switch {
-            ExposureMode.Continuous => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureContinuous),
-            ExposureMode.Locked     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureLock),
-            ExposureMode.Manual     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureManual),
+            ExposureMode.Continuous => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureContinuous),
+            ExposureMode.Locked     => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureLock),
+            ExposureMode.Manual     => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.ExposureManual),
             _                       => false
         };
 
@@ -305,8 +305,8 @@ namespace VideoKit {
         /// </summary>
         /// <param name="mode">Focus mode.</param>
         public bool IsFocusModeSupported(FocusMode mode) => mode switch {
-            FocusMode.Continuous    => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusContinuous),
-            FocusMode.Locked        => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusLock),
+            FocusMode.Continuous    => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusContinuous),
+            FocusMode.Locked        => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.FocusLock),
             _                       => false,
         };
 
@@ -315,8 +315,8 @@ namespace VideoKit {
         /// </summary>
         /// <param name="mode">White balance mode.</param>
         public bool IsWhiteBalanceModeSupported(WhiteBalanceMode mode) => mode switch {
-            WhiteBalanceMode.Continuous => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceContinuous),
-            WhiteBalanceMode.Locked     => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceLock),
+            WhiteBalanceMode.Continuous => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceContinuous),
+            WhiteBalanceMode.Locked     => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.WhiteBalanceLock),
             _                           => false
         };
 
@@ -326,7 +326,7 @@ namespace VideoKit {
         /// <param name="mode">Video stabilization mode.</param>
         public bool IsVideoStabilizationModeSupported(VideoStabilizationMode mode) => mode switch {
             VideoStabilizationMode.Off      => true,
-            VideoStabilizationMode.Standard => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.VideoStabilization),
+            VideoStabilizationMode.Standard => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok && flags.HasFlag(MediaDeviceFlags.VideoStabilization),
             _                               => false
         };
 
@@ -335,7 +335,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="duration">Exposure duration in seconds. MUST be in `exposureDurationRange`.</param>
         /// <param name="ISO">Sensor sensitivity ISO value. MUST be in `ISORange`.</param>
-        public void SetExposureDuration(float duration, float ISO) => device.SetCameraDeviceExposureDuration(duration, ISO).Throw();
+        public void SetExposureDuration(float duration, float ISO) => handle.SetCameraDeviceExposureDuration(duration, ISO).Throw();
 
         /// <summary>
         /// Set the exposure point of interest.
@@ -343,7 +343,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetExposurePoint(float x, float y) => device.SetCameraDeviceExposurePoint(x, y).Throw();
+        public void SetExposurePoint(float x, float y) => handle.SetCameraDeviceExposurePoint(x, y).Throw();
 
         /// <summary>
         /// Set the focus point of interest.
@@ -351,7 +351,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="x">Normalized x coordinate.</param>
         /// <param name="y">Normalized y coordinate.</param>
-        public void SetFocusPoint(float x, float y) => device.SetCameraDeviceFocusPoint(x, y).Throw();
+        public void SetFocusPoint(float x, float y) => handle.SetCameraDeviceFocusPoint(x, y).Throw();
         #endregion
 
 
@@ -370,7 +370,7 @@ namespace VideoKit {
         /// <param name="handler">Delegate to receive high-resolution photo. Note that this delegate is invoked on a dedicated thread.</param>
         public void CapturePhoto(Action<PixelBuffer> handler) {
             var handle = GCHandle.Alloc(handler, GCHandleType.Normal);
-            device.CapturePhoto(OnCapturePhoto, (IntPtr)handle).Throw();
+            this.handle.CapturePhoto(OnCapturePhoto, (IntPtr)handle).Throw();
         }
         #endregion
 

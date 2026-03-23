@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -76,12 +76,12 @@ namespace VideoKit {
         /// <summary>
         /// Device location.
         /// </summary>
-        public virtual Location location => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? (Location)((int)flags & 0x3) : default;
+        public virtual Location location => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? (Location)((int)flags & 0x3) : default;
 
         /// <summary>
         /// Device is the default device for its media type.
         /// </summary>
-        public virtual bool defaultForMediaType => device.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.Default) : default;
+        public virtual bool defaultForMediaType => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.Default) : default;
         #endregion
 
 
@@ -97,14 +97,14 @@ namespace VideoKit {
         /// <summary>
         /// Whether the device is running.
         /// </summary>
-        public virtual bool running => device.GetMediaDeviceIsRunning(out var running).Throw() == Status.Ok ? running : default;
+        public virtual bool running => handle.GetMediaDeviceIsRunning(out var running).Throw() == Status.Ok ? running : default;
 
         /// <summary>
         /// Stop running.
         /// </summary>
         public virtual void StopRunning() {
             if (running)
-                device.StopRunning().Throw();
+                handle.StopRunning().Throw();
             if (streamHandle != default)
                 streamHandle.Free();
             streamHandle = default;
@@ -113,37 +113,37 @@ namespace VideoKit {
 
 
         #region --Operations--
-        protected readonly IntPtr device;
+        protected readonly IntPtr handle;
         protected readonly GCHandle weakSelf;
         private readonly bool strong;
         private GCHandle streamHandle;
 
-        internal MediaDevice(IntPtr device, bool strong = true) {
-            this.device = device;
+        internal MediaDevice(IntPtr handle, bool strong = true) {
+            this.handle = handle;
             this.strong = strong;
             this.weakSelf = GCHandle.Alloc(this, GCHandleType.Weak);
             // Cache UID
             var buffer = new StringBuilder(2048);
-            device.GetMediaDeviceUniqueID(buffer, buffer.Capacity);
+            handle.GetMediaDeviceUniqueID(buffer, buffer.Capacity);
             this.uniqueId = buffer.ToString();
             // Cache name
             buffer.Clear();
-            device.GetMediaDeviceName(buffer, buffer.Capacity);
+            handle.GetMediaDeviceName(buffer, buffer.Capacity);
             this.name = buffer.ToString();
             // Register handlers
-            device.SetDisconnectHandler(OnDeviceDisconnect, (IntPtr)weakSelf);
+            handle.SetDisconnectHandler(OnDeviceDisconnect, (IntPtr)weakSelf);
         }
 
         ~MediaDevice() {
             if (strong)
-                device.ReleaseMediaDevice();
+                handle.ReleaseMediaDevice();
             weakSelf.Free();
         }
 
         protected virtual void StartRunning(Action<IntPtr> handler) {
             streamHandle = GCHandle.Alloc(handler, GCHandleType.Normal);
             try {
-                device.StartRunning(OnSampleBuffer, (IntPtr)streamHandle).Throw();
+                handle.StartRunning(OnSampleBuffer, (IntPtr)streamHandle).Throw();
             } catch {
                 streamHandle.Free();
                 streamHandle = default;
@@ -163,7 +163,7 @@ namespace VideoKit {
             return tcs.Task;
         }
 
-        public static implicit operator IntPtr(MediaDevice device) => device.device;
+        public static implicit operator IntPtr(MediaDevice device) => device.handle;
         #endregion
 
 

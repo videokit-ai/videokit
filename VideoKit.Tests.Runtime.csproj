@@ -59,6 +59,7 @@
     <Compile Include="Assets/Tests/Runtime/MediaAssetFromAudioClipTest.cs" />
     <Compile Include="Assets/Tests/Runtime/CameraDeviceEnumerateTest.cs" />
     <Compile Include="Assets/Tests/Runtime/RecordTextureDataTest.cs" />
+    <Compile Include="Assets/Tests/Runtime/MediaAssetFromGeneratedTranscriptionTest.cs" />
     <Compile Include="Assets/Tests/Runtime/MediaAssetCaptionToStructureTest.cs" />
     <Compile Include="Assets/Tests/Runtime/VideoKitRecorderCaptureScreenshotTest.cs" />
     <Compile Include="Assets/Tests/Runtime/MediaAssetConcatenateTest.cs" />
@@ -492,7 +493,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@74deb55db2a0/Runtime/Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@4dfd81071c64/Runtime/Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Namotion.Reflection">
