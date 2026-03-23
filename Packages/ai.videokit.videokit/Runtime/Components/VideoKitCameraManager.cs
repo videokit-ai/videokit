@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -288,6 +288,7 @@ namespace VideoKit {
             var events = VideoKitEvents.Instance;
             events.onPause += OnPause;
             events.onResume += OnResume;
+            events.onQuit += StopRunning;
         }
 
         /// <summary>
@@ -299,6 +300,7 @@ namespace VideoKit {
             if (events != null) {
                 events.onPause -= OnPause;
                 events.onResume -= OnResume;
+                events.onQuit -= StopRunning;
             }
             // Stop running
             if (running)
@@ -310,7 +312,7 @@ namespace VideoKit {
         #region --Operations--
         private MediaDevice[]? devices;
         private MediaDevice? _device;
-        public const string HumanTextureTag = @"@videokit/human-texture-2";
+        internal const string HumanTextureTag = @"@videokit/human-texture-2";
 
         private void Awake() {
             if (playOnAwake)

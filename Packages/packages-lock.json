@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "ai.muna.muna": {
-      "version": "0.0.49",
+      "version": "0.0.51",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.2.1"
+        "com.unity.nuget.newtonsoft-json": "3.2.2"
       },
       "url": "https://registry.npmjs.com"
     },
@@ -14,7 +14,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "ai.muna.muna": "0.0.49"
+        "ai.muna.muna": "0.0.51"
       }
     },
     "com.unity.editorcoroutines": {
@@ -62,7 +62,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.1",
+      "version": "3.2.2",
       "depth": 2,
       "source": "registry",
       "dependencies": {},

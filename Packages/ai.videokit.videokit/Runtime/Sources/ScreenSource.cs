@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -59,9 +59,14 @@ namespace VideoKit.Sources {
         /// Stop the screen source and release resources.
         /// </summary>
         public void Dispose() {
+            // Stop listening for events
+            var events = VideoKitEvents.OptionalInstance;
+            if (events != null) {
+                events.onLateUpdate -= OnFrame;
+                events.onFrame -= OnFrame;
+            }
+            // Teardown
             textureSource.Dispose();
-            VideoKitEvents.Instance.onLateUpdate -= OnFrame;
-            VideoKitEvents.Instance.onFrame -= OnFrame;
         }
         #endregion
 

@@ -1,6 +1,6 @@
 /* 
 *   VideoKit
-*   Copyright © 2025 Yusuf Olokoba. All Rights Reserved.
+*   Copyright © 2026 Yusuf Olokoba. All Rights Reserved.
 */
 
 #nullable enable
@@ -137,8 +137,12 @@ namespace VideoKit.Sources {
         /// Stop the media source and release resources.
         /// </summary>
         public void Dispose() {
+            // Stop listening for events
+            var events = VideoKitEvents.OptionalInstance;
+            if (events != null)
+                events.onFrame -= OnFrame;
+            // Teardown
             handler = null;
-            VideoKitEvents.Instance.onFrame -= OnFrame;
             Texture2D.Destroy(readbackBuffer);
         }
         #endregion
