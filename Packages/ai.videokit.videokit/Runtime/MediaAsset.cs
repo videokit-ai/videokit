@@ -403,7 +403,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="audio">Audio clip to transcribe.</param>
         /// <returns>Transcribed text asset.</returns>
-        public static async Task<MediaAsset> FromGeneratedTranscription(AudioClip audio) { // DEPLOY
+        public static async Task<MediaAsset> FromGeneratedTranscription(AudioClip audio) {
             var audioAsset = await FromAudioClip(audio, MediaRecorder.Format.WAV);
             var transcriptionAsset = await FromGeneratedTranscription(audioAsset.path);
             return transcriptionAsset;
@@ -414,7 +414,7 @@ namespace VideoKit {
         /// </summary>
         /// <param name="path">Path to audio file.</param>
         /// <returns>Transcribed text asset.</returns>
-        public static async Task<MediaAsset> FromGeneratedTranscription(string path) { // DEPLOY
+        public static async Task<MediaAsset> FromGeneratedTranscription(string path) {
             var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
             using var stream = File.OpenRead(path);
             var transcription = await openai.Audio.Transcriptions.Create(
