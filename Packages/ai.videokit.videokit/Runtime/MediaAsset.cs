@@ -377,11 +377,14 @@ namespace VideoKit {
         /// </summary>
         /// <param name="prompt">Text to synthesize speech from.</param>
         /// <param name="voice">Voice to use for generation. See https://videokit.ai/reference/mediaasset for more information.</param>
+        /// <param name="speed">Audio speed of the generated speech.</param>
+        /// <param name="acceleration">Prediction acceleration.</param>
         /// <returns>Generated audio asset.</returns>
         internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
             string prompt,
             NarrationVoice voice,
-            float speed = 1f
+            float speed = 1f,
+            string? acceleration = default
         ) {
             var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
             var tag = SpeechPredictorMap[voice];
@@ -391,7 +394,7 @@ namespace VideoKit {
                 voice: GetEnumValueString(voice)!,
                 speed: speed,
                 responseFormat: ResponseFormat.PCM,
-                acceleration: Acceleration.Auto
+                acceleration: acceleration
             );
             var clip = ToAudioClip(speech);
             var asset = await FromAudioClip(clip);
@@ -413,13 +416,18 @@ namespace VideoKit {
         /// Create a media asset by transcribing on the provided audio clip.
         /// </summary>
         /// <param name="path">Path to audio file.</param>
+        /// <param name="acceleration">Prediction acceleration.</param>
         /// <returns>Transcribed text asset.</returns>
-        public static async Task<MediaAsset> FromGeneratedTranscription(string path) {
+        public static async Task<MediaAsset> FromGeneratedTranscription(
+            string path,
+            string? acceleration = default
+        ) {
             var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
             using var stream = File.OpenRead(path);
             var transcription = await openai.Audio.Transcriptions.Create(
                 model: TranscribeTag,
-                file: stream
+                file: stream,
+                acceleration: acceleration
             );
             var asset = await FromText(transcription.Text);
             return asset;

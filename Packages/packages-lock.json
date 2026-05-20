@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "ai.muna.muna": {
-      "version": "0.0.51",
+      "version": "0.0.52",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -14,7 +14,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "ai.muna.muna": "0.0.51"
+        "ai.muna.muna": "0.0.52"
       }
     },
     "com.unity.editorcoroutines": {
