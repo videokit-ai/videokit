@@ -1,5 +1,5 @@
 ## 1.0.12
-*INCOMPLETE*
++ Upgraded to Muna 0.0.52.
 
 ## 1.0.11
 + Added `MediaAsset.FromGeneratedTranscription` method to transcribe an audio clip or audio file.
