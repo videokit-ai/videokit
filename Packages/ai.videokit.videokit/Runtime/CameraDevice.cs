@@ -426,7 +426,7 @@ namespace VideoKit {
         public override string ToString () => $"CameraDevice(uniqueId=\"{uniqueId}\", name=\"{name}\")";
 
         [MonoPInvokeCallback(typeof(VideoKit.MediaDeviceDiscoveryHandler))]
-        private static unsafe void OnDiscoverDevices (IntPtr context, IntPtr devices, int count) {            
+        private static unsafe void OnDiscoverDevices(IntPtr context, IntPtr devices, int count) {            
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)
@@ -449,7 +449,7 @@ namespace VideoKit {
         }
 
         [MonoPInvokeCallback(typeof(VideoKit.SampleBufferHandler))]
-        private static unsafe void OnCapturePhoto (IntPtr context, IntPtr sampleBuffer) {
+        private static unsafe void OnCapturePhoto(IntPtr context, IntPtr sampleBuffer) {
             try {
                 // Check
                 if (!VideoKit.IsAppDomainLoaded)

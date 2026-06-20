@@ -56,7 +56,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "videokit.sln",
+    "dotnet.defaultSolution": "videokit.slnx",
     "csharp.format.enable": true,
-    "omnisharp.enableEditorConfigSupport": true,
+    "omnisharp.enableEditorConfigSupport": true
 }

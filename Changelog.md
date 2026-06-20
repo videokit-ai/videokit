@@ -1,5 +1,5 @@
 ## 1.0.13
-*INCOMPLETE*
++ Upgraded to Muna 0.0.54.
 
 ## 1.0.12
 + Upgraded to Muna 0.0.52.

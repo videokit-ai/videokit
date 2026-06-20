@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="VideoKit.Tests.Runtime.csproj" />
+  <Project Path="VideoKit.Runtime.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="VideoKit.Editor.csproj" />
+</Solution>

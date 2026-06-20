@@ -46,7 +46,7 @@ namespace VideoKit.Tests {
             Debug.Log($"Prediction roundtrip latency: {watch.Elapsed.TotalMilliseconds}ms");
             // Update texture
             var result = (Image)prediction.results[0];
-            humanTexture = result.ToTexture(humanTexture);
+            result.CopyTo(humanTexture);
             rawImage.texture = humanTexture;
         }
     }

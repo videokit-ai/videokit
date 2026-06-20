@@ -15,9 +15,9 @@ MonoBehaviour:
   m_PixelRect:
     serializedVersion: 2
     x: 0
-    y: 33
+    y: 61
     width: 1512
-    height: 949
+    height: 849
   m_ShowMode: 4
   m_Title: Profiler
   m_RootView: {fileID: 3}
@@ -42,7 +42,7 @@ MonoBehaviour:
     x: 0
     y: 36
     width: 1512
-    height: 893
+    height: 793
   m_MinSize: {x: 900, y: 244}
   m_MaxSize: {x: 4000, y: 4028}
   m_ActualView: {fileID: 6}
@@ -67,7 +67,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1512
-    height: 949
+    height: 849
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 929
+    y: 829
     width: 1512
     height: 20
   m_MinSize: {x: 0, y: 0}
@@ -139,9 +139,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 69
+    y: 36
     width: 1512
-    height: 869
+    height: 793
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0

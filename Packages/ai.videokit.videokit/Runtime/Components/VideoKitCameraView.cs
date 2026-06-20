@@ -209,7 +209,7 @@ namespace VideoKit.UI {
                         }
                     ).Throw().Result;
                     var image = (Image)prediction.results![0]!;
-                    image.ToTexture(texture);
+                    image.CopyTo(texture);
                     upload = true;
                 }
             }
