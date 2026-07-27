@@ -14,7 +14,7 @@ namespace VideoKit.Tests {
 
         private async void Start() {
             var asset = await MediaAsset.FromAudioClip(clip);
-            Debug.Log($"Created media asset at path: {asset.path}");
+            Debug.Log($"Created media asset at path: {asset.path} with format {asset.sampleRate}Hz @{asset.channelCount}ch");
         }
     }
 }

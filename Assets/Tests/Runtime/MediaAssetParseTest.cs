@@ -5,27 +5,32 @@
 
 namespace VideoKit.Tests {
 
+    using System.Runtime.Serialization;
     using UnityEngine;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
-    internal sealed class MediaAssetCaptionToStructureTest : MonoBehaviour {
+    internal sealed class MediaAssetParseTest : MonoBehaviour {
 
         enum Direction {
+            [EnumMember(Value = @"North")]
             North,
+            [EnumMember(Value = @"East")]
             East,
+            [EnumMember(Value = @"West")]
             West,
+            [EnumMember(Value = @"South")]
             South    
         }
 
         struct Command {
-            [JsonProperty(Required = Required.Always)]
             public string name;
-            [JsonProperty(Required = Required.Always)]
+            [JsonConverter(typeof(StringEnumConverter))]
             public Direction direction;
         }
 
         private async void Start() {
-            var asset = await MediaAsset.FromText(@"My name is Yusuf and I'm heading East");
+            var asset = await MediaAsset.FromText(@"My name is Yusuf and I'm heading South");
             var command = await asset.Parse<Command>();
             Debug.Log(JsonConvert.SerializeObject(command, Formatting.Indented));
         }

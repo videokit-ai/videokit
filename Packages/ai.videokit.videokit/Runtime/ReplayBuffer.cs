@@ -18,7 +18,7 @@ namespace VideoKit {
     /// <summary>
     /// Replay buffer for recording the last several seconds of video.
     /// NOTE: This only supports recording video.
-    /// NOTE: This is not supported on WebGL due to the lack of C# multithreading..
+    /// NOTE: This is not supported on WebGL due to the lack of C# multithreading.
     /// </summary>
     public sealed class ReplayBuffer {
 
@@ -173,7 +173,11 @@ namespace VideoKit {
             /// <param name="width">Pixel buffer width.</param>
             /// <param name="height">Pixel buffer height.</param>
             /// <param name="timestamp">Pixel buffer timestamp.</param>
-            public unsafe Packet(int width, int height, long timestamp) {
+            public unsafe Packet(
+                int width,
+                int height,
+                long timestamp
+            ) {
                 data = ArrayPool<byte>.Shared.Rent(width * height * 4);
                 handle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 buffer = new PixelBuffer(

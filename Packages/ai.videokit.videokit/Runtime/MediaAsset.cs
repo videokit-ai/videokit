@@ -20,15 +20,16 @@ namespace VideoKit {
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
-    using Muna;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Linq;
     using NJsonSchema;
     using NJsonSchema.Generation;
     using Internal;
     using static Muna.Beta.OpenAI.SpeechService;
     using BinaryData = Muna.Beta.OpenAI.BinaryData;
     using Status = Internal.VideoKit.Status;
+    using Muna.Beta.OpenAI;
 
     /// <summary>
     /// Media asset.
@@ -408,7 +409,7 @@ namespace VideoKit {
         /// <returns>Transcribed text asset.</returns>
         public static async Task<MediaAsset> FromGeneratedTranscription(AudioClip audio) {
             var audioAsset = await FromAudioClip(audio, MediaRecorder.Format.WAV);
-            var transcriptionAsset = await FromGeneratedTranscription(audioAsset.path);
+            var transcriptionAsset = await FromGeneratedTranscription(audioAsset.path!);
             return transcriptionAsset;
         }
 
@@ -536,23 +537,44 @@ namespace VideoKit {
         /// Parse the text asset into a structure.
         /// </summary>
         /// <typeparam name="T">Structure to parse into.</typeparam>
+        /// <param name="acceleration">Prediction acceleration.</param>
         /// <returns>Parsed structure.</returns>
-        internal async Task<T> Parse<T>() {
+        public async Task<T> Parse<T>(string? acceleration = default) {
             // Check
             if (type != MediaType.Text)
                 throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
             // Generate schema
             var settings = new JsonSchemaGeneratorSettings {
-                GenerateAbstractSchemas = false,
-                GenerateExamples = false,
-                UseXmlDocumentation = false,
+                GenerateAbstractSchemas         = false,
+                GenerateExamples                = false,
+                UseXmlDocumentation             = false,
                 ResolveExternalXmlDocumentation = false,
-                FlattenInheritanceHierarchy = false,
+                FlattenInheritanceHierarchy     = false,
             };
             var schema = JsonSchema.FromType<T>(settings);
             // Parse
-            
-            return default;
+            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
+            var response = await openai.Chat.Completions.Create(
+                model: ParseTag,
+                messages: new ChatMessage[] {
+                    new() { Role = @"system", Content = @"You must parse the user's input into a structured JSON object." },
+                    new() { Role = @"user", Content = ToText() }
+                },
+                responseFormat: new() {
+                    [@"type"] = @"json_schema",
+                    [@"json_schema"] = new Dictionary<string, object> {
+                        [@"name"]   = typeof(T).Name,
+                        [@"strict"] = true,
+                        [@"schema"] = new JRaw(schema.ToJson(Formatting.None))
+                    }
+                },
+                acceleration: acceleration
+            );
+            var json = response?.Choices?[0].Message.Content;
+            if (string.IsNullOrEmpty(json))
+                throw new InvalidOperationException($"Failed to parse media asset to {typeof(T).Name}");
+            // Return
+            return JsonConvert.DeserializeObject<T>(json)!;
         }
 
         /// <summary>
@@ -792,6 +814,7 @@ namespace VideoKit {
         private static readonly Dictionary<NarrationVoice, string> SpeechPredictorMap = new() { // INCOMPLETE
             
         };
+        internal const string ParseTag = @"@videokit/parse-v1-260721";
         internal const string TranscribeTag = @"@videokit/transcribe-v1";
 
         internal MediaAsset(IntPtr handle, MediaAsset? parent = null) {

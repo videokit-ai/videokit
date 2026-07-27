@@ -91,7 +91,7 @@ namespace VideoKit {
         /// </summary>
         public static async Task<MultiCameraDevice[]> Discover() {
             // Check session
-            await VideoKitClient.Instance!.CheckSession();
+            await VideoKitClient.Instance!.CheckSession().Throw();
             // Discover
             var tcs = new TaskCompletionSource<MultiCameraDevice[]>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);

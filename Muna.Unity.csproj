@@ -18,7 +18,7 @@
     <LangVersion>9.0</LangVersion>
     <RootNamespace></RootNamespace>
     <OutputType>Library</OutputType>
-    <AssemblyName>VideoKit.Tests.Runtime</AssemblyName>
+    <AssemblyName>Muna.Unity</AssemblyName>
     <TargetFramework>netstandard2.1</TargetFramework>
     <BaseDirectory>.</BaseDirectory>
   </PropertyGroup>
@@ -49,32 +49,41 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromGeneratedSpeechTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitVersionTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/CameraDeviceStartStopTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetTrimStartTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromCameraRollTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetShareTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/AudioDeviceEnumerateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/RecordEmptyVideoTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromAudioClipTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/CameraDeviceEnumerateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/RecordTextureDataTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetParseTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromGeneratedTranscriptionTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitRecorderCaptureScreenshotTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetConcatenateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/HumanTextureTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MultiCameraDeviceEnumeratTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetTrimEndTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetReadPixelBufferTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitCameraManagerSwitchCameraTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetSaveToCameraRollTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaRecorderCreateBackgroundThreadTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoRecordingHandler.cs" />
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Internal/MunaSettings.cs">
+      <Link>Unity/Internal/MunaSettings.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Converters/Rect.cs">
+      <Link>Unity/Converters/Rect.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Converters/Color.cs">
+      <Link>Unity/Converters/Color.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/MunaUnity.cs">
+      <Link>Unity/MunaUnity.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Converters/Vector4.cs">
+      <Link>Unity/Converters/Vector4.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/API/UnityClient.cs">
+      <Link>Unity/API/UnityClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Converters/Vector3.cs">
+      <Link>Unity/Converters/Vector3.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Internal/CachedPrediction.cs">
+      <Link>Unity/Internal/CachedPrediction.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/API/PredictionCacheClient.cs">
+      <Link>Unity/API/PredictionCacheClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Converters/Vector2.cs">
+      <Link>Unity/Converters/Vector2.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets/Tests/Runtime/VideoKit.Tests.Runtime.asmdef" />
+    <None Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Unity/Muna.Unity.asmdef">
+      <Link>Unity/Muna.Unity.asmdef</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -501,24 +510,8 @@
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NJsonSchema">
-      <HintPath>Packages/ai.videokit.videokit/Plugins/Managed/NJsonSchema.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Library/PackageCache/com.unity.ext.nunit@031a54704bff/net40/unity-custom/nunit.framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ReportGeneratorMerged">
-      <HintPath>Library/PackageCache/com.unity.testtools.codecoverage@19a841221620/lib/ReportGenerator/ReportGeneratorMerged.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@4dfd81071c64/Runtime/Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Namotion.Reflection">
-      <HintPath>Packages/ai.videokit.videokit/Plugins/Managed/Namotion.Reflection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
@@ -1033,14 +1026,6 @@
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Muna.Runtime">
-      <HintPath>Library/ScriptAssemblies/Muna.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Muna.Unity">
-      <HintPath>Library/ScriptAssemblies/Muna.Unity.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
       <Private>False</Private>
@@ -1051,7 +1036,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="VideoKit.Runtime.csproj" />
+    <ProjectReference Include="Muna.Runtime.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

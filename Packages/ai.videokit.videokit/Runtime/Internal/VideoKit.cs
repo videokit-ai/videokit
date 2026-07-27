@@ -64,7 +64,9 @@ namespace VideoKit.Internal {
             InvalidOperation    = 2,
             NotImplemented      = 3,
             InvalidSession      = 101,
+            SessionStale        = 102,
             InvalidPlan         = 104,
+            DeviceLimitReached  = 1000,
         }
         #endregion
 
@@ -868,14 +870,18 @@ namespace VideoKit.Internal {
         }
 
         public static Status Throw(this Status status) => status switch {
-            Status.Ok               => status,
-            Status.InvalidArgument  => throw new ArgumentException(),
-            Status.InvalidOperation => throw new InvalidOperationException(),
-            Status.NotImplemented   => throw new NotImplementedException(),
-            Status.InvalidSession   => throw new InvalidOperationException(@"VideoKit session token is invalid. Get your VideoKit access key at https://videokit.ai"),
-            Status.InvalidPlan      => throw new InvalidOperationException(@"VideoKit plan does not support this operation. Check your plan and upgrade at https://videokit.ai"),
-            _                       => throw new InvalidOperationException(),
+            Status.Ok                   => status,
+            Status.SessionStale         => status,
+            Status.InvalidArgument      => throw new ArgumentException(),
+            Status.InvalidOperation     => throw new InvalidOperationException(),
+            Status.NotImplemented       => throw new NotImplementedException(),
+            Status.InvalidSession       => throw new InvalidOperationException(@"VideoKit session token is invalid. Get your VideoKit access key at https://videokit.ai"),
+            Status.InvalidPlan          => throw new InvalidOperationException(@"VideoKit plan does not support this operation. Check your plan and upgrade at https://videokit.ai"),
+            Status.DeviceLimitReached   => throw new InvalidOperationException(@"VideoKit device limit reached for your plan. Upgrade at https://videokit.ai"),
+            _                           => throw new InvalidOperationException(),
         };
+
+        public static async Task<Status> Throw(this Task<Status> task) => (await task).Throw();
 
         public static async Task<Prediction> Throw(this Task<Prediction> task) {
             var prediction = await task;

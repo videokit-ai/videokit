@@ -26,7 +26,9 @@ namespace VideoKit {
         /// <summary>
         /// Whether acoustic echo cancellation is supported.
         /// </summary>
-        public bool echoCancellationSupported => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ? flags.HasFlag(MediaDeviceFlags.EchoCancellation) : default;
+        public bool echoCancellationSupported => handle.GetMediaDeviceFlags(out var flags).Throw() == Status.Ok ?
+            flags.HasFlag(MediaDeviceFlags.EchoCancellation) :
+            default;
 
         /// <summary>
         /// Enable or disable acoustic echo cancellation (AEC).
@@ -83,7 +85,7 @@ namespace VideoKit {
         /// <param name="configureAudioSession">Configure the application's global audio session for audio device discovery. This is required for discovering audio devices on iOS.</param>
         public static async Task<AudioDevice[]> Discover(bool configureAudioSession = true) {
             // Check session
-            await VideoKitClient.Instance!.CheckSession();
+            await VideoKitClient.Instance!.CheckSession().Throw();
             // Configure audio session
             if (configureAudioSession)
                 VideoKit.ConfigureAudioSession();

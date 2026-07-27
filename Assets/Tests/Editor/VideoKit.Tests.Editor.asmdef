@@ -2,17 +2,19 @@
     "name": "VideoKit.Tests.Editor",
     "rootNamespace": "",
     "references": [
-        "VideoKit.Runtime",
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "VideoKit.Runtime"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [
-        "nunit.framework.dll",
         "Newtonsoft.Json.dll"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
     ],
     "autoReferenced": true,
     "defineConstraints": [

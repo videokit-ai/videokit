@@ -174,7 +174,7 @@ namespace VideoKit {
             string? prefix = null
         ) {
             // Check session
-            await VideoKitClient.Instance!.CheckSession();
+            await VideoKitClient.Instance!.CheckSession().Throw();
             // Create recorder
             IntPtr recorder = IntPtr.Zero;
             switch (format) {

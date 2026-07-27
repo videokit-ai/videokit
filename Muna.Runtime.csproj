@@ -18,7 +18,7 @@
     <LangVersion>9.0</LangVersion>
     <RootNamespace></RootNamespace>
     <OutputType>Library</OutputType>
-    <AssemblyName>VideoKit.Tests.Runtime</AssemblyName>
+    <AssemblyName>Muna.Runtime</AssemblyName>
     <TargetFramework>netstandard2.1</TargetFramework>
     <BaseDirectory>.</BaseDirectory>
   </PropertyGroup>
@@ -49,476 +49,117 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromGeneratedSpeechTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitVersionTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/CameraDeviceStartStopTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetTrimStartTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromCameraRollTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetShareTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/AudioDeviceEnumerateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/RecordEmptyVideoTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromAudioClipTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/CameraDeviceEnumerateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/RecordTextureDataTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetParseTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetFromGeneratedTranscriptionTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitRecorderCaptureScreenshotTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetConcatenateTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/HumanTextureTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MultiCameraDeviceEnumeratTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetTrimEndTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetReadPixelBufferTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoKitCameraManagerSwitchCameraTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaAssetSaveToCameraRollTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/MediaRecorderCreateBackgroundThreadTest.cs" />
-    <Compile Include="Assets/Tests/Runtime/VideoRecordingHandler.cs" />
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/Prediction.cs">
+      <Link>Runtime/C/Prediction.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/EmbeddingService.cs">
+      <Link>Runtime/Beta/OpenAI/EmbeddingService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/ChatService.cs">
+      <Link>Runtime/Beta/OpenAI/ChatService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Services/UserService.cs">
+      <Link>Runtime/Services/UserService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/BetaClient.cs">
+      <Link>Runtime/Beta/BetaClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/RemoteValue.cs">
+      <Link>Runtime/Types/RemoteValue.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/ValueUtils.cs">
+      <Link>Runtime/Types/ValueUtils.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/PredictionStream.cs">
+      <Link>Runtime/C/PredictionStream.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/ImageService.cs">
+      <Link>Runtime/Beta/OpenAI/ImageService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Prediction.cs">
+      <Link>Runtime/Types/Prediction.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/API/MunaClient.cs">
+      <Link>Runtime/API/MunaClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Json.cs">
+      <Link>Runtime/Types/Json.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Image.cs">
+      <Link>Runtime/Types/Image.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Parameter.cs">
+      <Link>Runtime/Types/Parameter.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/Types.cs">
+      <Link>Runtime/Beta/OpenAI/Types.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/OpenAIClient.cs">
+      <Link>Runtime/Beta/OpenAI/OpenAIClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Services/PredictorService.cs">
+      <Link>Runtime/Services/PredictorService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Services/PredictionService.cs">
+      <Link>Runtime/Services/PredictionService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/Types.cs">
+      <Link>Runtime/Beta/Types.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/Configuration.cs">
+      <Link>Runtime/C/Configuration.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/AudioService.cs">
+      <Link>Runtime/Beta/OpenAI/AudioService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/SpeechService.cs">
+      <Link>Runtime/Beta/OpenAI/SpeechService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/API/DotNetClient.cs">
+      <Link>Runtime/API/DotNetClient.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/Function.cs">
+      <Link>Runtime/C/Function.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Tensor.cs">
+      <Link>Runtime/Types/Tensor.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Predictor.cs">
+      <Link>Runtime/Types/Predictor.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/ValueMap.cs">
+      <Link>Runtime/C/ValueMap.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/User.cs">
+      <Link>Runtime/Types/User.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/TranscriptionService.cs">
+      <Link>Runtime/Beta/OpenAI/TranscriptionService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Types/Dtype.cs">
+      <Link>Runtime/Types/Dtype.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Muna.cs">
+      <Link>Runtime/Muna.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/Value.cs">
+      <Link>Runtime/C/Value.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Beta/OpenAI/CompletionService.cs">
+      <Link>Runtime/Beta/OpenAI/CompletionService.cs</Link>
+    </Compile>
+    <Compile Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/C/Predictor.cs">
+      <Link>Runtime/C/Predictor.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets/Tests/Runtime/VideoKit.Tests.Runtime.asmdef" />
+    <None Include="/Users/yusuf/Documents/Projects/muna/muna-unity/Packages/ai.muna.muna/Runtime/Muna.Runtime.asmdef">
+      <Link>Runtime/Muna.Runtime.asmdef</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UnityEngine">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ARModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ARModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AssetBundleModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterInputModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterRendererModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ContentLoadModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ContentLoadModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CrashReportingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.DSPGraphModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.DSPGraphModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GameCenterModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GameCenterModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GraphicsStateCollectionSerializerModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GraphicsStateCollectionSerializerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GridModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GridModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.HierarchyCoreModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.HierarchyCoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.HotReloadModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.HotReloadModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IdentifiersModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.IdentifiersModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ImageConversionModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputForUIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputForUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputLegacyModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InsightsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InsightsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.JSONSerializeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.LocalizationModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.LocalizationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.MarshallingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.MarshallingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.MultiplayerModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.MultiplayerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PerformanceReportingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PropertiesModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PropertiesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ScreenCaptureModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ShaderVariantAnalyticsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ShaderVariantAnalyticsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SharedInternalsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SpriteMaskModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SpriteShapeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.StreamingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.StreamingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SubstanceModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SubstanceModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TLSModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TLSModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreFontEngineModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextCoreFontEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreTextEngineModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextCoreTextEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIElementsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityAnalyticsCommonModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityConnectModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityConnectModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityConsentModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityConsentModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityCurlModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityCurlModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityTestProtocolModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityTestProtocolModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VFXModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VFXModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VideoModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VideoModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VirtualTexturingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VirtualTexturingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.AccessibilityModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.AccessibilityModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.AdaptivePerformanceModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.AdaptivePerformanceModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.BuildProfileModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.BuildProfileModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.CoreBusinessMetricsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.CoreBusinessMetricsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.CoreModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.DeviceSimulatorModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.DiagnosticsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DiagnosticsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.EditorToolbarModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.EditorToolbarModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.EmbreeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.EmbreeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.GIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.GraphViewModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GraphViewModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.GraphicsStateCollectionSerializerModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GraphicsStateCollectionSerializerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.GridAndSnapModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GridAndSnapModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.GridModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.GridModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.MultiplayerModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.MultiplayerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.Physics2DModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.Physics2DModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.PhysicsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.PresetsUIModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.PresetsUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.PropertiesModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.PropertiesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.QuickInstallModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.QuickInstallModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.QuickSearchModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.QuickSearchModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SafeModeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SafeModeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SceneTemplateModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SceneTemplateModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SceneViewModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SceneViewModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.ShaderFoundryModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.ShaderFoundryModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SketchUpModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SketchUpModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SpriteMaskModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SpriteMaskModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SpriteShapeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SpriteShapeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.SubstanceModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.SubstanceModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TerrainModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TerrainModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TextCoreFontEngineModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TextCoreFontEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TextCoreTextEngineModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TextCoreTextEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TextRenderingModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TilemapModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TilemapModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.TreeModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.TreeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UIAutomationModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIAutomationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UIBuilderModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIBuilderModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UIElementsModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIElementsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UIElementsSamplesModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UIElementsSamplesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UmbraModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UmbraModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UnityConnectModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UnityConnectModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.VFXModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.VFXModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.VideoModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.VideoModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.XRModule">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.XRModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.Graphs">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.WebGL.Extensions">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.OSXStandalone.Extensions">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.Android.Extensions">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions">
-      <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NJsonSchema">
-      <HintPath>Packages/ai.videokit.videokit/Plugins/Managed/NJsonSchema.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Library/PackageCache/com.unity.ext.nunit@031a54704bff/net40/unity-custom/nunit.framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ReportGeneratorMerged">
-      <HintPath>Library/PackageCache/com.unity.testtools.codecoverage@19a841221620/lib/ReportGenerator/ReportGeneratorMerged.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@4dfd81071c64/Runtime/Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Namotion.Reflection">
-      <HintPath>Packages/ai.videokit.videokit/Plugins/Managed/Namotion.Reflection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
@@ -1033,25 +674,6 @@
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.76f1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Muna.Runtime">
-      <HintPath>Library/ScriptAssemblies/Muna.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Muna.Unity">
-      <HintPath>Library/ScriptAssemblies/Muna.Unity.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="VideoKit.Runtime.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

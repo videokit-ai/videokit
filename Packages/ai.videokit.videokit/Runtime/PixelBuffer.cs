@@ -46,7 +46,7 @@ namespace VideoKit {
             /// <summary>
             /// BGRA8888.
             /// </summary>
-            BGRA8888 = 3,    
+            BGRA8888 = 3,
         }
 
         public enum Rotation : int { // CHECK // VideoKit.h
