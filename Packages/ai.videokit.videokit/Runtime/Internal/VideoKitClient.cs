@@ -9,6 +9,7 @@ namespace VideoKit.Internal {
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Runtime.InteropServices;
@@ -18,6 +19,8 @@ namespace VideoKit.Internal {
     using UnityEngine.Networking;
     using Muna;
     using Newtonsoft.Json;
+    using NJsonSchema;
+    using NJsonSchema.Generation;
     using Status = VideoKit.Status;
 
     /// <summary>
@@ -79,35 +82,7 @@ namespace VideoKit.Internal {
         #endregion
 
 
-        #region --Operations--
-        [SerializeField, HideInInspector]
-        private string? authToken = string.Empty;
-        private Muna? _muna;
-        private string? sessionToken;
-        private Task<Status>? sessionTask;
-        public const string URL = @"https://www.videokit.ai/api";
-        private const string SessionTokenKey = @"ai.videokit.session";
-        private const string DeviceLimitErrorCode = @"device_limit_reached";
-
-        private sealed class SessionResponse {
-            public string? token { get; set; }
-            public string? error { get; set; }
-            public string? code { get; set; }
-        }
-
-        private void Awake() {
-            // Check editor
-            if (Application.isEditor)
-                return;
-            // Set singleton in player
-            Instance = Instance ? Instance : this;
-            // Set session token
-            sessionToken = (
-                PlayerPrefs.HasKey(SessionTokenKey) ?
-                PlayerPrefs.GetString(SessionTokenKey) :
-                null
-            );
-        }
+        #region --Internal API--
 
         internal async static Task<string> CreateAuthToken(
             string platform,
@@ -141,6 +116,79 @@ namespace VideoKit.Internal {
                 throw new InvalidOperationException(error);
             // Return
             return responseBody[@"token"];
+        }
+
+        /// <summary>
+        /// Get the JSON schema for a given structured output type.
+        /// </summary>
+        /// <typeparam name="T">Structured output type.</typeparam>
+        /// <returns>Serialized JSON schema.</returns>
+        internal StructuredOutputSchema? GetSchema<T>() => GetSchema(typeof(T));
+
+        /// <summary>
+        /// Get the JSON schema for a given structured output type.
+        /// </summary>
+        /// <param name="type">Structured output type.</typeparam>
+        /// <returns>Serialized JSON schema.</returns>
+        internal StructuredOutputSchema? GetSchema(Type type) {
+            // Build cache
+            schemaMap ??= schemas?.ToDictionary(e => e.key, e => e);
+            // Check if cached
+            var key = $"{type.FullName}, {type.Assembly.GetName().Name}";
+            if (schemaMap?.TryGetValue(key, out var res) ?? false)
+                return res;
+            // Cache on-demand in the editor
+            if (Application.isEditor) {
+                var settings = new JsonSchemaGeneratorSettings {
+                    GenerateAbstractSchemas         = false,
+                    GenerateExamples                = false,
+                    UseXmlDocumentation             = false,
+                    ResolveExternalXmlDocumentation = false,
+                    FlattenInheritanceHierarchy     = false,
+                };
+                var schema = JsonSchema.FromType(type, settings);
+                var result = new StructuredOutputSchema {
+                    key = key,
+                    schema = schema.ToJson(Formatting.None)
+                };
+                schemaMap?.Add(key, result);
+                return result;
+            }
+            // Unrecognized type
+            return null;
+        }
+        #endregion
+
+
+        #region --State--
+        [SerializeField, HideInInspector]
+        private string? authToken = string.Empty;
+        [SerializeField, HideInInspector]
+        internal StructuredOutputSchema[] schemas;
+        #endregion
+
+
+        #region --Operations--
+        private Muna? _muna;
+        private string? sessionToken;
+        private Task<Status>? sessionTask;
+        private Dictionary<string, StructuredOutputSchema>? schemaMap;
+        public const string URL = @"https://www.videokit.ai/api";
+        private const string SessionTokenKey = @"ai.videokit.session";
+        private const string DeviceLimitErrorCode = @"device_limit_reached";
+
+        private void Awake() {
+            // Check editor
+            if (Application.isEditor)
+                return;
+            // Set singleton in player
+            Instance = Instance ? Instance : this;
+            // Set session token
+            sessionToken = (
+                PlayerPrefs.HasKey(SessionTokenKey) ?
+                PlayerPrefs.GetString(SessionTokenKey) :
+                null
+            );
         }
 
         private async Task<string?> CreateSessionToken() {
@@ -178,7 +226,7 @@ namespace VideoKit.Internal {
             );
         }
 
-        internal static string ParseSessionTokenResponse(
+        private static string ParseSessionTokenResponse(
             string responseText,
             long responseCode
         ) {
@@ -249,6 +297,27 @@ namespace VideoKit.Internal {
                 VideoKit.SetSessionToken(fallbackToken);
             }
             return status;
+        }
+        #endregion
+
+
+        #region --Types--
+        private sealed class SessionResponse {
+            public string? token { get; set; }
+            public string? error { get; set; }
+            public string? code { get; set; }
+        }
+    
+        [Serializable]
+        internal struct StructuredOutputSchema {
+            /// <summary>
+            /// Type key.
+            /// </summary>
+            public string key;
+            /// <summary>
+            /// Type schema.
+            /// </summary>
+            public string schema;
         }
         #endregion
     }

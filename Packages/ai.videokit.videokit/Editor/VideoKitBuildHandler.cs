@@ -15,37 +15,11 @@ namespace VideoKit.Editor.Build {
     using UnityEditor.Build;
     using UnityEditor.Build.Reporting;
     using Internal;
+    using Models = Internal.VideoKitModels;
 
     internal sealed class VideoKitBuildHandler : IPreprocessBuildWithReport, IPostprocessBuildWithReport {
 
-        #region --Operations--
-        private const string CachePath = @"Assets/__VIDEOKIT_DELETE_THIS__";
-
-        [Muna.Muna.Embed(MediaAsset.ParseTag, MediaAsset.TranscribeTag, VideoKitCameraManager.HumanTextureTag)]
-        private static Muna.Muna muna => new(
-            accessKey: VideoKitProjectSettings.instance.accessKey,
-            url: VideoKitClient.URL
-        );
-
-        private VideoKitClient CreateClient(BuildReport report) {
-            try {
-                var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
-                var accessKey = VideoKitProjectSettings.instance.accessKey;
-                var token = Task.Run(() => VideoKitClient.CreateAuthToken(platform, accessKey)).Result;
-                return VideoKitClient.Create(token: token);
-            } catch (Exception ex) {
-                Debug.LogWarning($"VideoKit: {ex.Message}");
-                return VideoKitClient.Create(token: null); // unauthed
-            }
-        }
-
-        private void FailureListener() {
-            if (BuildPipeline.isBuildingPlayer)
-                return;
-            ClearSettings();
-            EditorApplication.update -= FailureListener;
-        }
-
+        #region --Build Handlers--
         int IOrderedCallback.callbackOrder => -1;
 
         void IPreprocessBuildWithReport.OnPreprocessBuild(BuildReport report) {
@@ -67,6 +41,46 @@ namespace VideoKit.Editor.Build {
         #endregion
 
 
+        #region --Operations--
+        private const string CachePath = @"Assets/__VIDEOKIT_DELETE_THIS__";
+
+        [Muna.Muna.Embed(
+            Models.HumanTexture_v2,
+            Models.Narrate_v1,
+            Models.Parse_v1,
+            Models.Transcribe_v1
+        )]
+        private static Muna.Muna muna => new(
+            accessKey: VideoKitProjectSettings.instance.accessKey,
+            url: VideoKitClient.URL
+        );
+
+        private VideoKitClient CreateClient(BuildReport report) {
+            try {
+                var platform = TargetToPlatform.GetValueOrDefault(report.summary.platform);
+                var accessKey = VideoKitProjectSettings.instance.accessKey;
+                var token = Task.Run(() => VideoKitClient.CreateAuthToken(platform, accessKey)).Result;
+                var client = VideoKitClient.Create(token: token);
+                client.schemas = TypeCache
+                    .GetTypesWithAttribute<StructuredOutputAttribute>()
+                    .Select(t => client.GetSchema(t).Value)
+                    .ToArray();
+                return client;
+            } catch (Exception ex) {
+                Debug.LogWarning($"VideoKit: {ex.Message}");
+                return VideoKitClient.Create(token: null); // unauthed
+            }
+        }
+
+        private void FailureListener() {
+            if (BuildPipeline.isBuildingPlayer)
+                return;
+            ClearSettings();
+            EditorApplication.update -= FailureListener;
+        }
+        #endregion
+
+
         #region --Utilities--
 
         private static readonly Dictionary<BuildTarget, string> TargetToPlatform = new () {
@@ -82,7 +96,7 @@ namespace VideoKit.Editor.Build {
             [BuildTarget.StandaloneWindows64]       = @"windows",
         };
 
-        private static void EmbedClient (VideoKitClient client) {
+        private static void EmbedClient(VideoKitClient client) {
             Directory.CreateDirectory(CachePath);
             AssetDatabase.CreateAsset(client, $"{CachePath}/VideoKit.asset");
             var assets = PlayerSettings.GetPreloadedAssets()?.ToList() ?? new List<UnityEngine.Object>();
@@ -90,7 +104,7 @@ namespace VideoKit.Editor.Build {
             PlayerSettings.SetPreloadedAssets(assets.ToArray());
         }
 
-        private static void ClearSettings () {
+        private static void ClearSettings() {
             var assets = PlayerSettings.GetPreloadedAssets()?.ToList();
             if (assets != null) {
                 assets.RemoveAll(asset => asset && asset.GetType() == typeof(VideoKitClient));
@@ -99,7 +113,7 @@ namespace VideoKit.Editor.Build {
             AssetDatabase.DeleteAsset(CachePath);
         }
 
-        private static void SetAndroidXImportSettings () {
+        private static void SetAndroidXImportSettings() {
             var guids = AssetDatabase.FindAssets(@"videokit-androidx-core");
             if (guids.Length == 0)
                 return;
@@ -108,7 +122,7 @@ namespace VideoKit.Editor.Build {
             importer.SetCompatibleWithPlatform(BuildTarget.Android, VideoKitProjectSettings.instance.embedAndroidX);
         }
 
-        private static void AddPhotoLibraryUsageDescription (BuildReport report) {
+        private static void AddPhotoLibraryUsageDescription(BuildReport report) {
             var description = VideoKitProjectSettings.instance.photoLibraryUsageDescription;
             var outputPath = report.summary.outputPath;
             if (string.IsNullOrEmpty(description))

@@ -21,6 +21,7 @@ namespace VideoKit.UI {
     using Internal;
     using Facing = VideoKitCameraManager.Facing;
     using Image = Muna.Image;
+    using Models = Internal.VideoKitModels;
 
     /// <summary>
     /// VideoKit UI component for displaying the camera preview from a camera manager.
@@ -198,7 +199,7 @@ namespace VideoKit.UI {
                 } else if (viewMode == ViewMode.HumanTexture) {
                     var muna = VideoKitClient.Instance!.muna;
                     var prediction = muna.Predictions.Create(
-                        tag: VideoKitCameraManager.HumanTextureTag,
+                        tag: Models.HumanTexture_v2,
                         inputs: new () {
                             ["image"] = new Image(
                                 (byte*)pixelBuffer.data.GetUnsafePtr(),

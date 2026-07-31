@@ -82,13 +82,9 @@ namespace VideoKit {
         /// <summary>
         /// Discover available audio input devices.
         /// </summary>
-        /// <param name="configureAudioSession">Configure the application's global audio session for audio device discovery. This is required for discovering audio devices on iOS.</param>
-        public static async Task<AudioDevice[]> Discover(bool configureAudioSession = true) {
+        public static async Task<AudioDevice[]> Discover() {
             // Check session
             await VideoKitClient.Instance!.CheckSession().Throw();
-            // Configure audio session
-            if (configureAudioSession)
-                VideoKit.ConfigureAudioSession();
             // Discover
             var tcs = new TaskCompletionSource<AudioDevice[]>();
             var handle = GCHandle.Alloc(tcs, GCHandleType.Normal);

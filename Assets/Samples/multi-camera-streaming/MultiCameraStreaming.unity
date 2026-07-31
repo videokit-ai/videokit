@@ -352,7 +352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88aa3c596777f4cf489ae6096a962171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configureOnAwake: 1
   sampleRate: 44100
   channelCount: 1
   echoCancellation: 0

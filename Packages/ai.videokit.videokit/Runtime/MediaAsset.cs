@@ -20,16 +20,15 @@ namespace VideoKit {
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Networking;
+    using Muna.Beta.OpenAI;
+    using static Muna.Beta.OpenAI.SpeechService;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using Newtonsoft.Json.Linq;
-    using NJsonSchema;
-    using NJsonSchema.Generation;
     using Internal;
-    using static Muna.Beta.OpenAI.SpeechService;
     using BinaryData = Muna.Beta.OpenAI.BinaryData;
+    using Models = Internal.VideoKitModels;
     using Status = Internal.VideoKit.Status;
-    using Muna.Beta.OpenAI;
 
     /// <summary>
     /// Media asset.
@@ -81,43 +80,43 @@ namespace VideoKit {
             /// <summary>
             /// Male 1 narration voice.
             /// </summary>
-            [EnumMember(Value = @"kevin")]
+            [EnumMember(Value = @"M1")]
             Kevin = 1,
             /// <summary>
             /// Male 2 narration voice.
             /// </summary>
-            [EnumMember(Value = @"arjun")]
+            [EnumMember(Value = @"M2")]
             Arjun = 2,
             /// <summary>
             /// Male 3 narration voice.
             /// </summary>
-            [EnumMember(Value = @"dami")]
+            [EnumMember(Value = @"M3")]
             Dami = 3,
             /// <summary>
             /// Male 4 narration voice.
             /// </summary>
-            [EnumMember(Value = @"juan")]
+            [EnumMember(Value = @"M4")]
             Juan = 4,
             /// <summary>
             /// Female 1 narration voice.
             /// </summary>
-            [EnumMember(Value = @"rhea")]
-            Rhea = 5,
+            [EnumMember(Value = @"F1")]
+            Roberta = 5,
             /// <summary>
             /// Female 2 narration voice.
             /// </summary>
-            [EnumMember(Value = @"aliyah")]
-            Aliyah = 6,
+            [EnumMember(Value = @"F2")]
+            Maimuna = 6,
             /// <summary>
             /// Female 3 narration voice.
             /// </summary>
-            [EnumMember(Value = @"kristen")]
-            Kristen = 7,
+            [EnumMember(Value = @"F3")]
+            Rhea = 7,
             /// <summary>
             /// Female 4 narration voice.
             /// </summary>
-            [EnumMember(Value = @"salma")]
-            Salma = 8,
+            [EnumMember(Value = @"F4")]
+            Samantha = 8,
         }
         #endregion
 
@@ -381,18 +380,19 @@ namespace VideoKit {
         /// <param name="speed">Audio speed of the generated speech.</param>
         /// <param name="acceleration">Prediction acceleration.</param>
         /// <returns>Generated audio asset.</returns>
-        internal static async Task<MediaAsset> FromGeneratedSpeech( // INCOMPLETE
+        internal static async Task<MediaAsset> FromGeneratedSpeech( // DEPLOY
             string prompt,
             NarrationVoice voice,
             float speed = 1f,
             string? acceleration = default
         ) {
             var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
-            var tag = SpeechPredictorMap[voice];
+            var voiceId = GetEnumValueString(voice)!;
+            var tag = SpeechPredictorMap[voiceId];
             var speech = await openai.Audio.Speech.Create(
                 model: tag,
                 input: prompt,
-                voice: GetEnumValueString(voice)!,
+                voice: voiceId,
                 speed: speed,
                 responseFormat: ResponseFormat.PCM,
                 acceleration: acceleration
@@ -426,7 +426,7 @@ namespace VideoKit {
             var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
             using var stream = File.OpenRead(path);
             var transcription = await openai.Audio.Transcriptions.Create(
-                model: TranscribeTag,
+                model: Models.Transcribe_v1,
                 file: stream,
                 acceleration: acceleration
             );
@@ -544,18 +544,15 @@ namespace VideoKit {
             if (type != MediaType.Text)
                 throw new ArgumentException($"Cannot perform structured parsing on media asset because asset is not a text asset");
             // Generate schema
-            var settings = new JsonSchemaGeneratorSettings {
-                GenerateAbstractSchemas         = false,
-                GenerateExamples                = false,
-                UseXmlDocumentation             = false,
-                ResolveExternalXmlDocumentation = false,
-                FlattenInheritanceHierarchy     = false,
-            };
-            var schema = JsonSchema.FromType<T>(settings);
+            var client = VideoKitClient.Instance!;
+            var schema = (
+                client.GetSchema<T>() ??
+                throw new ArgumentException($"{typeof(T).FullName} is not marked with `[VideoKit.StructuredOutput]` attribute.")
+            );
             // Parse
-            var openai = VideoKitClient.Instance!.muna.Beta.OpenAI;
+            var openai = client.muna.Beta.OpenAI;
             var response = await openai.Chat.Completions.Create(
-                model: ParseTag,
+                model: Models.Parse_v1,
                 messages: new ChatMessage[] {
                     new() { Role = @"system", Content = @"You must parse the user's input into a structured JSON object." },
                     new() { Role = @"user", Content = ToText() }
@@ -565,14 +562,14 @@ namespace VideoKit {
                     [@"json_schema"] = new Dictionary<string, object> {
                         [@"name"]   = typeof(T).Name,
                         [@"strict"] = true,
-                        [@"schema"] = new JRaw(schema.ToJson(Formatting.None))
+                        [@"schema"] = new JRaw(schema.schema)
                     }
                 },
                 acceleration: acceleration
             );
             var json = response?.Choices?[0].Message.Content;
             if (string.IsNullOrEmpty(json))
-                throw new InvalidOperationException($"Failed to parse media asset to {typeof(T).Name}");
+                throw new InvalidOperationException($"Failed to parse media asset to {typeof(T).FullName}");
             // Return
             return JsonConvert.DeserializeObject<T>(json)!;
         }
@@ -811,11 +808,16 @@ namespace VideoKit {
         #region --Operations--
         private readonly IntPtr handle;
         private readonly MediaAsset? parent;
-        private static readonly Dictionary<NarrationVoice, string> SpeechPredictorMap = new() { // INCOMPLETE
-            
+        private static readonly Dictionary<string, string> SpeechPredictorMap = new() {
+            [@"M1"] = Models.Narrate_v1,
+            [@"M2"] = Models.Narrate_v1,
+            [@"M3"] = Models.Narrate_v1,
+            [@"M4"] = Models.Narrate_v1,
+            [@"F1"] = Models.Narrate_v1,
+            [@"F2"] = Models.Narrate_v1,
+            [@"F3"] = Models.Narrate_v1,
+            [@"F4"] = Models.Narrate_v1,
         };
-        internal const string ParseTag = @"@videokit/parse-v1-260721";
-        internal const string TranscribeTag = @"@videokit/transcribe-v1";
 
         internal MediaAsset(IntPtr handle, MediaAsset? parent = null) {
             this.handle = handle;

@@ -10,6 +10,7 @@ namespace VideoKit.Tests {
     using Muna;
     using Newtonsoft.Json;
     using UI;
+    using Models = Internal.VideoKitModels;
     using Stopwatch = System.Diagnostics.Stopwatch;
 
     internal sealed class HumanTextureTest : MonoBehaviour {
@@ -18,25 +19,31 @@ namespace VideoKit.Tests {
         [SerializeField] UnityEngine.UI.RawImage rawImage;
         private Texture2D humanTexture;
         private Muna muna;
+        private bool ready;
 
         private async void Start() {
+            // Preload model
             muna = VideoKitClient.Instance.muna;
-            await muna.Predictions.Create("@videokit/human-texture");
+            await muna.Predictions.Create(
+                tag: Models.HumanTexture_v2,
+                inputs: new() { [@""] = null }
+            );
+            ready = true;
             Debug.Log("Created predictor");
         }
 
         private void Update() {
             // Check
+            if (!ready)
+                return;
+            // Check
             var previewTexture = cameraView.texture;
             if (previewTexture == null)
                 return;
-            // Check
-            //if (!Input.GetKey(KeyCode.Space))
-            //    return;
             // Predict
             var watch = Stopwatch.StartNew();
             var prediction = muna.Predictions.Create(
-                "@videokit/human-texture",
+                tag: Models.HumanTexture_v2,
                 inputs: new () {
                     [@"image"] = previewTexture.ToImage()
                 }

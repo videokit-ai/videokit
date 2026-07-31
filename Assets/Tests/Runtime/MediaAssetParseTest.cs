@@ -23,6 +23,7 @@ namespace VideoKit.Tests {
             South    
         }
 
+        [StructuredOutput]
         struct Command {
             public string name;
             [JsonConverter(typeof(StringEnumConverter))]

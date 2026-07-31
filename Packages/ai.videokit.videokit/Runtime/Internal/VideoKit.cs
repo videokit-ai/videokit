@@ -841,16 +841,6 @@ namespace VideoKit.Internal {
         #endregion
 
 
-        #region --iOS--
-        #if (UNITY_IOS || UNITY_VISIONOS) && !UNITY_EDITOR
-        [DllImport(Assembly, EntryPoint = @"VKTConfigureAudioSession")]
-        public static extern void ConfigureAudioSession();
-        #else
-        public static void ConfigureAudioSession() { }
-        #endif
-        #endregion
-
-
         #region --Utility--
 
         public static bool IsAppDomainLoaded { // thanks @UnityAlex!

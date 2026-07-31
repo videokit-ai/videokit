@@ -77,14 +77,6 @@ namespace VideoKit {
 
 
         #region --Inspector--
-        [Header(@"Configuration")]
-        /// <summary>
-        /// Configure the application audio session on awake.
-        /// This only applies on iOS.
-        /// </summary>
-        [Tooltip(@"Configure the application audio session on awake. This only applies on iOS.")]
-        public bool configureOnAwake = true;
-
         [Header(@"Format")]
         /// <summary>
         /// Audio sample rate.
@@ -156,8 +148,8 @@ namespace VideoKit {
             if (permissions != MediaDevice.PermissionStatus.Authorized)
                 throw new InvalidOperationException(@"VideoKit: User did not grant microphone permissions");
             // Check device
-            var devices = await AudioDevice.Discover(configureAudioSession: false);
-            _device ??= devices.FirstOrDefault(); // configure once in `Awake` instead.
+            var devices = await AudioDevice.Discover();
+            _device ??= devices.FirstOrDefault();
             if (_device == null)
                 throw new InvalidOperationException(@"VideoKit: Audio manager failed to start running because no audio device is available");
             // Configure microphone
@@ -191,11 +183,6 @@ namespace VideoKit {
 
         #region --Operations--
         private AudioDevice _device;
-
-        private void Awake() {
-            if (configureOnAwake)
-                VideoKit.ConfigureAudioSession();
-        }
 
         private void OnSampleBuffer(AudioBuffer audioBuffer) => OnAudioBuffer?.Invoke(audioBuffer);
 

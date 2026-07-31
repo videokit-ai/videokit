@@ -9,11 +9,11 @@ namespace VideoKit {
 
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using UnityEngine;
     using Internal;
+    using Models = Internal.VideoKitModels;
 
     /// <summary>
     /// VideoKit camera manager for streaming video from camera devices.
@@ -274,13 +274,10 @@ namespace VideoKit {
             // Preload human texture predictor
             var muna = VideoKitClient.Instance!.muna;
             if (capabilities.HasFlag(Capabilities.HumanTexture)) {
-                try { await muna.Predictions.Create(HumanTextureTag, new()); }
-                catch { // CHECK // REMOVE
-                    var predictorCachePath = Path.Join(Application.persistentDataPath, @"fxn", @"predictors");
-                    if (Directory.Exists(predictorCachePath))
-                        Directory.Delete(predictorCachePath, recursive: true);
-                }
-                await muna.Predictions.Create(HumanTextureTag, new());
+                await muna.Predictions.Create(
+                    tag: Models.HumanTexture_v2,
+                    inputs: new() { [@""] = null }
+                );
             }
             // Start running
             StartRunning(_device, OnCameraBuffer);
@@ -312,7 +309,6 @@ namespace VideoKit {
         #region --Operations--
         private MediaDevice[]? devices;
         private MediaDevice? _device;
-        internal const string HumanTextureTag = @"@videokit/human-texture-2";
 
         private void Awake() {
             if (playOnAwake)

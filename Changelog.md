@@ -1,6 +1,7 @@
 ## 1.0.14
 + Added initial support for Linux with the `MediaRecorder` class.
 + Added `MediaAsset.Parse<T>` method to parse text assets into structured types using a local, small language model.
++ Added `StructuredOutput` attribute for making `struct` and `class` types compatible with `MediaAsset.Parse`.
 + Upgraded to Muna 0.0.58.
 
 ## 1.0.13
